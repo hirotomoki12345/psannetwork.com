@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>psan network</title>
+    <style>
+        /* スタイルをきれいに */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* キャンバスのスタイル */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <h1>Welcome to psan network!</h1>
+    <p>こんにちは、Pさんです。よろしくお願いします。</p>
+    <h2>ここでは主に便利なツールを投稿していきます。</h2>
+    <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
+    <p>Follow me on Instagram: <a href="https://www.instagram.com/psan" target="_blank">psan's Instagram</a></p>
+
+    <script>
+        // 背景の動く線を描画するためのJavaScript
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const lines = [];
+
+        class Line {
+            constructor(x, y, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.speed = speed;
+            }
+
+            update() {
+                this.x += this.speed;
+                if (this.x > canvas.width) {
+                    this.x = 0;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + 50, this.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function createLines() {
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+                const speed = 1 + Math.random() * 3;
+                lines.push(new Line(x, y, color, speed));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const line of lines) {
+                line.update();
+                line.draw();
+            }
+        }
+
+        createLines();
+        animate();
+    </script>
+</body>
+</html>
