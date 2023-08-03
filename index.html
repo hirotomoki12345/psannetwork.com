@@ -38,12 +38,26 @@
             left: 0;
             z-index: -1;
         }
+
+        /* New styles for parallax effect */
+        .parallax-header,
+        .parallax-text {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .parallax-header.show,
+        .parallax-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <h1>Welcome to psan network!</h1>
-    <p>こんにちは、Pさんです。よろしくお願いします。</p>
+    <h1 class="parallax-header">Welcome to psan network!</h1>
+    <p class="parallax-text">こんにちは、Pさんです。よろしくお願いします。</p>
     <h2>ここでは主に便利なツールを投稿していきます。</h2>
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psan" target="_blank">psan's Instagram</a></p>
@@ -105,6 +119,34 @@
 
         createLines();
         animate();
+
+        // Function to check if an element is in the viewport
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        // Function to handle the scroll event and trigger the parallax effect
+        function handleScroll() {
+            const header = document.querySelector(".parallax-header");
+            const text = document.querySelector(".parallax-text");
+
+            if (isElementInViewport(header)) {
+                header.classList.add("show");
+            }
+
+            if (isElementInViewport(text)) {
+                text.classList.add("show");
+            }
+        }
+
+        // Attach the handleScroll function to the scroll event
+        window.addEventListener("scroll", handleScroll);
     </script>
 
     <h2>最新の投稿</h2>
