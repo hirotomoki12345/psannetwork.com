@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>学校などの管理から完全に逃れる方法 - psan network</title>
+    <style>
+        /* スタイルをきれいに */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 32px;
+            margin: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .link-button {
+            color: #007bff;
+            text-decoration: none;
+            display: block;
+            margin: 20px;
+            cursor: pointer;
+        }
+
+        .link-button:hover {
+            text-decoration: underline;
+        }
+
+        /* カラフルな文字色 */
+        .colorful-1 {
+            color: #e74c3c;
+        }
+
+        .colorful-2 {
+            color: #2ecc71;
+        }
+
+        .colorful-3 {
+            color: #3498db;
+        }
+
+        .colorful-4 {
+            color: #f39c12;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <h1 class="colorful-1">学校などの管理から完全に逃れる方法 - psan network</h1>
+    <p class="colorful-2">Chromebookユーザーの皆さん、こんにちは。</p>
+    <p class="colorful-1">手順：</p>
+    <ol class="colorful-2">
+        <li>chrome-extension://拡張機能ID/manifest.json　にアクセスします。（拡張機能IDは僕までDMしてください。天中はjcdhmojfecjfmbdpchihbeilohgnbdci
+　これです）</li>
+        <li>アクセスしたサイト内のURL入力欄に、chrome://hang　を入力してエンターを押します。</li>
+        <li>その後、2秒以内に更新ボタンを押してすぐにURL入力欄に chrome://kill　を入力してエンターを押します（猶予15秒）（タブは開いたままにしてください）。</li>
+        <li>これでフィルタリングが強制停止されます。</li>    
+</ol>
+    <p class="colorful-3">【注意】</p>
+    <ul class="colorful-4">
+        <li>ページを閉じないでください</li>
+    </ul>
+
+    <script>
+    // 背景の動く線を描画するためのJavaScript
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const lines = [];
+
+        class Line {
+            constructor(x, color, speed) {
+                this.x = x;
+                this.y = 0;
+                this.color = color;
+                this.speed = speed;
+                this.length = Math.random() * 200 + 50; // 線の長さを調整
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.y = 0;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + this.length); // 線の長さを適用
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function createLines() {
+            for (let i = 0; i < canvas.width; i += 30) {
+                const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`;
+                const speed = 1 + Math.random() * 3;
+                lines.push(new Line(i, color, speed));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            lines.forEach((line) => {
+                line.update();
+                line.draw();
+            });
+        }
+
+        createLines();
+        animate();
+    </script>
+</body>
+</html>
