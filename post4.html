@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Auto Clicker Code Example</title>
+<title>自動クリックコードの例</title>
 </head>
 <body>
-<h1>Auto Clicker Code Example</h1>
-<p>This code demonstrates an auto clicker functionality implemented in JavaScript. When an element with the class "auto-clicker-target" is clicked, it will toggle auto-clicking on and off. The auto-clicking clicks the element at a specified delay.</p>
-<p>To use this code, include the following JavaScript in your HTML:</p>
-<pre>
+<h1>自動クリックコードの例</h1>
+<p>このコードは、JavaScriptで実装された自動クリック機能のデモンストレーションです。クラス名が「auto-clicker-target」の要素がクリックされると、自動クリックがオンとオフが切り替わります。自動クリックは指定された遅延時間で要素をクリックします。</p>
+<p>以下のボタンをクリックして、コードをコピーできます。</p>
+<button id="copy-button">コードをコピー</button>
+<pre id="code-container">
 <code>
 var DELAY = 1;
 
@@ -30,7 +31,18 @@ document.body.addEventListener("click", function(e) {
 });
 </code>
 </pre>
-<p>To apply auto-clicking to an element, simply add the "auto-clicker-target" class to it.</p>
-<button class="auto-clicker-target">Clickable Element</button>
+
+<script>
+document.getElementById("copy-button").addEventListener("click", function() {
+  const code = document.getElementById("code-container").innerText;
+  const textarea = document.createElement("textarea");
+  textarea.value = code;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+  alert("コードがコピーされました。");
+});
+</script>
 </body>
 </html>
