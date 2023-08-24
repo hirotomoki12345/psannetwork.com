@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Clicker Code Example</title>
+</head>
+<body>
+<h1>Auto Clicker Code Example</h1>
+<p>This code demonstrates an auto clicker functionality implemented in JavaScript. When an element with the class "auto-clicker-target" is clicked, it will toggle auto-clicking on and off. The auto-clicking clicks the element at a specified delay.</p>
+<p>To use this code, include the following JavaScript in your HTML:</p>
+<pre>
+<code>
+var DELAY = 1;
+
+function autoClick(element) {
+  element.click();
+  setTimeout(function() {
+    autoClick(element);
+  }, DELAY);
+}
+
+document.body.addEventListener("click", function(e) {
+  if (e.target.classList.contains("auto-clicker-target")) {
+    e.target.classList.remove("auto-clicker-target");
+  } else {
+    e.target.classList.add("auto-clicker-target");
+  }
+  autoClick(e.target);
+});
+</code>
+</pre>
+<p>To apply auto-clicking to an element, simply add the "auto-clicker-target" class to it.</p>
+<button class="auto-clicker-target">Clickable Element</button>
+</body>
+</html>
