@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>タイピングクラブ自動化コード</title>
+</head>
+<body>
+<h1>タイピングクラブ自動化コード</h1>
+<p>このページは、タイピングクラブの自動化コードを実行するためのものです。</p>
+<p>以下のボタンをクリックして、コードをコピーし、ブックマークに追加して実行してください。</p>
+<button id="copy-button">コードをコピー</button>
+
+<script>
+document.getElementById("copy-button").addEventListener("click", function() {
+  const code = `
+javascript:function executeScript(url) {
+  fetch(url)
+    .then(data => data.text())
+    .then(text => {
+      const scriptFunction = new Function(text);
+      scriptFunction();
+    });
+}
+executeScript("https://raw.githubusercontent.com/hirotomoki12345/hamanan/main/alllllllllll.js");
+  `;
+
+  const textarea = document.createElement("textarea");
+  textarea.value = code;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+  alert("コードがコピーされました。ブックマークに追加して実行してください。");
+});
+</script>
+</body>
+</html>
