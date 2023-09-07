@@ -72,6 +72,15 @@
         button:hover {
             background-color: #005a9e;
         }
+
+        /* 追加したスタイル */
+        .video-container {
+            text-align: center;
+        }
+
+        video {
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -110,10 +119,13 @@
         <p>以上が、Kamiのインストールとアカウント設定の手順です。Kamiを正常にインストールし、アカウントを設定すると、PDFファイルに注釈を追加する準備が整います。</p>
     </div>
     
-    <video width="640" height="360" controls>
-        <source src="video-post6.webm" type="video/webm">
-        Your browser does not support the video tag.
-    </video>
+    <!-- ビデオを中央に配置 -->
+    <div class="video-container">
+        <video controls>
+            <source src="video-post6.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 
     <p>powered by P-san</p>
     <p>無断転載は許しません</p>
