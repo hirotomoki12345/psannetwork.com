@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>psan network hide</title>
+    <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
+    
+    <style>
+        /* スタイルをきれいに */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* キャンバスのスタイル */
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* New styles for parallax effect */
+        .parallax-header,
+        .parallax-text {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .parallax-header.show,
+        .parallax-text.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <h1 class="parallax-header">Welcome to psan network hide!</h1>
+    <p class="parallax-text">こんにちは、Pさんです。よろしくお願いします。</p>
+    <h2>ここでは主に便利なツールを投稿していきます。</h2>
+    <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
+    <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
+
+    <script>
+        // 背景の動く線を描画するためのJavaScript
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const lines = [];
+
+        class Line {
+            constructor(x, y, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.speed = speed;
+            }
+
+            update() {
+                this.x += this.speed;
+                if (this x > canvas.width) {
+                    this.x = 0;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + 50, this.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function createLines() {
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+                const speed = 1 + Math.random() * 3;
+                lines.push(new Line(x, y, color, speed));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const line of lines) {
+                line.update();
+                line.draw();
+            }
+        }
+
+        createLines();
+        animate();
+
+        // Function to check if an element is in the viewport
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        // Function to handle the scroll event and trigger the parallax effect
+        function handleScroll() {
+            const header = document.querySelector(".parallax-header");
+            const text = document.querySelector(".parallax-text");
+
+            if (isElementInViewport(header)) {
+                header.classList.add("show");
+            }
+
+            if (isElementInViewport(text)) {
+                text.classList.add("show");
+            }
+        }
+
+        // Attach the handleScroll function to the scroll event
+        window.addEventListener("scroll", handleScroll);
+
+        // Function to handle the window load event and trigger the parallax effect for the header and text
+        function handleLoad() {
+            const header = document.querySelector(".parallax-header");
+            const text = document.querySelector(".parallax-text");
+
+            if (isElementInViewport(header)) {
+                header.classList.add("show");
+            }
+
+            if (isElementInViewport(text)) {
+                text.classList.add("show");
+            }
+        }
+
+        // Attach the handleLoad function to the window load event
+        window.addEventListener("load", handleLoad);
+
+        document.body.style.display = "none";
+        
+    </script>
+
+    <h2>最新の投稿</h2>
+    <ul>
+        <li><a href="/post1.html">簡易Proxy</a></li>
+        <li><a href="/post2.html">学校などの管理から完全に逃れる方法 - psan network</a></li>
+         <li><a href="/post4.html">連打ツール紹介</a></li>
+
+        <!-- 新しいブログ記事を追加する場合はここにリンクを追加 -->
+    </ul>
+
+    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38390" rel="nofollow" referrerpolicy="no-referrer-when-downgrade"><img src="//image.moshimo.com/af-img/1762/000000038390.png" width="120" height="600" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38390" width="1" height="1" style="border:none;">
+    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38391" rel="nofollow" referrerpolicy="no-referrer-when-downgrade"><img src="//image.moshimo.com/af-img/1762/000000038391.png" width="160" height="600" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38391" width="1" height="1" style="border:none;">
+    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38392" rel="nofollow" referrerpolicy="no-referrer-when-downgrade"><img src="//image.moshimo.com/af-img/1762/000000038392.png" width="200" height="200" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38392" width="1" height="1" style="border:none;">
+    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" rel="nofollow" referrerpolicy="no-referrer-when-downgrade"><img src="//image.moshimo.com/af-img/1762/000000038393.gif" width="234" height="60" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" width="1" height="1" style="border:none;">
+</body>
+</html>
