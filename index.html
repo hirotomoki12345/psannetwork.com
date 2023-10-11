@@ -61,6 +61,12 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+        <!-- パスワード入力フォーム -->
+    <div id="password-form" style="text-align: center; margin-top: 100px;">
+        <h3>パスワードを入力してください:</h3>
+        <input type="password" id="password-input">
+        <button onclick="checkPassword()">Submit</button>
+    </div>
     <h1 class="parallax-header">Welcome to psan network!</h1>
     <p class="parallax-text">こんにちは、Pさんです。よろしくお願いします。</p>
     <h2>ここでは主に便利なツールを投稿していきます。</h2>
@@ -169,6 +175,21 @@
 
         // Attach the handleLoad function to the window load event
         window.addEventListener("load", handleLoad);
+
+
+                document.body.style.display = "none";
+        
+        // パスワードチェック
+        function checkPassword() {
+            const passwordInput = document.getElementById("password-input").value;
+            if (passwordInput === "ありをりはべりいまそがり") {
+                document.body.style.display = "block"; // パスワードが正しい場合、コンテンツを表示
+                const passwordForm = document.getElementById("password-form");
+                passwordForm.style.display = "none"; // パスワードフォームを非表示
+            } else {
+                alert("パスワードが正しくありません。再試行してください。");
+            }
+        }
     </script>
 
     <h2>最新の投稿</h2>
