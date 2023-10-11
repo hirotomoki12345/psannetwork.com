@@ -61,12 +61,11 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
-        <!-- パスワード入力フォーム -->
-    <div id="password-form" style="text-align: center; margin-top: 100px;">
-        <h3>パスワードを入力してください:</h3>
-        <input type="password" id="password-input">
-        <button onclick="checkPassword()">Submit</button>
-    </div>
+    <form action="/check_password" method="post">
+        <label for="password">パスワードを入力してください:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Submit">
+    </form>
     <h1 class="parallax-header">Welcome to psan network!</h1>
     <p class="parallax-text">こんにちは、Pさんです。よろしくお願いします。</p>
     <h2>ここでは主に便利なツールを投稿していきます。</h2>
