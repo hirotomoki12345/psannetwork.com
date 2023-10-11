@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>2進数と10進数の変換・複合</title>
+</head>
+<body>
+  <h1>2進数と10進数の変換・複合</h1>
+  <div>これは2進法と10進法を変換するコードです</div>
+
+  <!-- Add a button element with an ID to trigger the conversion -->
+  <button id="convertButton">変換または複合</button>
+
+  <div id="resultContainer"></div>
+
+  <script>
+    function convertToBinary(text) {
+      let binary = "";
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i);
+        const binaryString = charCode.toString(2);
+        binary += binaryString.padStart(16, "0");
+      }
+      return binary;
+    }
+
+    function convertToText(binary) {
+      let text = "";
+      for (let i = 0; i < binary.length; i += 16) {
+        const binarySubstring = binary.substr(i, 16);
+        const decimal = parseInt(binarySubstring, 2);
+        const character = String.fromCharCode(decimal);
+        text += character;
+      }
+      return text;
+    }
+
+    // Add an event listener to the button
+    document.getElementById("convertButton").addEventListener("click", performConversion);
+
+    function performConversion() {
+      const choice = prompt("変換または複合のどちらを行いますか？\n1. 変換\n2. 複合");
+
+      if (choice === "1") {
+        const textInput = prompt("テキストを入力してください:");
+        const binaryOutput = convertToBinary(textInput);
+
+        const resultContainer = document.getElementById("resultContainer");
+        resultContainer.innerHTML = `入力したテキスト: ${textInput}<br>テキストを2進数に変換: ${binaryOutput}`;
+      } else if (choice === "2") {
+        const binaryInput = prompt("2進数を入力してください:");
+        const textOutput = convertToText(binaryInput);
+
+        const resultContainer = document.getElementById("resultContainer");
+        resultContainer.innerHTML = `入力した2進数: ${binaryInput}<br>2進数をテキストに戻す: ${textOutput}`;
+      } else {
+        alert("無効な選択です。変換または複合を選んでください。");
+      }
+    }
+  </script>
+</body>
+</html>
