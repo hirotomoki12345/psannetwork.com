@@ -64,112 +64,65 @@
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
 
-    <script>
-        // 背景の動く線を描画するためのJavaScript
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+<script>
+    // 背景の動く線を描画するためのJavaScript
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        const lines = [];
+    const lines = [];
 
-        class Line {
-            constructor(x, y, color, speed) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.speed = speed;
-            }
+    class Line {
+        constructor(x, y, color, speed) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.speed = speed;
+        }
 
-            update() {
-                this.x += this.speed;
-                if (this x > canvas.width) {
-                    this.x = 0;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x + 50, this.y);
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 2;
-                ctx.stroke();
+        update() {
+            this.x += this.speed;
+            if (this.x > canvas.width) {
+                this.x = 0;
             }
         }
 
-        function createLines() {
-            for (let i = 0; i < 100; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
-                const speed = 1 + Math.random() * 3;
-                lines.push(new Line(x, y, color, speed));
-            }
+        draw() {
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + 50, this.y);
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
         }
+    }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (const line of lines) {
-                line.update();
-                line.draw();
-            }
+    function createLines() {
+        for (let i = 0; i < 100; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+            const speed = 1 + Math.random() * 3;
+            lines.push(new Line(x, y, color, speed));
         }
+    }
 
-        createLines();
-        animate();
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Function to check if an element is in the viewport
-        function isElementInViewport(el) {
-            const rect = el.getBoundingClientRect();
-            return (
-                rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
+        for (const line of lines) {
+            line.update();
+            line.draw();
         }
+    }
 
-        // Function to handle the scroll event and trigger the parallax effect
-        function handleScroll() {
-            const header = document.querySelector(".parallax-header");
-            const text = document.querySelector(".parallax-text");
+    createLines();
+    animate();
+</script>
 
-            if (isElementInViewport(header)) {
-                header.classList.add("show");
-            }
-
-            if (isElementInViewport(text)) {
-                text.classList.add("show");
-            }
-        }
-
-        // Attach the handleScroll function to the scroll event
-        window.addEventListener("scroll", handleScroll);
-
-        // Function to handle the window load event and trigger the parallax effect for the header and text
-        function handleLoad() {
-            const header = document.querySelector(".parallax-header");
-            const text = document.querySelector(".parallax-text");
-
-            if (isElementInViewport(header)) {
-                header.classList.add("show");
-            }
-
-            if (isElementInViewport(text)) {
-                text.classList.add("show");
-            }
-        }
-
-        // Attach the handleLoad function to the window load event
-        window.addEventListener("load", handleLoad);
-
-        document.body.style.display = "none";
-        
-    </script>
 
     <h2>最新の投稿</h2>
     <ul>
