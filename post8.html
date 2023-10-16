@@ -8,32 +8,39 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f7f7f7;
+            background-color: #f0f0f0; /* 背景色をやさしい灰色に変更 */
+            line-height: 1.6; /* 行間を広く取る */
+            padding: 20px;
         }
         h1 {
-            font-size: 36px;
-            color: #333;
+            font-size: 28px; /* 見出しのフォントサイズを大きめに戻す */
+            color: #1e90ff; /* 見出しの色を青に変更 */
+            font-family: "Helvetica Neue", sans-serif;
         }
         p {
             font-size: 18px;
-            line-height: 1.5;
-            color: #666;
+            color: #333; /* 本文の文字色を黒に変更 */
         }
         .important {
-            color: #1e90ff;
+            color: #ff4500; /* 重要な部分の色をオレンジに変更 */
             font-weight: bold;
         }
     </style>
 </head>
 <body>
     <h1>Chromebookを開発者モードに移行する方法</h1>
+    <p>この記事では、Chromebookを開発者モードに移行する方法について説明します。</p>
+    
+    <h2>開発者モードとは</h2>
     <p>開発者モードを有効にすると、<span class="important">Chromebookのシステムファイルを変更したり、ルートアクセスを取得したり</span>することができます。開発者モードは、クルトンを使用して完全なLinuxシステムをインストールしたり、いくつかのファイルを変更したり、外部USBデバイスからChromebookを起動したりするためにも使用されます。</p>
-
+    
+    <h2>注意事項</h2>
     <p>ただし、注意点もあります。開発者モードを有効にすると、<span class="important">Chromebookのデータが消去されます。</span>また、Googleは公式に開発者モードをサポートしていないため、ハードウェアの問題が発生した場合には保証が無効になる可能性があります。</p>
-
-    <p>通常のChromebookの場合、開発者モードを有効にするには、まずChromebookをリカバリモードで起動する必要があります。リカバリモードに入るためには、<span class="important">EscキーとRefreshキーを押したままにして、電源ボタンをタップします。その後、Ctrl + Dを押して開発者モードを有効にします。</span>これにより、オペレーティングシステムの検証が無効になり、Chrome OSのシステムファイルを変更できるようになります。</p>
-
-    <p>タブレットのChromebookの場合、開発者モードを有効にするには以下の手順を実行します。</p>
+    
+    <h2>開発者モードの有効化</h2>
+    <p>通常のChromebookの場合、開発者モードを有効にするには、まずChromebookをリカバリモードで起動する必要があります。リカバリモードに入るためには、<span class="important">EscキーとRefreshキーを押したままにして、電源ボタンをタップします。</span>その後、Ctrl + Dを押して開発者モードを有効にします。これにより、オペレーティングシステムの検証が無効になり、Chrome OSのシステムファイルを変更できるようになります。</p>
+    
+    <h2>タブレットの場合の開発者モードの有効化方法</h2>
     <ol>
         <li>Chromebookをシャットダウンします.</li>
         <li>電源ボタンを押し、Chromebookを起動します.</li>
@@ -42,7 +49,7 @@
         <li>「開発者モードを有効にしますか？」というメッセージが表示されるので、「ボリュームアップボタン」を使って「Yes」を選択し、「ボリューム ダウンボタン」を使って確認します.</li>
         <li>その後、Chromebookは再起動され、開発者モードが有効になります.</li>
     </ol>
-
+    
     <p>開発者モードを有効にした後、Chromebookを再起動すると初回セットアップウィザードが表示されます。初回セットアップには10〜15分かかる場合があります.</p>
 </body>
 </html>
