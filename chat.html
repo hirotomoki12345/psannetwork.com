@@ -1,89 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Chat App</title>
-    <!-- Add Firebase SDK script tags here -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
-</head>
-<body>
-    <div>
-        <h1>Chat App</h1>
-        <input type="text" id="jsi-name" placeholder="Your Name">
-        <input type="text" id="jsi-msg" placeholder="Your Message">
-        <button id="jsi-button">Send</button>
-        <ul id="jsi-board"></ul>
-    </div>
+<!doctype html>
+<html lang="ja">
 
-    <script>
-        var CHAT = CHAT || {};
+ <head>
+　<!-- Firebaseライブラリを読み込む バージョンは2.3.2という古いのを使っています -->
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 
-        CHAT.fire = {
-            init: function () {
-                this.setParameters();
-                this.bindEvent();
-            },
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="chat.js"></script>
 
-            setParameters: function () {
-                this.$name = document.getElementById('jsi-name');
-                this.$textArea = document.getElementById('jsi-msg');
-                this.$board = document.getElementById('jsi-board');
-                this.$button = document.getElementById('jsi-button');
+  <!-- ↓ 先ほど入手したコード　↓ -->
+  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase-app.js"></script>
+  <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "各自",
+        authDomain: "各自",
+        databaseURL: "https://各自",
+        storageBucket: "各自",
+        messagingSenderId: "各自"
+      };
+      firebase.initializeApp(config);
+  </script>
+  <!-- ↑ 先ほど入手したコード ↑ -->
 
-                // Firebaseの設定
-                var firebaseConfig = {
-                    apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
-                    authDomain: "hamanan1.firebaseapp.com",
-                    projectId: "hamanan1",
-                    storageBucket: "hamanan1.appspot.com",
-                    messagingSenderId: "939524742350",
-                    appId: "1:939524742350:web:114f1b698a5f4c1ec0049f"
-                };
+  <!-- ↓ 少ないのでcssベタ張り ↓ -->
+  <style>
+    ul > li:first-child {
+     color: black;
+     font-size: 25px;
+    }
+    ul > li:nth-child(2n) {
+     color: blue;
+    }
+    ul > li:nth-child(2n):before {
+     content:"ユーザー名："
+    }
+  </style>
+  <!-- ↑ 少ないのでcssベタ張り ↑ -->
 
-                // Firebaseアプリを初期化
-                this.chatDataStore = firebase.initializeApp(firebaseConfig).database();
+ </head>
 
-                // メッセージの取得
-                this.chatDataStore.ref('talks').on('child_added', function (snapshot) {
-                    var data = snapshot.val();
-                    self.addText(data.user);
-                    self.addText(data.message);
-                });
-            },
+ <body>
 
-            bindEvent: function () {
-                var self = this;
-                this.$button.addEventListener('click', function () {
-                    self.sendMsg();
-                });
-            },
+  <div>
+   <!-- 投稿者 -->
+   <div>
+    <p>ユーザ名</p>
+    <textarea name="" id="jsi-name" cols="10" rows="1"></textarea>
+   </div>
 
-            // ユーザー、メッセージ送信
-            sendMsg: function () {
-                var self = this;
-                if (this.$textArea.value === '') {
-                    return;
-                }
+   <!-- メッセージを打ち込む部分 -->
+   <div>
+    <p>内容</p>
+    <textarea name="" id="jsi-msg" cols="30" rows="4"></textarea>
+   </div>
+  </div>
 
-                var name = this.$name.value;
-                var text = this.$textArea.value;
+  <!-- メッセージを送る部分 -->
+  <button name="button" id="jsi-button">send message!</button>
 
-                // データベースの中の「talks」に値を送り格納
-                self.chatDataStore.ref('talks').push({ user: name, message: text });
-                self.$textArea.value = '';
-            },
-
-            // 受け取り後の処理
-            addText: function (data) {
-                var msgDom = document.createElement('li');
-                msgDom.innerHTML = data;
-                this.$board.appendChild(msgDom);
-            },
-        };
-
-        CHAT.fire.init();
-    </script>
-</body>
+  <!-- チャット内容が動的に生成される部分 -->
+  <ul id="jsi-board" style="list-style:none;">
+    <li>〜チャット内容〜</li>
+  </ul>
+ </body>
 </html>
