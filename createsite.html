@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新しいサイトを作成</title>
+</head>
+<body>
+    <h1>新しいサイトを作成</h1>
+    <form id="siteForm">
+        <label for="email">メールアドレス:</label>
+        <input type="email" id="email" name="email" required><br>
+        
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required><br>
+        
+        <button type="submit">サイトを作成</button>
+    </form>
+    
+    <div id="response"></div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
+
+    <script>
+        // Firebaseの設定
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
+            authDomain: "ip-add-47c83.firebaseapp.com",
+            databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
+            projectId: "ip-add-47c83",
+            storageBucket: "ip-add-47c83.appspot.com",
+            messagingSenderId: "711426693718",
+            appId: "1:711426693718:web:c4937017de3fc4830779f7"
+        };
+
+        // Firebaseアプリの初期化
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // フォーム送信時のイベントリスナーを追加
+        document.getElementById("siteForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // ページのリロードを防ぐ
+
+            // ユーザーが入力したメールアドレスとURLを取得
+            const email = document.getElementById("email").value;
+            const url = document.getElementById("url").value;
+
+            // Firebase Realtime Databaseへのデータ保存
+            const dbRef = ref(database, 'sites'); // 'sites'はデータベース内のコレクション名
+
+            const newSiteData = {
+                email: email,
+                url: url,
+            };
+
+            // データをFirebase Realtime Databaseに追加
+            push(dbRef, newSiteData)
+                .then(() => {
+                    // データの保存が成功した場合
+                    const responseDiv = document.getElementById("response");
+                    responseDiv.innerHTML = "新しいサイトが作成されました。";
+                })
+                .catch((error) => {
+                    // データの保存が失敗した場合
+                    const responseDiv = document.getElementById("response");
+                    responseDiv.innerHTML = "エラーが発生しました: " + error.message;
+                });
+        });
+    </script>
+</body>
+</html>
