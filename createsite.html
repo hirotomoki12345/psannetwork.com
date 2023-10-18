@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>位置情報、高度、日付を取得して保存</title>
+    <title>ブラウザ情報と位置情報を取得して保存</title>
 </head>
 <body>
-    <h1>位置情報、高度、日付を取得して保存</h1>
+    <h1>ブラウザ情報と位置情報を取得して保存</h1>
     
     <div id="response"></div>
     
@@ -27,42 +27,68 @@
         const app = firebase.initializeApp(firebaseConfig);
         const database = app.database();
 
-        // ページがロードされたときに位置情報、高度、日付を取得して保存
-        window.addEventListener("load", getLocationAndSave);
+        // ページがロードされたときにブラウザ情報、位置情報、IPアドレス、リファラを取得して保存
+        window.addEventListener("load", getDataAndSave);
 
-        function getLocationAndSave() {
+        function getDataAndSave() {
+            // ブラウザ情報
+            const browserInfo = {
+                appName: window.navigator.appName,
+                language: window.navigator.language,
+                userAgent: window.navigator.userAgent,
+                appVersion: window.navigator.appVersion,
+            };
+
+            // 位置情報
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
                     const altitude = position.coords.altitude;
-                    const userAgent = navigator.userAgent;
-                    const ipAddress = "取得できません";
-                    const currentDate = new Date().toUTCString();
 
-                    // Google マップの URLを生成
-                    const googleMapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                    // IPアドレスを取得
+                    fetch("https://ipinfo.io?callback")
+                        .then((response) => response.text())
+                        .then((data) => {
+                            // URL内のクエリ情報を抽出
+                            const queryInfo = window.location.search;
 
-                    // Firebase Realtime Databaseへのデータ保存
-                    const dbRef = database.ref('locations');
-                    const newLocationData = {
-                        latitude: latitude,
-                        longitude: longitude,
-                        altitude: altitude,
-                        googleMapUrl: googleMapUrl,
-                        userAgent: userAgent,
-                        ipAddress: ipAddress,
-                        date: currentDate,
-                    };
+                            // URL内のハッシュ情報を抽出
+                            const hashInfo = window.location.hash;
 
-                    dbRef.push(newLocationData)
-                        .then(() => {
-                            const responseDiv = document.getElementById("response");
-                            responseDiv.innerHTML = "位置情報、高度、日付が保存されました。";
+                            // ページのURL
+                            const pageURL = window.location.href;
+
+                            // リファラ（直前に閲覧していたWebページのURL）
+                            const referrer = window.document.referrer;
+
+                            // Firebase Realtime Databaseへのデータ保存
+                            const dbRef = database.ref('browserInfo');
+                            const newBrowserInfo = {
+                                ...browserInfo,
+                                latitude: latitude,
+                                longitude: longitude,
+                                altitude: altitude,
+                                ipInfo: data,
+                                queryInfo: queryInfo,
+                                hashInfo: hashInfo,
+                                pageURL: pageURL,
+                                referrer: referrer,
+                                date: new Date().toUTCString(),
+                            };
+
+                            dbRef.push(newBrowserInfo)
+                                .then(() => {
+                                    const responseDiv = document.getElementById("response");
+                                    responseDiv.innerHTML = "ブラウザ情報、位置情報、IPアドレス、リファラが保存されました。";
+                                })
+                                .catch((error) => {
+                                    const responseDiv = document.getElementById("response");
+                                    responseDiv.innerHTML = "エラーが発生しました: " + error.message;
+                                });
                         })
                         .catch((error) => {
-                            const responseDiv = document.getElementById("response");
-                            responseDiv.innerHTML = "エラーが発生しました: " + error.message;
+                            alert("IPアドレスの取得に失敗しました: " + error);
                         });
                 });
             } else {
