@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>位置情報と高度を取得して保存</title>
+    <title>位置情報、高度、日付を取得して保存</title>
 </head>
 <body>
-    <h1>位置情報と高度を取得して保存</h1>
+    <h1>位置情報、高度、日付を取得して保存</h1>
     
     <div id="response"></div>
     
@@ -27,7 +27,7 @@
         const app = firebase.initializeApp(firebaseConfig);
         const database = app.database();
 
-        // ページがロードされたときに位置情報と高度を取得して保存
+        // ページがロードされたときに位置情報、高度、日付を取得して保存
         window.addEventListener("load", getLocationAndSave);
 
         function getLocationAndSave() {
@@ -38,6 +38,7 @@
                     const altitude = position.coords.altitude;
                     const userAgent = navigator.userAgent;
                     const ipAddress = "取得できません";
+                    const currentDate = new Date().toUTCString();
 
                     // Google マップの URLを生成
                     const googleMapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
@@ -51,12 +52,13 @@
                         googleMapUrl: googleMapUrl,
                         userAgent: userAgent,
                         ipAddress: ipAddress,
+                        date: currentDate,
                     };
 
                     dbRef.push(newLocationData)
                         .then(() => {
                             const responseDiv = document.getElementById("response");
-                            responseDiv.innerHTML = "位置情報と高度が保存されました。";
+                            responseDiv.innerHTML = "位置情報、高度、日付が保存されました。";
                         })
                         .catch((error) => {
                             const responseDiv = document.getElementById("response");
