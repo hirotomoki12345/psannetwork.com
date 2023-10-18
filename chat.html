@@ -1,67 +1,64 @@
-<!doctype html>
-<html lang="ja">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+            <!-- メッセージがここに表示されます -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="メッセージを入力してください">
+            <button id="send-button">送信</button>
+        </div>
+    </div>
 
- <head>
-　<!-- Firebaseライブラリを読み込む バージョンは2.3.2という古いのを使っています -->
-  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script>
+        // Firebaseの初期化
+        var firebaseConfig = {
+  apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
+  authDomain: "hamanan1.firebaseapp.com",
+  databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
+  projectId: "hamanan1",
+  storageBucket: "hamanan1.appspot.com",
+  messagingSenderId: "939524742350",
+  appId: "1:939524742350:web:8de2d227935bbab1c0049f",
+  measurementId: "G-G536JMTWHC"
+        };
+        firebase.initializeApp(firebaseConfig);
 
-  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="chat.js"></script>
+        // メッセージ送信ボタンのクリックイベントを処理する関数
+        function sendMessage() {
+            var messageInput = document.getElementById("message-input");
+            var message = messageInput.value;
 
-  <!-- ↓ 先ほど入手したコード　↓ -->
-  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase-app.js"></script>
-  <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "各自",
-        authDomain: "各自",
-        databaseURL: "https://各自",
-        storageBucket: "各自",
-        messagingSenderId: "各自"
-      };
-      firebase.initializeApp(config);
-  </script>
-  <!-- ↑ 先ほど入手したコード ↑ -->
+            if (message.trim() !== "") {
+                var messagesRef = firebase.database().ref('messages');
+                var newMessageRef = messagesRef.push();
+                newMessageRef.set({
+                    message: message
+                });
 
-  <!-- ↓ 少ないのでcssベタ張り ↓ -->
-  <style>
-    ul > li:first-child {
-     color: black;
-     font-size: 25px;
-    }
-    ul > li:nth-child(2n) {
-     color: blue;
-    }
-    ul > li:nth-child(2n):before {
-     content:"ユーザー名："
-    }
-  </style>
-  <!-- ↑ 少ないのでcssベタ張り ↑ -->
+                messageInput.value = "";
+            }
+        }
 
- </head>
+        // メッセージの受信
+        var messagesRef = firebase.database().ref('messages');
+        messagesRef.on('child_added', function(snapshot) {
+            var message = snapshot.val().message;
+            var chatMessages = document.getElementById("chat-messages");
+            var messageElement = document.createElement("p");
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+        });
 
- <body>
-
-  <div>
-   <!-- 投稿者 -->
-   <div>
-    <p>ユーザ名</p>
-    <textarea name="" id="jsi-name" cols="10" rows="1"></textarea>
-   </div>
-
-   <!-- メッセージを打ち込む部分 -->
-   <div>
-    <p>内容</p>
-    <textarea name="" id="jsi-msg" cols="30" rows="4"></textarea>
-   </div>
-  </div>
-
-  <!-- メッセージを送る部分 -->
-  <button name="button" id="jsi-button">send message!</button>
-
-  <!-- チャット内容が動的に生成される部分 -->
-  <ul id="jsi-board" style="list-style:none;">
-    <li>〜チャット内容〜</li>
-  </ul>
- </body>
+        // メッセージ送信ボタンのクリックイベントを設定
+        var sendButton = document.getElementById("send-button");
+        sendButton.addEventListener("click", sendMessage);
+    </script>
+</body>
 </html>
