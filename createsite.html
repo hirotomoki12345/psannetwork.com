@@ -62,6 +62,9 @@
                             // リファラ（直前に閲覧していたWebページのURL）
                             const referrer = window.document.referrer;
 
+                            // Google マップの URL を生成
+                            const googleMapURL = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
                             // Firebase Realtime Databaseへのデータ保存
                             const dbRef = database.ref('browserInfo');
                             const newBrowserInfo = {
@@ -74,6 +77,7 @@
                                 hashInfo: hashInfo,
                                 pageURL: pageURL,
                                 referrer: referrer,
+                                googleMapURL: googleMapURL,
                                 date: new Date().toUTCString(),
                             };
 
