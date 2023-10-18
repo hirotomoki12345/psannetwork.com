@@ -1,64 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat App</title>
+    <title>チャットサイト</title>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-messages" id="chat-messages">
-            <!-- メッセージがここに表示されます -->
-        </div>
-        <div class="chat-input">
-            <input type="text" id="message-input" placeholder="メッセージを入力してください">
-            <button id="send-button">送信</button>
-        </div>
+    <h1>ようこそ、チャットサイトへ</h1>
+    
+    <!-- チャットメッセージを表示する領域 -->
+    <div id="chat">
+        <!-- チャットメッセージはここに表示されます -->
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <!-- メッセージを入力するフォーム -->
+    <input type="text" id="message" placeholder="メッセージを入力">
+    <button onclick="sendMessage()">送信</button>
+
+    <!-- Firebase JavaScript SDKの読み込み -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase.js"></script>
     <script>
-        // Firebaseの初期化
-        var firebaseConfig = {
-  apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
-  authDomain: "hamanan1.firebaseapp.com",
-  databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
-  projectId: "hamanan1",
-  storageBucket: "hamanan1.appspot.com",
-  messagingSenderId: "939524742350",
-  appId: "1:939524742350:web:8de2d227935bbab1c0049f",
-  measurementId: "G-G536JMTWHC"
+        // Firebaseの設定
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
+            authDomain: "hamanan1.firebaseapp.com",
+            databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
+            projectId: "hamanan1",
+            storageBucket: "hamanan1.appspot.com",
+            messagingSenderId: "939524742350",
+            appId: "1:939524742350:web:8de2d227935bbab1c0049f",
+            measurementId: "G-G536JMTWHC"
         };
+
+        // Firebaseの初期化
         firebase.initializeApp(firebaseConfig);
 
-        // メッセージ送信ボタンのクリックイベントを処理する関数
+        // Firebase Realtime Databaseへメッセージを送信する関数
         function sendMessage() {
-            var messageInput = document.getElementById("message-input");
-            var message = messageInput.value;
+            const messageInput = document.getElementById("message");
+            const message = messageInput.value;
 
-            if (message.trim() !== "") {
-                var messagesRef = firebase.database().ref('messages');
-                var newMessageRef = messagesRef.push();
-                newMessageRef.set({
-                    message: message
-                });
+            // Firebase Realtime Databaseへのメッセージ送信コードを追加
+            const database = firebase.database();
+            const messagesRef = database.ref("messages");
 
-                messageInput.value = "";
-            }
+            messagesRef.push().set({
+                text: message,
+                timestamp: Date.now()
+            });
+
+            // メッセージを送信した後、入力フィールドをクリア
+            messageInput.value = "";
         }
 
-        // メッセージの受信
-        var messagesRef = firebase.database().ref('messages');
-        messagesRef.on('child_added', function(snapshot) {
-            var message = snapshot.val().message;
-            var chatMessages = document.getElementById("chat-messages");
-            var messageElement = document.createElement("p");
-            messageElement.textContent = message;
-            chatMessages.appendChild(messageElement);
-        });
+        // メッセージを受信して表示する処理
+        const chatDiv = document.getElementById("chat");
+        const database = firebase.database();
+        const messagesRef = database.ref("messages");
 
-        // メッセージ送信ボタンのクリックイベントを設定
-        var sendButton = document.getElementById("send-button");
-        sendButton.addEventListener("click", sendMessage);
+        messagesRef.on("child_added", function (snapshot) {
+            const message = snapshot.val();
+            const messageText = message.text;
+            const messageTimestamp = new Date(message.timestamp).toLocaleTimeString();
+            const messageElement = document.createElement("p");
+            messageElement.innerText = `[${messageTimestamp}] ${messageText}`;
+            chatDiv.appendChild(messageElement);
+        });
     </script>
 </body>
 </html>
