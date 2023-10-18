@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>位置情報を取得して保存</title>
+    <title>新しいサイトを作成</title>
 </head>
 <body>
-    <h1>位置情報を取得して保存</h1>
-    <button id="getLocationButton">位置情報を取得</button>
+    <h1>新しいサイトを作成</h1>
+    <form id="siteForm">
+        <label for="email">メールアドレス:</label>
+        <input type="email" id="email" name="email" required><br>
+        
+        <label for "url">URL:</label>
+        <input type="text" id="url" name="url" required><br>
+        
+        <button type="submit">サイトを作成</button>
+    </form>
     
     <div id="response"></div>
     
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-compat.js"></script>
     <script>
         // Firebaseの設定
         const firebaseConfig = {
@@ -25,42 +31,38 @@
         };
 
         // Firebaseアプリの初期化
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = app.database();
 
-        // ボタンのクリックイベントリスナーを追加
-        document.getElementById("getLocationButton").addEventListener("click", getLocationAndSave);
+        // フォーム送信時のイベントリスナーを追加
+        document.getElementById("siteForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // ページのリロードを防ぐ
 
-        function getLocationAndSave() {
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
+            // ユーザーが入力したメールアドレスとURLを取得
+            const email = document.getElementById("email").value;
+            const url = document.getElementById("url").value;
 
-                    // Firebase Realtime Databaseへのデータ保存
-                    const dbRef = ref(database, 'locations'); // 'locations'はデータベース内のコレクション名
-                    const newLocationData = {
-                        latitude: latitude,
-                        longitude: longitude,
-                    };
+            // Firebase Realtime Databaseへのデータ保存
+            const dbRef = database.ref('sites'); // 'sites'はデータベース内のコレクション名
 
-                    // データをFirebase Realtime Databaseに追加
-                    push(dbRef, newLocationData)
-                        .then(() => {
-                            // データの保存が成功した場合
-                            const responseDiv = document.getElementById("response");
-                            responseDiv.innerHTML = "位置情報が保存されました。";
-                        })
-                        .catch((error) => {
-                            // データの保存が失敗した場合
-                            const responseDiv = document.getElementById("response");
-                            responseDiv.innerHTML = "エラーが発生しました: " + error.message;
-                        });
+            const newSiteData = {
+                email: email,
+                url: url,
+            };
+
+            // データをFirebase Realtime Databaseに追加
+            dbRef.push(newSiteData)
+                .then(() => {
+                    // データの保存が成功した場合
+                    const responseDiv = document.getElementById("response");
+                    responseDiv.innerHTML = "新しいサイトが作成されました。";
+                })
+                .catch((error) => {
+                    // データの保存が失敗した場合
+                    const responseDiv = document.getElementById("response");
+                    responseDiv.innerHTML = "エラーが発生しました: " + error.message;
                 });
-            } else {
-                alert("位置情報を取得できません。");
-            }
-        }
+        });
     </script>
 </body>
 </html>
