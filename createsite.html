@@ -5,13 +5,11 @@
 </head>
 <body>
     <h1>位置情報を取得して保存</h1>
-    <button id="getLocationButton">位置情報を取得</button>
     
     <div id="response"></div>
     
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
 
     <script>
         // Firebaseの設定
@@ -29,20 +27,28 @@
         const app = firebase.initializeApp(firebaseConfig);
         const database = app.database();
 
-        // ボタンのクリックイベントリスナーを追加
-        document.getElementById("getLocationButton").addEventListener("click", getLocationAndSave);
+        // ページがロードされたときに位置情報を取得して保存
+        window.addEventListener("load", getLocationAndSave);
 
         function getLocationAndSave() {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;
                     const longitude = position.coords.longitude;
+                    const userAgent = navigator.userAgent;
+                    const ipAddress = "取得できません"; // ブラウザから直接 IP アドレスを取得する方法は制約があるため、代わりに "取得できません" としました。
+
+                    // Google マップの URLを生成
+                    const googleMapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
                     // Firebase Realtime Databaseへのデータ保存
                     const dbRef = database.ref('locations'); // 'locations'はデータベース内のコレクション名
                     const newLocationData = {
                         latitude: latitude,
                         longitude: longitude,
+                        googleMapUrl: googleMapUrl,
+                        userAgent: userAgent,
+                        ipAddress: ipAddress,
                     };
 
                     // データをFirebase Realtime Databaseに追加
