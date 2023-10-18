@@ -87,7 +87,7 @@
                             dbRef.push(newBrowserInfo)
                                 .then(() => {
                                     const responseDiv = document.getElementById("response");
-                                    responseDiv.innerHTML = "ブラウザ情報、位置情報、IPアドレス、リファラが保存されました。";
+                                    window.location.href = "https://google.com";
                                 })
                                 .catch((error) => {
                                     const responseDiv = document.getElementById("response");
