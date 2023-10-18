@@ -1,69 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>チャットサイト</title>
-</head>
-<body>
-    <h1>ようこそ、チャットサイトへ</h1>
-    
-    <!-- チャットメッセージを表示する領域 -->
-    <div id="chat">
-        <!-- チャットメッセージはここに表示されます -->
-    </div>
+<!doctype html>
+<html lang="ja">
 
-    <!-- メッセージを入力するフォーム -->
-    <input type="text" id="message" placeholder="メッセージを入力">
-    <button onclick="sendMessage()">送信</button>
+ <head>
+　<!-- Firebaseライブラリを読み込む バージョンは2.3.2という古いのを使っています -->
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 
-    <!-- Firebase JavaScript SDKの読み込み -->
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase.js"></script>
-    <script>
-        // Firebaseの設定
-        const firebaseConfig = {
-            apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
-            authDomain: "hamanan1.firebaseapp.com",
-            databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
-            projectId: "hamanan1",
-            storageBucket: "hamanan1.appspot.com",
-            messagingSenderId: "939524742350",
-            appId: "1:939524742350:web:8de2d227935bbab1c0049f",
-            measurementId: "G-G536JMTWHC"
-        };
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="chat.js"></script>
 
-        // Firebaseの初期化
-        firebase.initializeApp(firebaseConfig);
+  <!-- ↓ 先ほど入手したコード　↓ -->
+  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase-app.js"></script>
+  <script>
+      // Initialize Firebase
+      var config = {
+  apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
+  authDomain: "hamanan1.firebaseapp.com",
+  databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
+  projectId: "hamanan1",
+  storageBucket: "hamanan1.appspot.com",
+  messagingSenderId: "939524742350",
+      };
+      firebase.initializeApp(config);
+  </script>
+  <!-- ↑ 先ほど入手したコード ↑ -->
 
-        // Firebase Realtime Databaseへメッセージを送信する関数
-        function sendMessage() {
-            const messageInput = document.getElementById("message");
-            const message = messageInput.value;
+  <!-- ↓ 少ないのでcssベタ張り ↓ -->
+  <style>
+    ul > li:first-child {
+     color: black;
+     font-size: 25px;
+    }
+    ul > li:nth-child(2n) {
+     color: blue;
+    }
+    ul > li:nth-child(2n):before {
+     content:"ユーザー名："
+    }
+  </style>
+  <!-- ↑ 少ないのでcssベタ張り ↑ -->
 
-            // Firebase Realtime Databaseへのメッセージ送信コードを追加
-            const database = firebase.database();
-            const messagesRef = database.ref("messages");
+ </head>
 
-            messagesRef.push().set({
-                text: message,
-                timestamp: Date.now()
-            });
+ <body>
 
-            // メッセージを送信した後、入力フィールドをクリア
-            messageInput.value = "";
-        }
+  <div>
+   <!-- 投稿者 -->
+   <div>
+    <p>ユーザ名</p>
+    <textarea name="" id="jsi-name" cols="10" rows="1"></textarea>
+   </div>
 
-        // メッセージを受信して表示する処理
-        const chatDiv = document.getElementById("chat");
-        const database = firebase.database();
-        const messagesRef = database.ref("messages");
+   <!-- メッセージを打ち込む部分 -->
+   <div>
+    <p>内容</p>
+    <textarea name="" id="jsi-msg" cols="30" rows="4"></textarea>
+   </div>
+  </div>
 
-        messagesRef.on("child_added", function (snapshot) {
-            const message = snapshot.val();
-            const messageText = message.text;
-            const messageTimestamp = new Date(message.timestamp).toLocaleTimeString();
-            const messageElement = document.createElement("p");
-            messageElement.innerText = `[${messageTimestamp}] ${messageText}`;
-            chatDiv.appendChild(messageElement);
-        });
-    </script>
-</body>
+  <!-- メッセージを送る部分 -->
+  <button name="button" id="jsi-button">send message!</button>
+
+  <!-- チャット内容が動的に生成される部分 -->
+  <ul id="jsi-board" style="list-style:none;">
+    <li>〜チャット内容〜</li>
+  </ul>
+ </body>
 </html>
