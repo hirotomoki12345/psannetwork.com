@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create HTML File</title>
+</head>
+<body>
+  <h1>Create HTML File</h1>
+  <button id="createFileButton">Create File</button>
+  <script>
+
+    // GitHubリポジトリの情報
+const owner = 'hirotomoki12345'; // リポジトリの所有者
+const repo = 'psannetwork.com'; // リポジトリ名
+const token = 'YourGitHubAccessToken'; // GitHubアクセストークン
+
+// ボタン要素を取得
+const createFileButton = document.getElementById('createFileButton');
+
+// ボタンクリックイベントのリスナーを設定
+createFileButton.addEventListener('click', createHTMLFile);
+
+// 新しいHTMLファイルを作成する関数
+function createHTMLFile() {
+  // 新しいHTMLファイルの情報
+  const path = 'id/newfile.html'; // 新しいHTMLファイルのパス
+  const htmlContent = `<!DOCTYPE html>
+  <html>
+  <head>
+    <title>My HTML Page</title>
+  </head>
+  <body>
+    <h1>Hello, World!</h1>
+  </body>
+  </html>`;
+
+  // HTMLコンテンツをBase64エンコード
+  const content = Buffer.from(htmlContent).toString('base64');
+
+  // APIエンドポイントのURLを構築
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+  // HTTPリクエストヘッダー
+  const headers = {
+    Authorization: `token ${token}`,
+  };
+
+  // APIリクエストデータ
+  const requestData = {
+    message: 'Create a new HTML file', // コミットメッセージ
+    content: content, // HTMLファイルの内容 (Base64エンコード済み)
+  };
+
+  // GitHub APIにPUTリクエストを送信
+  axios.put(apiUrl, requestData, { headers: headers })
+    .then(response => {
+      alert('HTML file created successfully!');
+    })
+    .catch(error => {
+      console.error('Error creating HTML file:', error);
+      alert('Error creating HTML file. Please check the console for details.');
+    });
+}
+
+
+</script>
+</body>
+</html>
