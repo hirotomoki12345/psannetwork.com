@@ -10,10 +10,13 @@
     <p>位置情報: <span id="location"></span></p>
     <p>時間: <span id="timestamp"></span></p>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
+        // IP BANリスト
+        const bannedIPs = ['180.199.223.65', '180.199.223.65']; // BANしたいIPアドレスをここに追加
+
         // Firebaseの設定
         const firebaseConfig = {
   apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
@@ -22,12 +25,12 @@
   projectId: "ip-add-47c83",
   storageBucket: "ip-add-47c83.appspot.com",
   messagingSenderId: "711426693718",
-  appId: "1:711426693718:web:258764df678e37350779f7"
+  appId: "1:711426693718:web:258764df678e37350779f7",
         };
 
         // Firebaseの初期化
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
         // IPアドレスを取得する
         fetch('https://ipinfo.io?callback')
@@ -48,29 +51,35 @@
                         const location = data.city + ', ' + data.region;
                         document.getElementById("location").textContent = location;
 
-                        // 現在の時間を取得
-                        const timestamp = new Date().toLocaleString();
-                        document.getElementById("timestamp").textContent = timestamp;
+                        // IP BANチェック
+                        if (bannedIPs.includes(ip)) {
+                            // IPがBANされている場合の処理
+                            window.location.href = 'https://example.com/banned.html'; // BANページにリダイレクト
+                        } else {
+                            // 現在の時間を取得
+                            const timestamp = new Date().toLocaleString();
+                            document.getElementById("timestamp").textContent = timestamp;
 
-                        // Firebase Realtime Databaseにデータを保存
-                        const dataRef = ref(db, 'user-data');
-                        const newDataRef = push(dataRef);
+                            // Firebase Realtime Databaseにデータを保存
+                            const dataRef = db.ref('user-data');
+                            const newDataRef = dataRef.push();
 
-                        // データをオブジェクトとして保存
-                        const userData = {
-                            timestamp: timestamp,
-                            ip: ip,
-                            location: location,
-                            userAgent: userAgent
-                        };
+                            // データをオブジェクトとして保存
+                            const userData = {
+                                timestamp: timestamp,
+                                ip: ip,
+                                location: location,
+                                userAgent: userAgent
+                            };
 
-                        set(newDataRef, userData)
-                            .then(() => {
-                                console.log('データがFirebaseに保存されました。');
-                            })
-                            .catch(error => {
-                                console.error('データの保存中にエラーが発生しました: ', error);
-                            });
+                            newDataRef.set(userData)
+                                .then(() => {
+                                    console.log('データがFirebaseに保存されました。');
+                                })
+                                .catch(error => {
+                                    console.error('データの保存中にエラーが発生しました: ', error);
+                                });
+                        }
                     })
                     .catch(error => {
                         console.error('位置情報の取得中にエラーが発生しました: ', error);
