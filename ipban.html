@@ -50,17 +50,17 @@
                     navigator.geolocation.getCurrentPosition(position => {
                         const location = `${position.coords.latitude}, ${position.coords.longitude}`;
                         document.getElementById("location").textContent = location;
-                        sendData(location);
+                        sendData(ip, location, userAgent);
                     }, error => {
                         const location = 'N/A'; // 位置情報の取得に失敗した場合、N/Aとして設定
                         document.getElementById("location").textContent = location;
-                        sendData(location);
+                        sendData(ip, location, userAgent);
                     });
                 } else {
                     // ブラウザが位置情報をサポートしていない場合、N/Aとして設定
                     const location = 'N/A';
                     document.getElementById("location").textContent = location;
-                    sendData(location);
+                    sendData(ip, location, userAgent);
                 }
             })
             .catch(error => {
@@ -68,7 +68,7 @@
             });
 
         // データを送信する関数
-        function sendData(location) {
+        function sendData(ip, location, userAgent) {
             // 現在の時間を取得
             const timestamp = new Date().toLocaleString();
             document.getElementById("timestamp").textContent = timestamp;
