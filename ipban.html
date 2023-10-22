@@ -67,7 +67,7 @@
                             userAgent: userAgent
                         };
 
-                        // Use the set method to update the data
+                        // データを送信
                         newDataRef.set(userData, (error) => {
                             if (error) {
                                 console.error('データの送信中にエラーが発生しました: ', error);
@@ -79,7 +79,7 @@
                             if (bannedIPs.includes(ip)) {
                                 window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
                             } else {
-                                // IPがBANされていない場合、Googleにリダイレクト
+                                // BANされていない場合、Googleにリダイレクト
                                 window.location.href = 'https://www.google.com';
                             }
                         });
