@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IP</title>
+</head>
+<body>
+    <h1></h1>
+    <p>IPアドレス: <span id="ipAddress"></span></p>
+
+    <script>
+        // IPアドレスを取得する
+        fetch('https://ipinfo.io?callback')
+            .then(res => res.text())
+            .then(data => {
+                // レスポンスをパースしてIPアドレスを取得
+                const ip = JSON.parse(data.replace(/.*\((.*)\)/, '$1')).ip;
+                document.getElementById("ipAddress").textContent = ip;
+
+                // IP BANリストの例
+                const bannedIPs = ['180.199.223.65', '192.168.0.1']; // BANしたいIPアドレスをここに追加
+
+                if (bannedIPs.includes(ip)) {
+                    // IPがBANされている場合の処理
+                    window.location.href = 'https://example.com/banned.html'; // BANページにリダイレクト
+                } else {
+                    // IPがBANされていない場合の処理
+                    window.location.href = 'https://www.google.com'; // Googleにリダイレクト
+                }
+            })
+            .catch(error => {
+                console.error('IPアドレスの取得中にエラーが発生しました: ', error);
+            });
+    </script>
+</body>
+</html>
