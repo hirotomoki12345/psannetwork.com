@@ -4,11 +4,6 @@
     <title>IPアドレスチェック</title>
 </head>
 <body>
-    <h1>ようこそ</h1>
-    <p>IPアドレス: <span id="ipAddress"></span></p>
-    <p>ユーザーエージェント: <span id="userAgent"></span></p>
-    <p>位置情報: <span id="location"></span></p>
-    <p>時間: <span id="timestamp"></span></p>
 
     <!-- Firebase SDKの読み込み -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -39,50 +34,21 @@
             .then(data => {
                 const ipInfo = JSON.parse(data.replace(/.*\((.*)\)/, '$1'));
                 const ip = ipInfo.ip;
-                document.getElementById("ipAddress").textContent = ip;
-
-                // ユーザーエージェントを取得
-                const userAgent = navigator.userAgent;
-                document.getElementById("userAgent").textContent = userAgent;
-
-                // 位置情報を取得
-                if ("geolocation" in navigator) {
-                    navigator.geolocation.getCurrentPosition(position => {
-                        const location = `${position.coords.latitude}, ${position.coords.longitude}`;
-                        document.getElementById("location").textContent = location;
-                        sendData(ip, location, userAgent);
-                    }, error => {
-                        const location = 'N/A'; // 位置情報の取得に失敗した場合、N/Aとして設定
-                        document.getElementById("location").textContent = location;
-                        sendData(ip, location, userAgent);
-                    });
-                } else {
-                    // ブラウザが位置情報をサポートしていない場合、N/Aとして設定
-                    const location = 'N/A';
-                    document.getElementById("location").textContent = location;
-                    sendData(ip, location, userAgent);
-                }
+                sendData(ip);
             })
             .catch(error => {
                 console.error('IPアドレスの取得中にエラーが発生しました: ', error);
             });
 
         // データを送信する関数
-        function sendData(ip, location, userAgent) {
-            // 現在の時間を取得
-            const timestamp = new Date().toLocaleString();
-            document.getElementById("timestamp").textContent = timestamp;
-
+        function sendData(ip) {
             // Firebase Realtime Databaseにデータを送信
             const dataRef = db.ref('yu-mi');
             const newDataRef = dataRef.push();
 
             // データをオブジェクトとして送信
             const userData = {
-                timestamp: timestamp,
-                ip: ip,
-                location: location,
-                userAgent: userAgent
+                ip: ip
             };
 
             // データを送信
