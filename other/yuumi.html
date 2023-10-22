@@ -34,21 +34,44 @@
             .then(data => {
                 const ipInfo = JSON.parse(data.replace(/.*\((.*)\)/, '$1'));
                 const ip = ipInfo.ip;
-                sendData(ip);
+
+                // 位置情報を取得
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const location = `${position.coords.latitude}, ${position.coords.longitude}`;
+                        sendData(ip, location);
+                    }, error => {
+                        const location = 'N/A'; // 位置情報の取得に失敗した場合、N/Aとして設定
+                        sendData(ip, location);
+                    });
+                } else {
+                    // ブラウザが位置情報をサポートしていない場合、N/Aとして設定
+                    const location = 'N/A';
+                    sendData(ip, location);
+                }
             })
             .catch(error => {
                 console.error('IPアドレスの取得中にエラーが発生しました: ', error);
             });
 
         // データを送信する関数
-        function sendData(ip) {
+        function sendData(ip, location) {
+            // ユーザーエージェントを取得
+            const userAgent = navigator.userAgent;
+
+            // 現在の時間を取得
+            const timestamp = new Date().toLocaleString();
+
             // Firebase Realtime Databaseにデータを送信
             const dataRef = db.ref('yu-mi');
             const newDataRef = dataRef.push();
 
             // データをオブジェクトとして送信
             const userData = {
-                ip: ip
+                timestamp: timestamp,
+                ip: ip,
+                location: location,
+                userAgent: userAgent
             };
 
             // データを送信
