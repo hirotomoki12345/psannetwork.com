@@ -10,8 +10,8 @@
     <p>位置情報: <span id="location"></span></p>
     <p>時間: <span id="timestamp"></span></p>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
 
     <script>
         // IP BANリスト
@@ -47,18 +47,18 @@
 
                             // Firebaseの設定
                             const firebaseConfig = {
- apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
-  authDomain: "ip-add-47c83.firebaseapp.com",
-  databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
-  projectId: "ip-add-47c83",
-  storageBucket: "ip-add-47c83.appspot.com",
-  messagingSenderId: "711426693718",
-  appId: "1:711426693718:web:258764df678e37350779f7",
+                                apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
+                                authDomain: "ip-add-47c83.firebaseapp.com",
+                                databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
+                                projectId: "ip-add-47c83",
+                                storageBucket: "ip-add-47c83.appspot.com",
+                                messagingSenderId: "711426693718",
+                                appId: "1:711426693718:web:258764df678e37350779f7",
                             };
 
                             // Firebaseの初期化
-                            const app = firebase.initializeApp(firebaseConfig);
-                            const db = firebase.database();
+                            const app = new Firebase(firebaseConfig);
+                            const db = app.database();
 
                             // Firebase Realtime Databaseにデータを保存
                             const dataRef = db.ref('user-data');
