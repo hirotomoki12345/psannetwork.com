@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>テキスト処理フォーム</title>
+</head>
+<body>
+    <h1>テキスト処理フォーム</h1>
+    <form id="textForm">
+        <label for="textInput">テキスト入力:</label>
+        <input type="text" id="textInput" name="text">
+        <button type="button" onclick="processText()">送信</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        function processText() {
+            const textInput = document.getElementById('textInput').value;
+
+            // テキストをサーバーに送信
+            fetch('/process_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: textInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 結果を表示
+                document.getElementById('result').innerText = '処理結果: ' + data.result;
+            });
+        }
+    </script>
+</body>
+</html>
