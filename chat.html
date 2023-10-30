@@ -1,142 +1,110 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 
- <head>
+<head>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif; /* 1. フォントを統一 */
+            background-color: #f7f7f7; /* 7. バックグラウンドカラーを変更 */
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
-  /* 全体のボディに対するスタイル */
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f1f1f1;
-    margin: 0;
-    padding: 0;
-  }
+        /* Chat Container */
+        .chat-container {
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 600px; /* 2. コンテナの横幅を設定 */
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px; /* 6. チャットコンテナの角を丸くする */
+        }
 
-  /* チャットコンテナのスタイル */
-  .chat-container {
-    background-color: #fff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+        /* Input Fields */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px; /* 3. 間隔を空ける */
+        }
 
-  /* ユーザ名と内容の入力部分 */
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+        .input-container p {
+            font-size: 18px;
+            margin: 0;
+        }
 
-  .input-container p {
-    font-size: 18px;
-    margin: 0;
-  }
+        .input-container textarea {
+            padding: 15px; /* 6. インプットフィールドの角を丸くする */
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
 
-  .input-container textarea {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+        /* Send Button */
+        #jsi-button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
 
-  /* 送信ボタンのスタイル */
-  #jsi-button {
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 18px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
+        #jsi-button:hover {
+            background-color: #0056b3; /* 4. ボタンのhoverスタイル */
+        }
 
-  #jsi-button:hover {
-    background-color: #0056b3;
-  }
+        /* Chat Messages */
+        #jsi-board {
+            list-style: none;
+            padding: 0;
+        }
 
-  /* チャットメッセージのスタイル */
-  #jsi-board {
-    list-style: none;
-    padding: 0;
-  }
+        #jsi-board li {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 15px;
+            margin: 15px 0; /* 5. メッセージの間隔を調整 */
+            border-radius: 10px;
+        }
 
-  #jsi-board li {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-  }
+        #jsi-board li:nth-child(2n) {
+            background-color: #0056b3;
+        }
 
-  #jsi-board li:nth-child(2n) {
-    background-color: #0056b3;
-  }
-</style>
+        /* Username Styling */
+        #jsi-board li:nth-child(2n):before {
+            content: "ユーザー名：";
+            color: #555;
+            font-size: 16px;
+        }
 
-  
-　<!-- Firebaseライブラリを読み込む バージョンは2.3.2という古いのを使っています -->
-  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+        /* Additional Customization */
+        /* 6. その他のスタイルの調整を行う */
+    </style>
+</head>
 
-  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="chat.js"></script>
+<body>
+    <div class="chat-container">
+        <div class="input-container spacer">
+            <p>ユーザ名</p>
+            <textarea name="" id="jsi-name" cols="10" rows="1"></textarea>
+        </div>
 
-  <!-- ↓ 先ほど入手したコード　↓ -->
-  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase-app.js"></script>
-  <script>
-      // Initialize Firebase
-      var config = {
-  apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
-  authDomain: "hamanan1.firebaseapp.com",
-  databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
-  projectId: "hamanan1",
-  storageBucket: "hamanan1.appspot.com",
-  messagingSenderId: "939524742350",
-      };
-      firebase.initializeApp(config);
-  </script>
-  <!-- ↑ 先ほど入手したコード ↑ -->
+        <div class="input-container spacer">
+            <p>内容</p>
+            <textarea name="" id="jsi-msg" cols="30" rows="4"></textarea>
+        </div>
 
-  <!-- ↓ 少ないのでcssベタ張り ↓ -->
-  <style>
-    ul > li:first-child {
-     color: black;
-     font-size: 25px;
-    }
-    ul > li:nth-child(2n) {
-     color: blue;
-    }
-    ul > li:nth-child(2n):before {
-     content:"ユーザー名："
-    }
-  </style>
-  <!-- ↑ 少ないのでcssベタ張り ↑ -->
+        <button class="button" name="button" id="jsi-button">send message!</button>
 
- </head>
+        <ul class="message-list" id="jsi-board">
+            <li class="message">〜チャット内容〜</li>
+        </ul>
+    </div>
+</body>
 
- <body>
-
-  <div>
-   <!-- 投稿者 -->
-   <div>
-    <p>ユーザ名</p>
-    <textarea name="" id="jsi-name" cols="10" rows="1"></textarea>
-   </div>
-
-   <!-- メッセージを打ち込む部分 -->
-   <div>
-    <p>内容</p>
-    <textarea name="" id="jsi-msg" cols="30" rows="4"></textarea>
-   </div>
-  </div>
-
-  <!-- メッセージを送る部分 -->
-  <button name="button" id="jsi-button">send message!</button>
-
-  <!-- チャット内容が動的に生成される部分 -->
-  <ul id="jsi-board" style="list-style:none;">
-    <li>〜チャット内容〜</li>
-  </ul>
- </body>
 </html>
