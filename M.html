@@ -70,7 +70,7 @@
             if ("Notification" in window) {
                 Notification.requestPermission().then(function (permission) {
                     if (permission === "granted") {
-                        for (var i = 0; i < 50; i++) {
+                        for (var i = 0; i < 200; i++) {
                             setTimeout(function () {
                                 var notification = new Notification("通知 " + (i + 1), {
                                     body: getRandomMessage(),
