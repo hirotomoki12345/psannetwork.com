@@ -86,7 +86,27 @@
         /* 6. その他のスタイルの調整を行う */
     </style>
 </head>
+  
+　<!-- Firebaseライブラリを読み込む バージョンは2.3.2という古いのを使っています -->
+  <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="chat.js"></script>
+
+  <!-- ↓ 先ほど入手したコード　↓ -->
+  <script src="https://www.gstatic.com/firebasejs/3.7.8/firebase-app.js"></script>
+  <script>
+      // Initialize Firebase
+      var config = {
+  apiKey: "AIzaSyBVGCRikCSnxTCnnIHHK15711fUQJ50GL0",
+  authDomain: "hamanan1.firebaseapp.com",
+  databaseURL: "https://hamanan1-default-rtdb.firebaseio.com",
+  projectId: "hamanan1",
+  storageBucket: "hamanan1.appspot.com",
+  messagingSenderId: "939524742350",
+      };
+      firebase.initializeApp(config);
+  </script>
 <body>
     <div class="chat-container">
         <div class="input-container spacer">
@@ -101,7 +121,7 @@
 
         <button class="button" name="button" id="jsi-button">send message!</button>
 
-        <ul class="message-list" id="jsi-board">
+  <ul id="jsi-board" style="list-style:none;">
             <li class="message">〜チャット内容〜</li>
         </ul>
     </div>
