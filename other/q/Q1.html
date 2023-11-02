@@ -10,9 +10,25 @@
     <h2>
       仮名文字を重複させず使って作られた47字の 誦文 （ ずもん ）。
     </h2>
-      <div>1加算3加算5減算2</div>
+    <div>1加算3加算5減算2</div>
+    <form>
+      <label for="password">パスワード:</label>
+      <input type="password" id="password" name="password">
+      <input type="button" value="送信" onclick="checkPassword()">
+    </form>
     <script>
-      const _0xaa8459=_0x2358;function _0x2358(_0x1568f7,_0x2dc145){const _0x4d7d4d=_0x4d7d();return _0x2358=function(_0x235876,_0xbe9329){_0x235876=_0x235876-0x15f;let _0x5adfa4=_0x4d7d4d[_0x235876];return _0x5adfa4;},_0x2358(_0x1568f7,_0x2dc145);}(function(_0x57aacc,_0x3fc7d1){const _0x472bbe=_0x2358,_0x728bca=_0x57aacc();while(!![]){try{const _0x3a5cca=parseInt(_0x472bbe(0x169))/0x1*(-parseInt(_0x472bbe(0x16b))/0x2)+-parseInt(_0x472bbe(0x161))/0x3*(parseInt(_0x472bbe(0x15f))/0x4)+parseInt(_0x472bbe(0x16e))/0x5+-parseInt(_0x472bbe(0x16a))/0x6+-parseInt(_0x472bbe(0x166))/0x7+-parseInt(_0x472bbe(0x168))/0x8*(parseInt(_0x472bbe(0x167))/0x9)+-parseInt(_0x472bbe(0x160))/0xa*(-parseInt(_0x472bbe(0x16c))/0xb);if(_0x3a5cca===_0x3fc7d1)break;else _0x728bca['push'](_0x728bca['shift']());}catch(_0x1e90fb){_0x728bca['push'](_0x728bca['shift']());}}}(_0x4d7d,0xd0388));function checkPassword(_0x3bc442){const _0x56ec93=_0x2358,_0x2e5ffc=_0x56ec93(0x164);_0x3bc442===_0x2e5ffc?console[_0x56ec93(0x162)](_0x56ec93(0x163)):console[_0x56ec93(0x162)](_0x56ec93(0x16d));}const userPassword=_0xaa8459(0x165);checkPassword(userPassword);function _0x4d7d(){const _0x1f6012=['パスワードが一致しました。特定の操作を実行します。','とかなくてしす','user_input_password','3366496wmJgbb','9qFHrAj','6115304dUXcMx','1UgjpXG','5451822qHChiO','2179914nlgqoM','11dzCycu','パスワードが一致しません。操作は実行されません。','962160GXyUrP','252660oiJbns','45991900DZrRJh','33jnyelb','log'];_0x4d7d=function(){return _0x1f6012;};return _0x4d7d();}
+      function checkPassword() {
+        const inputPassword = document.getElementById("password").value;
+        const correctPassword = "とかなくてしす"; // 正しいパスワードを設定
+
+        if (inputPassword === correctPassword) {
+          // 正しいパスワードが一致する場合、alertメッセージを表示
+          alert("パスワードが一致しました。特定の操作を実行します。");
+          // ここに操作のコードを追加
+        } else {
+          alert("パスワードが一致しません。操作は実行されません。");
+        }
+      }
     </script>
   </body>
 </html>
