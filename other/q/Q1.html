@@ -11,24 +11,20 @@
       仮名文字を重複させず使って作られた47字の 誦文 （ ずもん ）。
     </h2>
     <div>1加算3加算5減算2</div>
-    <form>
-      <label for="password">パスワード（非推奨 - 隠されない）:</label>
-      <input type="text" id="password" name="password">
-      <input type="button" value="送信" onclick="checkPassword()">
-    </form>
     <script>
       function checkPassword() {
-        const inputPassword = document.getElementById("password").value;
         const correctPassword = "とかなくてしす"; // 正しいパスワードを設定
+        const inputPassword = prompt("パスワードを入力してください:"); // ユーザーにパスワードを尋ねる
 
         if (inputPassword === correctPassword) {
           // 正しいパスワードが一致する場合、alertメッセージを表示
           alert("パスワードが一致しました。特定の操作を実行します。");
-          // ここに操作のコードを追加
+          // ここに他の操作のコードを追加
         } else {
           alert("パスワードが一致しません。操作は実行されません。");
         }
       }
     </script>
+    <input type="button" value="パスワードを入力" onclick="checkPassword()">
   </body>
 </html>
