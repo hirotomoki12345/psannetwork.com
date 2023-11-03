@@ -17,9 +17,8 @@
         const inputPassword = prompt("パスワードを入力してください:"); // ユーザーにパスワードを尋ねる
 
         if (inputPassword === correctPassword) {
-          // 正しいパスワードが一致する場合、alertメッセージを表示
-          alert("パスワードが一致しました。");
-          // ここに他の操作のコードを追加
+          // 正しいパスワードが一致する場合、特定のサイトにリダイレクト
+          window.location.href = "https://lighthearted-manatee-c3344e.netlify.app/other/q/Q2.html"; // リダイレクト先のURLを設定
         } else {
           alert("パスワードが一致しません");
         }
