@@ -5,22 +5,26 @@
 </head>
 <body>
     <p id="location"></p>
-    <input type="text" id="userInput" placeholder="特定の条件を入力してください">
-    <button onclick="checkLocation()">条件をチェック</button>
+    <input type="text" id="latitudeInput" placeholder="緯度を入力してください">
+    <input type="text" id="longitudeInput" placeholder="経度を入力してください">
+    <button onclick="checkLocation()">位置情報をチェック</button>
     <script>
         function checkLocation() {
-            var userInput = document.getElementById("userInput").value;
+            var latitudeInput = parseFloat(document.getElementById("latitudeInput").value);
+            var longitudeInput = parseFloat(document.getElementById("longitudeInput").value);
 
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(function (position) {
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
-                    
-                    if (userInput === "特定の条件" && latitude === 特定の緯度 && longitude === 特定の経度) {
-                        window.location.href = "https://example.com";
+
+                    if (latitude === latitudeInput && longitude === longitudeInput) {
+                        document.getElementById("location").textContent = "位置情報が一致しました。";
                     } else {
-                        document.getElementById("location").textContent = "条件と位置情報が一致しません。";
+                        document.getElementById("location").textContent = "位置情報が一致しません。";
                     }
+                }, function (error) {
+                    document.getElementById("location").textContent = "位置情報を取得できませんでした: " + error.message;
                 });
             } else {
                 document.getElementById("location").textContent = "Geolocationはサポートされていません。";
