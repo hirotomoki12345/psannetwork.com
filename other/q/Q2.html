@@ -1,3 +1,31 @@
 <!DOCTYPE html>
 <html>
-<body></body>
+<head>
+    <title>Q2</title>
+</head>
+<body>
+    <p id="location"></p>
+    <input type="text" id="userInput" placeholder="特定の条件を入力してください">
+    <button onclick="checkLocation()">条件をチェック</button>
+    <script>
+        function checkLocation() {
+            var userInput = document.getElementById("userInput").value;
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    
+                    if (userInput === "特定の条件" && latitude === 特定の緯度 && longitude === 特定の経度) {
+                        window.location.href = "https://example.com";
+                    } else {
+                        document.getElementById("location").textContent = "条件と位置情報が一致しません。";
+                    }
+                });
+            } else {
+                document.getElementById("location").textContent = "Geolocationはサポートされていません。";
+            }
+        }
+    </script>
+</body>
+</html>
