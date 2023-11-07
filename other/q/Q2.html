@@ -19,9 +19,10 @@
                     var longitude = position.coords.longitude;
 
                     if (latitude === latitudeInput && longitude === longitudeInput) {
-                        document.getElementById("location").textContent = "位置情報が一致しました。";
+                        alert("正解！");
+                        window.location.href = "https://google.com";
                     } else {
-                        document.getElementById("location").textContent = "位置情報が一致しません。";
+                        document.getElementById("location").textContent = "違うよ。";
                     }
                 }, function (error) {
                     document.getElementById("location").textContent = "位置情報を取得できませんでした: " + error.message;
