@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <title>psan network</title>
     <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
-    
+
     <style>
-        /* スタイルをきれいに */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -33,7 +32,6 @@
             text-decoration: none;
         }
 
-        /* キャンバスのスタイル */
         canvas {
             position: fixed;
             top: 0;
@@ -41,7 +39,6 @@
             z-index: -1;
         }
 
-        /* New styles for parallax effect */
         .parallax-header,
         .parallax-text {
             opacity: 0;
@@ -54,6 +51,36 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        h2 {
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -64,123 +91,86 @@
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
 
-<script>
-    // 背景の動く線を描画するためのJavaScript
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    const lines = [];
+        const lines = [];
 
-    class Line {
-        constructor(x, y, color, speed) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.speed = speed;
-        }
+        class Line {
+            constructor(x, y, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.speed = speed;
+            }
 
-        update() {
-            this.x += this.speed;
-            if (this.x > canvas.width) {
-                this.x = 0;
+            update() {
+                this.x += this.speed;
+                if (this.x > canvas.width) {
+                    this.x = 0;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + 50, this.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
             }
         }
 
-        draw() {
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x + 50, this.y);
-            ctx.strokeStyle = this.color;
-            ctx.lineWidth = 2;
-            ctx.stroke();
+        function createLines() {
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+                const speed = 1 + Math.random() * 3;
+                lines.push(new Line(x, y, color, speed));
+            }
         }
-    }
 
-    function createLines() {
-        for (let i = 0; i < 100; i++) {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height;
-            const color = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
-            const speed = 1 + Math.random() * 3;
-            lines.push(new Line(x, y, color, speed));
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const line of lines) {
+                line.update();
+                line.draw();
+            }
         }
-    }
 
-    function animate() {
-        requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (const line of lines) {
-            line.update();
-            line.draw();
-        }
-    }
-
-    createLines();
-    animate();
-</script>
-
+        createLines();
+        animate();
+    </script>
 
     <h2>最新の投稿</h2>
     <ul>
-         <li><a href="/post3.html">処理水について</a></li>
-         <li><a href="/post4.html">連打ツール紹介</a></li>
-         <li><a href="/post6.html">kamiのインストール方法</a></li>
-         <li><a href="/post7.html">2進法10進法変換</a></li>
-         <li><a href="/post8.html">開発者モードに移行する方法</a></li>
-         <li><a href="/進数変換.html">進数変換</a></li>
-
-        <!-- 新しいブログ記事を追加する場合はここにリンクを追加 -->
+        <li><a href="/post3.html">処理水について</a></li>
+        <li><a href="/post4.html">連打ツール紹介</a></li>
+        <li><a href="/post6.html">kamiのインストール方法</a></li>
+        <li><a href="/post7.html">2進法10進法変換</a></li>
+        <li><a href="/post8.html">開発者モードに移行する方法</a></li>
+        <li><a href="/進数変換.html">進数変換</a></li>
     </ul>
 
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
 
-
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-</div>
-<div></div>
-
-
-
-
-
-
-    
-   
-    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" rel="nofollow" referrerpolicy="no-referrer-when-downgrade"><img src="//image.moshimo.com/af-img/1762/000000038393.gif" width="234" height="60" style="border:none;"></a><img src="//i.moshimo.com/af/i/impression?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" width="1" height="1" style="border:none;">
-<div><a href="#" id="secretLink">secret network</a></div>
-
-<script>
-document.getElementById('secretLink').addEventListener('click', function(event) {
-    event.preventDefault();
-    window.location.href = 'http://cf238855.cloudfree.jp/hide/hide.html';
-});
-</script>
-    <div><a href="/chat.html">CHAT</a></div>
-</body>
-</html>
+    <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" rel="nofollow"
+        referrerpolicy="no-referrer-when-downgrade"><img
+            src="//image.moshimo.com/af-img/1762/000000038393.gif" width="234" height="60" style="border:none;"></a><img
+        src="//i.moshimo.com/af/i/impression?a_id=4202523&p
