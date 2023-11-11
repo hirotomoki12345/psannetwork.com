@@ -1,4 +1,4 @@
-// authenticate.js
+// functions/authenticate.js
 
 const jwt = require('jsonwebtoken');
 
@@ -13,19 +13,20 @@ exports.handler = async (event, context) => {
     }
 
     const token = authorization.replace('Bearer ', '');
-    const decoded = jwt.verify(token, 'hamanan'); // 本当に安全な方法で秘密鍵を保護する必要があります
+    const decoded = jwt.verify(token, 'hamanan'); // 安全な方法で秘密鍵を保護する必要があります
 
-    if (decoded.role !== 'admin') {
+    // ユーザーの権限やその他の認証チェックを行います
+    if (/* ユーザーがアクセスを許可されているかの条件 */) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Authenticated' }),
+      };
+    } else {
       return {
         statusCode: 403,
         body: JSON.stringify({ message: 'Forbidden' }),
       };
     }
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: 'Authenticated' }),
-    };
   } catch (error) {
     console.error(error);
     return {
