@@ -31,9 +31,18 @@
       padding: 10px;
       border-radius: 5px;
     }
+
+    input[type="text"] {
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
   </style>
   <script>
-    // JavaScript部分はそのまま保持
     function textToBase(text, base) {
       let result = "";
       for (let i = 0; i < text.length; i++) {
@@ -54,27 +63,41 @@
       return result;
     }
 
+    function updateConversionType() {
+      const conversionType = document.querySelector('input[name="conversionType"]:checked').value;
+      const inputLabel = document.querySelector('#inputLabel');
+      const buttonText = document.querySelector('#buttonText');
+      inputLabel.textContent = conversionType === "1" ? "テキストを入力してください:" : "進法を入力してください:";
+      buttonText.textContent = conversionType === "1" ? "変換" : "複合";
+    }
+
     function startConversion() {
-      const choice = prompt("変換または複合のどちらを行いますか？\n1. 変換\n2. 複合");
+      const conversionType = document.querySelector('input[name="conversionType"]:checked').value;
+      const inputValue = document.getElementById("inputValue").value;
+      const resultContainer = document.getElementById("result");
+      resultContainer.innerHTML = `入力したテキスト: ${inputValue}<br>`;
 
-      if (choice === "1" || choice === "2") {
-        const text = prompt("テキストを入力してください:");
-        const resultContainer = document.getElementById("result");
-        resultContainer.innerHTML = `入力したテキスト: ${text}<br>`;
-
-        for (let base = 2; base <= 20; base++) {
-          const convertedText = choice === "1" ? textToBase(text, base) : baseToText(text, base);
-          resultContainer.innerHTML += `${base}進法: ${convertedText}<br>`;
-        }
-      } else {
-        alert("無効な選択です。変換または複合を選んでください。");
+      for (let base = 2; base <= 20; base++) {
+        const convertedText = conversionType === "1" ? textToBase(inputValue, base) : baseToText(inputValue, base);
+        resultContainer.innerHTML += `${base}進法: ${convertedText}<br>`;
       }
     }
   </script>
 </head>
 <body>
   <h1>進法変換ツール</h1>
-  <button onclick="startConversion()">実行</button>
+
+  <label>
+    <input type="radio" name="conversionType" value="1" checked onchange="updateConversionType()"> 変換
+  </label>
+  <label>
+    <input type="radio" name="conversionType" value="2" onchange="updateConversionType()"> 複合
+  </label>
+
+  <label id="inputLabel">テキストを入力してください:</label>
+  <input type="text" id="inputValue">
+  
+  <button onclick="startConversion()" id="convertButton">実行</button>
   <div id="result"></div>
 </body>
 </html>
