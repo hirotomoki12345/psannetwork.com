@@ -20,14 +20,14 @@
         function sendRequest() {
             var question = document.getElementById("question").value;
 
-            // Send POST request to Flask endpoint
 fetch('https://psan.pythonanywhere.com/get_answer', {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
     },
-    body: 'question=' + encodeURIComponent(question),
+    body: JSON.stringify({ question: question }),
 })
+
 
             .then(response => response.json())
             .then(data => {
