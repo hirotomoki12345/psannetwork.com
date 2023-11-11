@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>進法変換</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #result {
+      margin-top: 20px;
+      background-color: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+  <script>
+    // JavaScript部分はそのまま保持
+    function textToBase(text, base) {
+      let result = "";
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i);
+        const baseValue = charCode.toString(base);
+        result += baseValue + " ";
+      }
+      return result.trim();
+    }
+
+    function baseToText(input, base) {
+      const values = input.split(" ");
+      let result = "";
+      for (let i = 0; i < values.length; i++) {
+        const decimalValue = parseInt(values[i], base);
+        result += String.fromCharCode(decimalValue);
+      }
+      return result;
+    }
+
+    function startConversion() {
+      const choice = prompt("変換または複合のどちらを行いますか？\n1. 変換\n2. 複合");
+
+      if (choice === "1" || choice === "2") {
+        const text = prompt("テキストを入力してください:");
+        const resultContainer = document.getElementById("result");
+        resultContainer.innerHTML = `入力したテキスト: ${text}<br>`;
+
+        for (let base = 2; base <= 20; base++) {
+          const convertedText = choice === "1" ? textToBase(text, base) : baseToText(text, base);
+          resultContainer.innerHTML += `${base}進法: ${convertedText}<br>`;
+        }
+      } else {
+        alert("無効な選択です。変換または複合を選んでください。");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>進法変換ツール</h1>
+  <button onclick="startConversion()">実行</button>
+  <div id="result"></div>
+</body>
+</html>
