@@ -1,43 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bard API Request</title>
+    <title>質問と回答</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#question-form').submit(function(e) {
+                e.preventDefault();
+                var question = $('#question-input').val();
+                $.ajax({
+                    url: 'https://psan.pythonanywhere.com/question',
+                    type: 'POST',
+                    data: JSON.stringify({ 'question': question }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        $('#answer').text(response.answer);
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-
-    <h1>Bard API Request</h1>
-
-    <label for="question">Enter your question:</label>
-    <input type="text" id="question" name="question" required>
-    <button onclick="sendRequest()">Get Answer</button>
-
-    <div id="response"></div>
-
-    <script>
-        function sendRequest() {
-            var question = document.getElementById("question").value;
-
-fetch('https://psan.pythonanywhere.com/get_answer', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ question: question }),
-})
-
-
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("response").innerText = 'Answer: ' + data.answer;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
-
+    <h1>質問と回答</h1>
+    <form id="question-form">
+        <label for="question-input">質問:</label>
+        <input type="text" id="question-input" required>
+        <button type="submit">送信</button>
+    </form>
+    <div id="answer"></div>
 </body>
 </html>
