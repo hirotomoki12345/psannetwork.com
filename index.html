@@ -5,40 +5,145 @@
     <title>Psan Network</title>
     <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
     <style>
-        body{font-family:Arial,sans-serif;line-height:1.6;margin:20px;background-color:#000;color:#fff}
-        h1{color:#007bff;font-size:50px;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,0.6)}
-        h2{color:red;margin-top:45px;font-size:3em}
-        p{font-size:18px;margin-bottom:10px;text-shadow:1px 1px 2px rgba(0,0,0,0.6)}
-        a{color:#007bff;text-decoration:none}
-        canvas{position:fixed;top:0;left:0;z-index:-1}
-        ul{list-style-type:none;padding:0;font-size:20px;color:white}
-        li{margin-bottom:10px;border-bottom:1px solid #555;padding-bottom:5px}
-        li:last-child{border-bottom:none}
-        li a{color:#007bff;text-decoration:none}
-        li a:hover{text-decoration:underline}
-        .titles{color:red;font-family:sans-serif;font-size:5em;font-weight:bold}
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 50px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        h2 {
+            color: red;
+            margin-top: 45px;
+            font-size: 3em;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            font-size: 20px;
+            color: white;
+        }
+
+        li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+
+        .titles {
+            color: red;
+            font-family: sans-serif;
+            font-size: 5em;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
+
     <h1 class="titles">PsanNetwork</h1>
+
     <p class="parallax-text">こんにちは、Pさんです。よろしくお願いします。</p>
     <p>ここでは主に便利なツールを投稿していきます。</p>
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
+
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const lines = [];
-        class Line{constructor(x,y,color,speed){this.x=x;this.y=y;this.color=color;this.speed=speed}
-            update(){this.x+=this.speed;if(this.x>canvas.width){this.x=0}}
-            draw(){ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x+50,this.y);ctx.strokeStyle=this.color;ctx.lineWidth=2;ctx.stroke()}}
-        function createLines(){for(let i=0;i<100;i++){const x=Math.random()*canvas.width;const y=Math.random()*canvas.height;const color=`rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},0.8)`;const speed=1+Math.random()*3;lines.push(new Line(x,y,color,speed))}}
-        function animate(){requestAnimationFrame(animate);ctx.clearRect(0,0,canvas.width,canvas.height);for(const line of lines){line.update();line.draw()}}
-        createLines();animate();
+
+        class Line {
+            constructor(x, y, color, speed) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.speed = speed;
+            }
+
+            update() {
+                this.x += this.speed;
+                if (this.x > canvas.width) {
+                    this.x = 0;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + 50, this.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function createLines() {
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},0.8)`;
+                const speed = 1 + Math.random() * 3;
+                lines.push(new Line(x, y, color, speed));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const line of lines) {
+                line.update();
+                line.draw();
+            }
+        }
+
+        createLines();
+        animate();
     </script>
+
     <h2>最新の投稿</h2>
     <ul>
         <li><a href="/post3.html">処理水について</a></li>
@@ -48,14 +153,18 @@
         <li><a href="/post8.html">開発者モードに移行する方法</a></li>
         <li><a href="/進数変換.html">進数変換</a></li>
     </ul>
+
     <div><a href="#" id="secretLink">secret network</a></div>
+
     <script>
-        document.getElementById('secretLink').addEventListener('click', function(event) {
+        document.getElementById('secretLink').addEventListener('click', function (event) {
             event.preventDefault();
             window.location.href = 'http://cf238855.cloudfree.jp/hide/hide.html';
         });
     </script>
+
     <div><a href="/chat.html">CHAT</a></div>
+
     <a href="//af.moshimo.com/af/c/click?a_id=4202523&p_id=2312&pc_id=4967&pl_id=38393" rel="nofollow" referrerpolicy="no-referrer-when-downgrade">
         <img src="//image.moshimo.com/af-img/1762/000000038393.gif" width="234" height="60" style="border:none;">
     </a>
