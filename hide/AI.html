@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>質問と回答</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#question-form').submit(function(e) {
+                e.preventDefault();
+                var question = $('#question-input').val();
+                $.ajax({
+                    url: 'https://psan.pythonanywhere.com/',
+                    type: 'POST',
+                    data: JSON.stringify({ 'question': question }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        $('#answer').text(response.answer);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>質問と回答</h1>
+    <form id="question-form">
+        <label for="question-input">質問:</label>
+        <input type="text" id="question-input" required>
+        <button type="submit">送信</button>
+    </form>
+    <div id="answer"></div>
+</body>
+</html>
