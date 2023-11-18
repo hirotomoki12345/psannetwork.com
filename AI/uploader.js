@@ -1,97 +1,116 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
+  import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
 
-// Firebase構成
-const firebaseConfig = {
-  apiKey: "AIzaSyAQ6Wxch09h7hBaevt2tMa6los7DoKp-EE",
-  authDomain: "psan-file.firebaseapp.com",
-  projectId: "psan-file",
-  storageBucket: "psan-file.appspot.com",
-  messagingSenderId: "608944420732",
-  appId: "1:608944420732:web:9fed02b5c6e9e8185fd6f9",
-};
+  // Firebase構成
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQ6Wxch09h7hBaevt2tMa6los7DoKp-EE",
+    authDomain: "psan-file.firebaseapp.com",
+    projectId: "psan-file",
+    storageBucket: "psan-file.appspot.com",
+    messagingSenderId: "608944420732",
+    appId: "1:608944420732:web:9fed02b5c6e9e8185fd6f9",
+  };
 
-// Bitly APIキー
-const bitlyApiKey = "e58992970f4d2565ad5a9c90b6337619b2dd51b6";
+  // Firebaseアプリの初期化
+  const app = initializeApp(firebaseConfig);
 
-// Firebaseアプリの初期化
-const app = initializeApp(firebaseConfig);
+  // Storageへの参照を取得
+  const storage = getStorage(app);
 
-// Storageへの参照を取得
-const storage = getStorage(app);
+  // ファイル選択時の処理
+  const fileInput = document.getElementById('fileInput');
+  const resultContainer = document.getElementById('resultContainer');
+  const uploadButton = document.getElementById('uploadButton');
+  const fileIdInput = document.getElementById('fileIdInput');
+  const downloadButton = document.getElementById('downloadButton');
 
-// 短縮URLを格納する変数を宣言
-let shortLink;
+  let fileId; // ファイルIDを格納する変数
 
-// ファイル選択時の処理
-const fileInput = document.getElementById('fileInput');
-const resultContainer = document.getElementById('resultContainer');
-const uploadButton = document.getElementById('uploadButton');
+  uploadButton.addEventListener('click', handleFileUpload);
+  downloadButton.addEventListener('click', handleFileDownload);
 
-uploadButton.addEventListener('click', handleFileUpload);
+  function handleFileUpload() {
+    const files = fileInput.files;
+    if (!files || files.length === 0) {
+      alert('ファイルを選択してください。');
+      return;
+    }
 
-function handleFileUpload() {
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('ファイルを選択してください。');
-    return;
-  }
+    fileId = generateRandomId(); // ファイルIDを生成
 
-  // ファイルサイズ制限 (100MB以下)
-  const fileSizeLimit = 100 * 1024 * 1024; // 100MB
-  if (file.size > fileSizeLimit) {
-    alert('ファイルサイズが大きすぎます。最大サイズは100MBです。');
-    return;
-  }
+    resultContainer.innerHTML = ''; // 既存の結果をクリア
 
-  const filePath = 'data/' + file.name; // アップロード先のファイルパスを指定
+    // 各ファイルに対して処理を行う
+    Array.from(files).forEach((file, index) => {
+      const filePath = generateFilePath(file, fileId); // ファイルの保存先のパスを生成
 
-  // ファイルをアップロード
-  const storageRef = ref(storage, filePath);
-  uploadBytes(storageRef, file)
-    .then(() => {
-      console.log('ファイルのアップロードに成功しました。');
+      // ファイルをアップロード
+      const storageRef = ref(storage, filePath);
+      uploadBytes(storageRef, file)
+        .then(() => {
+          console.log(`ファイル ${index + 1} のアップロードに成功しました。`);
 
-      // ファイルのダウンロードURLを取得
-      return getDownloadURL(storageRef);
-    })
-    .then((url) => {
-      // ダウンロードURLを表示
-      console.log('ファイルのURL:', url);
+          // ファイルのダウンロードURLとファイルIDを取得
+          return Promise.all([getDownloadURL(storageRef), fileId]);
+        })
+        .then(([url, fileId]) => {
+          // ダウンロードリンクとファイルIDを表示
+          const linkElement = document.createElement('a');
+          linkElement.href = url;
+          linkElement.target = '_blank';
+          linkElement.textContent = `ファイル ${index + 1} のダウンロード`;
+          linkElement.classList.add('fileLink');
+          resultContainer.appendChild(linkElement);
+        resultContainer.innerHTML += `ファイルID: ${fileId}<br>`;
 
-      // 短縮URLを生成
-      return shortenURL(url);
-    })
-    .then((generatedShortLink) => {
-      // 短縮URLを表示
-      shortLink = generatedShortLink;
-      console.log('短縮URL:', shortLink);
-
-      // メッセージを結果のコンテナに追加
-// 短縮URLを表示
-resultContainer.innerHTML += `短縮URL: <a href="https://${shortLink}" target="_blank">${shortLink}</a>`;
-    })
-    .catch((error) => {
-      // エラーが発生した場合の処理
-      console.error('ファイルのアップロードに失敗しました。', error);
+        })
+        .catch((error) => {
+          // エラーが発生した場合の処理
+          console.error(`ファイル ${index + 1} のアップロードに失敗しました。`, error);
+        });
     });
-}
+  }
 
-// Bitlyを使用してURLを短縮する関数
-async function shortenURL(longURL) {
-  const bitlyAPI = 'https://api-ssl.bitly.com/v4/shorten';
+  async function handleFileDownload() {
+    const inputtedFileId = fileIdInput.value.trim();
+    if (!inputtedFileId) {
+      alert('ファイルIDを入力してください。');
+      return;
+    }
 
-  const response = await fetch(bitlyAPI, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${bitlyApiKey}`,
-    },
-    body: JSON.stringify({
-      long_url: longURL,
-    }),
-  });
+    // 入力されたファイルIDを使用してファイルの保存先のパスを構築
+    const filePath = `data/${inputtedFileId}`;
 
-  const result = await response.json();
-  return result.id; // 短縮URL
-}
+    // ファイルの一覧を取得
+    try {
+      const fileRef = ref(storage, filePath);
+      const fileList = await listAll(fileRef);
+
+      // ダウンロードリンクとファイルIDを表示
+      fileList.items.forEach(async (file) => {
+        const url = await getDownloadURL(file);
+        const linkElement = document.createElement('a');
+        linkElement.href = url;
+        linkElement.target = '_blank';
+        linkElement.textContent = `ファイルのダウンロード (ファイルID: ${inputtedFileId})`;
+        linkElement.classList.add('fileLink');
+        resultContainer.appendChild(linkElement);
+
+        // ファイルIDも表示
+        resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
+      });
+    } catch (error) {
+      // エラーが発生した場合の処理
+      console.error('ファイルのダウンロードに失敗しました。', error);
+    }
+  }
+
+  // ファイルの保存先のパスを生成する関数
+  function generateFilePath(file, id) {
+    return `data/${id}/${encodeURIComponent(file.name)}`;
+  }
+
+  // ランダムなIDを生成する関数
+  function generateRandomId() {
+    return Math.random().toString(36).substring(2, 15);
+  }
