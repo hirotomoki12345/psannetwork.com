@@ -86,24 +86,28 @@
       const fileRef = ref(storage, filePath);
       const fileList = await listAll(fileRef);
 
-      // ダウンロードリンクとファイルIDを表示
-      fileList.items.forEach(async (file) => {
-        const url = await getDownloadURL(file);
-        const linkElement = document.createElement('a');
-        linkElement.href = url;
-        linkElement.target = '_blank';
-        linkElement.textContent = `ファイルのダウンロード (ファイルID: ${inputtedFileId})`;
-        linkElement.classList.add('fileLink');
-        resultContainer.appendChild(linkElement);
+try {
+  const fileRef = ref(storage, filePath);
+  const fileList = await listAll(fileRef);
 
-        // ファイルIDも表示
-        resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
-      });
-    } catch (error) {
-      // エラーが発生した場合の処理
-      console.error('ファイルのダウンロードに失敗しました。', error);
-    }
-  }
+  // ダウンロードリンクとファイルIDを表示
+  fileList.items.forEach(async (file) => {
+    const url = await getDownloadURL(file);
+    const linkElement = document.createElement('a');
+    linkElement.href = url;
+    linkElement.target = '_blank';
+    linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
+    linkElement.classList.add('fileLink');
+    resultContainer.appendChild(linkElement);
+
+    // ファイルIDも表示
+    resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
+  });
+} catch (error) {
+  // エラーが発生した場合の処理
+  console.error('ファイルのダウンロードに失敗しました。', error);
+}
+
 
   // ファイルの保存先のパスを生成する関数
   function generateFilePath(file, id) {
