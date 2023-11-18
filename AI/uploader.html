@@ -12,7 +12,7 @@
     }
 
     #fileInput {
-      padding: 120px;
+      padding: 20px;
       background-color: #4CAF50;
       color: white;
       border: none;
@@ -111,11 +111,13 @@
       return;
     }
 
+    fileId = generateRandomId(); // ファイルIDを生成
+
     resultContainer.innerHTML = ''; // 既存の結果をクリア
 
     // 各ファイルに対して処理を行う
     Array.from(files).forEach((file, index) => {
-      const filePath = generateFilePath(file); // ファイルの保存先のパスを生成
+      const filePath = generateFilePath(file, fileId); // ファイルの保存先のパスを生成
 
       // ファイルをアップロード
       const storageRef = ref(storage, filePath);
@@ -127,9 +129,8 @@
           return getDownloadURL(storageRef);
         })
         .then((url) => {
-          // ダウンロードURLとファイルIDを表示
-          fileId = extractFileId(filePath); // アップロード時に使用したファイルIDを取得
-          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}<br>`;
+          // ダウンロードURLを表示
+          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>`;
         })
         .catch((error) => {
           // エラーが発生した場合の処理
@@ -165,18 +166,11 @@
   }
 
   // ファイルの保存先のパスを生成する関数
-  function generateFilePath(file) {
-    fileId = generateRandomId(); // ファイルIDを生成
-    return `data/${fileId}/${encodeURIComponent(file.name)}`;
+  function generateFilePath(file, id) {
+    return `data/${id}/${encodeURIComponent(file.name)}`;
   }
 
-  // ファイルIDを抽出する関数
-  function extractFileId(filePath) {
-    const match = filePath.match(/data\/([^/]+)\//);
-    return match ? match[1] : null;
-  }
-
-  // ランダムなIDを生成する関数（以前のコードから移植）
+  // ランダムなIDを生成する関数
   function generateRandomId() {
     return Math.random().toString(36).substring(2, 15);
   }
