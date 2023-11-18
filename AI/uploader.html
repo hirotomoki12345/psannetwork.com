@@ -130,15 +130,15 @@
         .then(() => {
           console.log(`ファイル ${index + 1} のアップロードに成功しました。`);
 
-          // ファイルのダウンロードURLを取得
-          return getDownloadURL(storageRef);
+          // ファイルのダウンロードURLとファイルIDを取得
+          return Promise.all([getDownloadURL(storageRef), fileId]);
         })
-        .then((url) => {
+        .then(([url, fileId]) => {
           // ダウンロードリンクとファイルIDを表示
           const linkElement = document.createElement('a');
           linkElement.href = url;
           linkElement.target = '_blank';
-          linkElement.textContent = `ファイル ${index + 1} のダウンロード`;
+          linkElement.textContent = `ファイル ${index + 1} のダウンロード (ファイルID: ${fileId})`;
           linkElement.classList.add('fileLink');
           resultContainer.appendChild(linkElement);
         })
@@ -164,15 +164,18 @@
       const fileRef = ref(storage, filePath);
       const fileList = await listAll(fileRef);
 
-      // ダウンロードリンクを表示
+      // ダウンロードリンクとファイルIDを表示
       fileList.items.forEach(async (file) => {
         const url = await getDownloadURL(file);
         const linkElement = document.createElement('a');
         linkElement.href = url;
         linkElement.target = '_blank';
-        linkElement.textContent = `ファイルのダウンロード`;
+        linkElement.textContent = `ファイルのダウンロード (ファイルID: ${inputtedFileId})`;
         linkElement.classList.add('fileLink');
         resultContainer.appendChild(linkElement);
+
+        // ファイルIDも表示
+        resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
       });
     } catch (error) {
       // エラーが発生した場合の処理
