@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ファイルアップロード</title>
-   <style>
+  <title>ファイルアップロードとダウンロード</title>
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -22,21 +22,6 @@
       margin: 20px auto;
     }
 
-    label {
-      padding: 50px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
-    label:hover {
-      background-color: #45a049;
-    }
-
     button {
       padding: 20px;
       background-color: #4CAF50;
@@ -48,15 +33,12 @@
       margin: 20px auto;
     }
 
-    button:hover {
-      background-color: #45a049;
-    }
-
     #resultContainer {
       margin-top: 20px;
     }
+
     .up {
-      padding: 20px;    
+      padding: 20px;
     }
   </style>
 </head>
@@ -107,7 +89,10 @@
       return;
     }
 
-    const filePath = 'data/' + encodeURIComponent(file.name); // アップロード先のファイルパスを指定
+    // ランダムなIDを生成
+    const fileId = generateRandomId();
+
+    const filePath = `data/${fileId}/${encodeURIComponent(file.name)}`; // アップロード先のファイルパスを指定
 
     // ファイルをアップロード
     const storageRef = ref(storage, filePath);
@@ -129,6 +114,11 @@
         // エラーが発生した場合の処理
         console.error('ファイルのアップロードに失敗しました。', error);
       });
+  }
+
+  // ランダムなIDを生成する関数
+  function generateRandomId() {
+    return Math.random().toString(36).substring(2, 15);
   }
 </script>
 
