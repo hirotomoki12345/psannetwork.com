@@ -141,7 +141,7 @@
           linkElement.textContent = `ファイル ${index + 1} のダウンロード`;
           linkElement.classList.add('fileLink');
           resultContainer.appendChild(linkElement);
-          linkElement.textContent = `ファイルID: ${fileId}`;
+        resultContainer.innerHTML += `ファイルID: ${fileId}<br>`;
 
         })
         .catch((error) => {
