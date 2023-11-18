@@ -92,7 +92,7 @@
   // Storageへの参照を取得
   const storage = getStorage(app);
 
- const fileInput = document.getElementById('fileInput');
+  const fileInput = document.getElementById('fileInput');
   const resultContainer = document.getElementById('resultContainer');
   const uploadButton = document.getElementById('uploadButton');
   const fileIdInput = document.getElementById('fileIdInput');
@@ -145,35 +145,37 @@
     }
 
     // 入力されたファイルIDを使用してファイルの保存先のパスを構築
-    const filePath = `data/${inputtedFileId}`;
+    const folderPath = `data/${inputtedFileId}`;
 
-    // ファイルのダウンロードURLを取得
-    getDownloadURL(ref(storage, filePath))
-      .then((url) => {
-        // ダウンロードURLを新しいウィンドウで開く
-        window.open(url, '_blank');
+    // フォルダ内のすべてのファイルを取得
+    listAll(ref(storage, folderPath))
+      .then((result) => {
+        // フォルダ内のすべてのファイルに対して処理を行う
+        result.items.forEach((fileRef) => {
+          // ファイルのダウンロードURLを取得
+          getDownloadURL(fileRef)
+            .then((url) => {
+              // ダウンロードURLを新しいウィンドウで開く
+              window.open(url, '_blank');
+            })
+            .catch((error) => {
+              // エラーが発生した場合の処理
+              console.error('ファイルのダウンロードに失敗しました。', error);
+            });
+        });
       })
       .catch((error) => {
         // エラーが発生した場合の処理
-        console.error('ファイルのダウンロードに失敗しました。', error);
+        console.error('ファイルの取得に失敗しました。', error);
       });
   }
 
-  // ファイルの保存先のパスを生成する関数
-  function generateFilePath(file) {
-    fileId = generateRandomId(); // ファイルIDを生成
-    return `data/${fileId}/${encodeURIComponent(file.name)}`;
-  }
+  // 以前のコードからの変更点：
 
   // ファイルIDを抽出する関数
   function extractFileId(filePath) {
     const match = filePath.match(/data\/([^/]+)\//);
     return match ? match[1] : null;
-  }
-
-  // ランダムなIDを生成する関数（以前のコードから移植）
-  function generateRandomId() {
-    return Math.random().toString(36).substring(2, 15);
   }
 </script>
 
