@@ -37,8 +37,26 @@
       margin-top: 20px;
     }
 
-    .up {
+    #downloadSection {
+      margin-top: 50px;
+    }
+
+    #fileIdInput {
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    #downloadButton {
       padding: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #downloadButton:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
@@ -47,6 +65,12 @@
 <input type="file" id="fileInput">
 <button id="uploadButton">ファイルをアップロード</button>
 <div id="resultContainer"></div>
+
+<div id="downloadSection">
+  <label for="fileIdInput">ファイルIDを入力してダウンロード：</label>
+  <input type="text" id="fileIdInput">
+  <button id="downloadButton">ダウンロード</button>
+</div>
 
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
@@ -72,8 +96,11 @@
   const fileInput = document.getElementById('fileInput');
   const resultContainer = document.getElementById('resultContainer');
   const uploadButton = document.getElementById('uploadButton');
+  const fileIdInput = document.getElementById('fileIdInput');
+  const downloadButton = document.getElementById('downloadButton');
 
   uploadButton.addEventListener('click', handleFileUpload);
+  downloadButton.addEventListener('click', handleFileDownload);
 
   function handleFileUpload() {
     const file = fileInput.files[0];
@@ -113,6 +140,28 @@
       .catch((error) => {
         // エラーが発生した場合の処理
         console.error('ファイルのアップロードに失敗しました。', error);
+      });
+  }
+
+  function handleFileDownload() {
+    const fileId = fileIdInput.value.trim();
+    if (!fileId) {
+      alert('ファイルIDを入力してください。');
+      return;
+    }
+
+    // ファイルのダウンロードURLを取得
+    const filePath = `data/${fileId}`;
+    const storageRef = ref(storage, filePath);
+
+    getDownloadURL(storageRef)
+      .then((url) => {
+        // ダウンロードURLを表示
+        window.open(url, '_blank');
+      })
+      .catch((error) => {
+        // エラーが発生した場合の処理
+        console.error('ファイルのダウンロードに失敗しました。', error);
       });
   }
 
