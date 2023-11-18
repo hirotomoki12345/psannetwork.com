@@ -71,48 +71,46 @@
     });
   }
 
-  async function handleFileDownload() {
-    const inputtedFileId = fileIdInput.value.trim();
-    if (!inputtedFileId) {
-      alert('ファイルIDを入力してください。');
-      return;
-    }
+  // ... (Previous code)
 
-    // 入力されたファイルIDを使用してファイルの保存先のパスを構築
-    const filePath = `data/${inputtedFileId}`;
+async function handleFileDownload() {
+  const inputtedFileId = fileIdInput.value.trim();
+  if (!inputtedFileId) {
+    alert('ファイルIDを入力してください。');
+    return;
+  }
 
-    // ファイルの一覧を取得
-    try {
-      const fileRef = ref(storage, filePath);
-      const fileList = await listAll(fileRef);
+  // 入力されたファイルIDを使用してファイルの保存先のパスを構築
+  const filePath = `data/${inputtedFileId}`;
 
-try {
-  const fileRef = ref(storage, filePath);
-  const fileList = await listAll(fileRef);
+  // ファイルの一覧を取得
+  try {
+    const fileRef = ref(storage, filePath);
+    const fileList = await listAll(fileRef);
 
-  // ダウンロードリンクとファイルIDを表示
-  fileList.items.forEach(async (file) => {
-    const url = await getDownloadURL(file);
-    const linkElement = document.createElement('a');
-    linkElement.href = url;
-    linkElement.target = '_blank';
-    linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
-    linkElement.classList.add('fileLink');
-    resultContainer.appendChild(linkElement);
+    // ダウンロードリンクとファイルIDを表示
+    fileList.items.forEach(async (file) => {
+      const url = await getDownloadURL(file);
+      const linkElement = document.createElement('a');
+      linkElement.href = url;
+      linkElement.target = '_blank';
+      linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
+      linkElement.classList.add('fileLink');
+      resultContainer.appendChild(linkElement);
 
-    // ファイルIDも表示
-    resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
-  });
-} catch (error) {
-  // エラーが発生した場合の処理
-  console.error('ファイルのダウンロードに失敗しました。', error);
+      // ファイルIDも表示
+      resultContainer.innerHTML += `ファイルID: ${inputtedFileId}<br>`;
+    });
+  } catch (error) {
+    // エラーが発生した場合の処理
+    console.error('ファイルのダウンロードに失敗しました。', error);
+  }
 }
 
-
-  // ファイルの保存先のパスを生成する関数
-  function generateFilePath(file, id) {
-    return `data/${id}/${encodeURIComponent(file.name)}`;
-  }
+// ファイルの保存先のパスを生成する関数
+function generateFilePath(file, id) {
+  return `data/${id}/${encodeURIComponent(file.name)}`;
+}
 
 // ランダムなIDを生成する関数（9桁）
 function generateRandomId() {
