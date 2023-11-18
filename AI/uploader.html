@@ -92,7 +92,7 @@
   // Storageへの参照を取得
   const storage = getStorage(app);
 
-   const fileInput = document.getElementById('fileInput');
+ const fileInput = document.getElementById('fileInput');
   const resultContainer = document.getElementById('resultContainer');
   const uploadButton = document.getElementById('uploadButton');
   const fileIdInput = document.getElementById('fileIdInput');
@@ -104,32 +104,37 @@
   downloadButton.addEventListener('click', handleFileDownload);
 
   function handleFileUpload() {
-    const file = fileInput.files[0];
-    if (!file) {
+    const files = fileInput.files;
+    if (!files || files.length === 0) {
       alert('ファイルを選択してください。');
       return;
     }
 
-    const filePath = generateFilePath(file); // ファイルの保存先のパスを生成
+    resultContainer.innerHTML = ''; // 既存の結果をクリア
 
-    // ファイルをアップロード
-    const storageRef = ref(storage, filePath);
-    uploadBytes(storageRef, file)
-      .then(() => {
-        console.log('ファイルのアップロードに成功しました。');
+    // 各ファイルに対して処理を行う
+    Array.from(files).forEach((file, index) => {
+      const filePath = generateFilePath(file); // ファイルの保存先のパスを生成
 
-        // ファイルのダウンロードURLを取得
-        return getDownloadURL(storageRef);
-      })
-      .then((url) => {
-        // ダウンロードURLとファイルIDを表示
-        fileId = extractFileId(filePath); // アップロード時に使用したファイルIDを取得
-        resultContainer.innerHTML = `ファイルのURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}`;
-      })
-      .catch((error) => {
-        // エラーが発生した場合の処理
-        console.error('ファイルのアップロードに失敗しました。', error);
-      });
+      // ファイルをアップロード
+      const storageRef = ref(storage, filePath);
+      uploadBytes(storageRef, file)
+        .then(() => {
+          console.log(`ファイル ${index + 1} のアップロードに成功しました。`);
+
+          // ファイルのダウンロードURLを取得
+          return getDownloadURL(storageRef);
+        })
+        .then((url) => {
+          // ダウンロードURLとファイルIDを表示
+          fileId = extractFileId(filePath); // アップロード時に使用したファイルIDを取得
+          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}<br>`;
+        })
+        .catch((error) => {
+          // エラーが発生した場合の処理
+          console.error(`ファイル ${index + 1} のアップロードに失敗しました。`, error);
+        });
+    });
   }
 
   function handleFileDownload() {
@@ -140,7 +145,7 @@
     }
 
     // 入力されたファイルIDを使用してファイルの保存先のパスを構築
-    const filePath = `data/${inputtedFileId}/${encodeURIComponent(fileId)}`;
+    const filePath = `data/${inputtedFileId}`;
 
     // ファイルのダウンロードURLを取得
     getDownloadURL(ref(storage, filePath))
