@@ -74,7 +74,7 @@
 
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
-  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
+  import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
 
   // Firebase構成
   const firebaseConfig = {
@@ -138,7 +138,7 @@
     });
   }
 
-  function handleFileDownload() {
+  async function handleFileDownload() {
     const inputtedFileId = fileIdInput.value.trim();
     if (!inputtedFileId) {
       alert('ファイルIDを入力してください。');
@@ -148,16 +148,20 @@
     // 入力されたファイルIDを使用してファイルの保存先のパスを構築
     const filePath = `data/${inputtedFileId}`;
 
-    // ファイルのダウンロードURLを取得
-    getDownloadURL(ref(storage, filePath))
-      .then((url) => {
-        // ダウンロードURLを新しいウィンドウで開く
-        window.open(url, '_blank');
-      })
-      .catch((error) => {
-        // エラーが発生した場合の処理
-        console.error('ファイルのダウンロードに失敗しました。', error);
+    // ファイルの一覧を取得
+    try {
+      const fileRef = ref(storage, filePath);
+      const fileList = await listAll(fileRef);
+
+      // 取得したファイルURLを表示
+      fileList.items.forEach(async (file) => {
+        const url = await getDownloadURL(file);
+        resultContainer.innerHTML += `ファイルURL: <a href="${url}" target="_blank">${url}</a><br>`;
       });
+    } catch (error) {
+      // エラーが発生した場合の処理
+      console.error('ファイルのダウンロードに失敗しました。', error);
+    }
   }
 
   // ファイルの保存先のパスを生成する関数
