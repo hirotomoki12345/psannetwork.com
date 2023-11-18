@@ -129,8 +129,8 @@
           return getDownloadURL(storageRef);
         })
         .then((url) => {
-          // ダウンロードURLを表示
-          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>`;
+          // ダウンロードURLとファイルIDを表示
+          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}<br>`;
         })
         .catch((error) => {
           // エラーが発生した場合の処理
