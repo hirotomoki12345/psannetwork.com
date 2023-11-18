@@ -68,7 +68,8 @@ function handleFileUpload() {
       console.log('短縮URL:', shortLink);
 
       // メッセージを結果のコンテナに追加
-      resultContainer.textContent += `短縮URL: ${shortLink}`;
+// 短縮URLを表示
+resultContainer.innerHTML += `短縮URL: <a href="${shortLink}" target="_blank">${shortLink}</a>`;
     })
     .catch((error) => {
       // エラーが発生した場合の処理
