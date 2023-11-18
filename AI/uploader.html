@@ -131,11 +131,8 @@
         return getDownloadURL(storageRef);
       })
       .then((url) => {
-        // ダウンロードURLを表示
-        console.log('ファイルのURL:', url);
-
-        // メッセージを結果のコンテナに追加
-        resultContainer.innerHTML = `ファイルのURL: <a href="${url}" target="_blank">${url}</a>`;
+        // ダウンロードURLとファイルIDを表示
+        resultContainer.innerHTML = `ファイルのURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}`;
       })
       .catch((error) => {
         // エラーが発生した場合の処理
@@ -150,13 +147,12 @@
       return;
     }
 
-    // ファイルのダウンロードURLを取得
     const filePath = `data/${fileId}`;
-    const storageRef = ref(storage, filePath);
 
-    getDownloadURL(storageRef)
+    // ファイルのダウンロードURLを取得
+    getDownloadURL(ref(storage, filePath))
       .then((url) => {
-        // ダウンロードURLを表示
+        // ダウンロードURLを新しいウィンドウで開く
         window.open(url, '_blank');
       })
       .catch((error) => {
