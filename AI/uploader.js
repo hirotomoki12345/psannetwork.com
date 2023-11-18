@@ -44,13 +44,6 @@ function handleFileUpload() {
     return;
   }
 
-  // ファイルの種類制限 (例: 画像ファイル)
-  const allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif'];
-  if (!allowedFileTypes.includes(file.type)) {
-    alert('サポートされていないファイル形式です。');
-    return;
-  }
-
   const filePath = 'data/' + file.name; // アップロード先のファイルパスを指定
 
   // ファイルをアップロード
