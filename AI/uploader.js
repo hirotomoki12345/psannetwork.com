@@ -110,7 +110,8 @@
     return `data/${id}/${encodeURIComponent(file.name)}`;
   }
 
-  // ランダムなIDを生成する関数
-  function generateRandomId() {
-    return Math.random().toString(36).substring(2, 15);
-  }
+// ランダムなIDを生成する関数（9桁）
+function generateRandomId() {
+  return Math.random().toString(36).substring(2, 11);
+}
+
