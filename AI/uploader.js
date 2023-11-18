@@ -53,17 +53,17 @@
           // ファイルのダウンロードURLとファイルIDを取得
           return Promise.all([getDownloadURL(storageRef), fileId]);
         })
-        .then(([url, fileId]) => {
-          // ダウンロードリンクとファイルIDを表示
-          const linkElement = document.createElement('a');
-          linkElement.href = url;
-          linkElement.target = '_blank';
-          linkElement.textContent = `ファイル ${index + 1} のダウンロード`;
-          linkElement.classList.add('fileLink');
-          resultContainer.appendChild(linkElement);
-        resultContainer.innerHTML += `ファイルID: ${fileId}<br>`;
+.then(([url, fileId]) => {
+  // ファイルのダウンロードURLとファイルIDを表示
+  const linkElement = document.createElement('a');
+  linkElement.href = url;
+  linkElement.target = '_blank';
+  linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
+  linkElement.classList.add('fileLink');
+  resultContainer.appendChild(linkElement);
+  resultContainer.innerHTML += `ファイルID: ${fileId}<br>`;
+})
 
-        })
         .catch((error) => {
           // エラーが発生した場合の処理
           console.error(`ファイル ${index + 1} のアップロードに失敗しました。`, error);
