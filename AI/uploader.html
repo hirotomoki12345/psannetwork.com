@@ -123,7 +123,7 @@
         console.log('ファイルのURL:', url);
 
         // メッセージを結果のコンテナに追加
-        resultContainer.innerHTML = `ファイルのURL: <a href="https://${url}" target="_blank">${url}</a>`;
+        resultContainer.innerHTML = `ファイルのURL: <a href="${url}" target="_blank">${url}</a>`;
       })
       .catch((error) => {
         // エラーが発生した場合の処理
