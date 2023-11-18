@@ -10,7 +10,7 @@
                 e.preventDefault();
                 var question = $('#question-input').val();
                 $.ajax({
-                    url: 'https://psan.pythonanywhere.com/question',
+                    url: 'https://psan.pythonanywhere.com/',
                     type: 'POST',
                     data: JSON.stringify({ 'question': question }),
                     contentType: 'application/json',

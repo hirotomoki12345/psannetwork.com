@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ファイルアップロード</title>
+  <script type="module" src="/hide/uploader.js"></script>
+
+ <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+
+    #fileInput {
+      padding: 120px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+    }
+
+    label {
+      padding: 50px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    label:hover {
+      background-color: #45a049;
+    }
+
+    button {
+      padding: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #resultContainer {
+      margin-top: 20px;
+    }
+    .up {
+      padding: 20px;    
+    }
+  </style>
+
+</head>
+</head>
+<body>
+  <h1>ファイル共有サイト</h1>
+  <input type="file" id="fileInput" accept=".js" class="up"></input>
+  <h2>ファイルを選択して、アップボタンを押してください</h2>
+  <button id="uploadButton">アップロード</button>
+  <p>このURLを共有することでファイルを共有することができます。</p>
+  <div id="resultContainer"></div>
+</body>
+</html>
