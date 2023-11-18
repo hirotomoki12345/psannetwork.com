@@ -134,7 +134,7 @@
           return getDownloadURL(storageRef);
         })
         .then((url) => {
-          // ダウンロードリンクを表示
+          // ダウンロードリンクとファイルIDを表示
           const linkElement = document.createElement('a');
           linkElement.href = url;
           linkElement.target = '_blank';
