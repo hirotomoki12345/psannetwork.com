@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ファイルアップロード</title>
-  <script type="module" src="/AI/uploader.js"></script>
-
- <style>
+   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -61,15 +59,78 @@
       padding: 20px;    
     }
   </style>
-
-</head>
 </head>
 <body>
-  <h1>ファイル共有サイト</h1>
-  <input type="file" id="fileInput" class="up"></input>
-  <h2>ファイルを選択して、アップボタンを押してください</h2>
-  <button id="uploadButton">アップロード</button>
-  <p>このURLを共有することでファイルを共有することができます。</p>
-  <div id="resultContainer"></div>
+
+<input type="file" id="fileInput">
+<button id="uploadButton">ファイルをアップロード</button>
+<div id="resultContainer"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
+  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
+
+  // Firebase構成
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQ6Wxch09h7hBaevt2tMa6los7DoKp-EE",
+    authDomain: "psan-file.firebaseapp.com",
+    projectId: "psan-file",
+    storageBucket: "psan-file.appspot.com",
+    messagingSenderId: "608944420732",
+    appId: "1:608944420732:web:9fed02b5c6e9e8185fd6f9",
+  };
+
+  // Firebaseアプリの初期化
+  const app = initializeApp(firebaseConfig);
+
+  // Storageへの参照を取得
+  const storage = getStorage(app);
+
+  // ファイル選択時の処理
+  const fileInput = document.getElementById('fileInput');
+  const resultContainer = document.getElementById('resultContainer');
+  const uploadButton = document.getElementById('uploadButton');
+
+  uploadButton.addEventListener('click', handleFileUpload);
+
+  function handleFileUpload() {
+    const file = fileInput.files[0];
+    if (!file) {
+      alert('ファイルを選択してください。');
+      return;
+    }
+
+    // ファイルサイズ制限 (100MB以下)
+    const fileSizeLimit = 100 * 1024 * 1024; // 100MB
+    if (file.size > fileSizeLimit) {
+      alert('ファイルサイズが大きすぎます。最大サイズは100MBです。');
+      return;
+    }
+
+    const filePath = 'data/' + encodeURIComponent(file.name); // アップロード先のファイルパスを指定
+
+    // ファイルをアップロード
+    const storageRef = ref(storage, filePath);
+    uploadBytes(storageRef, file)
+      .then(() => {
+        console.log('ファイルのアップロードに成功しました。');
+
+        // ファイルのダウンロードURLを取得
+        return getDownloadURL(storageRef);
+      })
+      .then((url) => {
+        // ダウンロードURLを表示
+        console.log('ファイルのURL:', url);
+
+        // メッセージを結果のコンテナに追加
+        resultContainer.innerHTML = `ファイルのURL: <a href="${url}" target="_blank">${url}</a>`;
+      })
+      .catch((error) => {
+        // エラーが発生した場合の処理
+        console.error('ファイルのアップロードに失敗しました。', error);
+      });
+  }
+</script>
+
 </body>
 </html>
