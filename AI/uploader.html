@@ -125,12 +125,8 @@
         .then(() => {
           console.log(`ファイル ${index + 1} のアップロードに成功しました。`);
 
-          // ファイルのダウンロードURLを取得
-          return getDownloadURL(storageRef);
-        })
-        .then((url) => {
-          // ダウンロードURLとファイルIDを表示
-          resultContainer.innerHTML += `ファイル ${index + 1} のURL: <a href="${url}" target="_blank">${url}</a><br>ファイルID: ${fileId}<br>`;
+          // ファイルの名前とファイルIDを表示
+          resultContainer.innerHTML += `ファイル ${index + 1} の名前: ${file.name}<br>ファイルID: ${fileId}<br>`;
         })
         .catch((error) => {
           // エラーが発生した場合の処理
@@ -154,10 +150,9 @@
       const fileRef = ref(storage, filePath);
       const fileList = await listAll(fileRef);
 
-      // 取得したファイルURLを表示
+      // 取得したファイルの名前を表示
       fileList.items.forEach(async (file) => {
-        const url = await getDownloadURL(file);
-        resultContainer.innerHTML += `ファイルURL: <a href="${url}" target="_blank">${url}</a><br>`;
+        resultContainer.innerHTML += `ファイルの名前: ${decodeURIComponent(file.name)}<br>`;
       });
     } catch (error) {
       // エラーが発生した場合の処理
