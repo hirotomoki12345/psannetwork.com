@@ -17,7 +17,8 @@
       color: #4CAF50;
       border-radius: 20px;
       cursor: pointer;
-      display: inline-block;
+      display: block;
+      margin: 20px auto; /* 調整：中央配置 */
       padding: 10px 20px;
       text-align: center;
       font-size: 16px;
@@ -44,15 +45,17 @@
       border-radius: 20px;
       cursor: pointer;
       display: block;
-      margin: 10px auto;
+      margin: 10px auto; /* 調整：中央配置 */
     }
 
     #fileIdInput {
       padding: 15px;
-      margin-bottom: 20px;
+      margin: 20px auto; /* 調整：中央配置 */
       font-size: 16px;
       border: 2px solid #4CAF50;
       border-radius: 5px;
+      display: block;
+      width: 80%; /* 調整：入力欄の幅を80%に */
     }
 
     .fileLink {
@@ -82,9 +85,7 @@
 <label for="fileInput" class="custom-file-upload">ファイルを選択</label>
 <input type="file" id="fileInput" multiple>
 
-<p class="msr_btn08">
-  <button id="uploadButton">ファイルをアップロード</button>
-</p>
+<button id="uploadButton">ファイルをアップロード</button>
 
 <div id="resultContainer"></div>
 
