@@ -11,7 +11,7 @@
     }
 
     #fileInput {
-      display: none; /* デフォルトのファイル選択ボタンを非表示 */
+      display: none;
     }
 
     #uploadContainer {
@@ -64,9 +64,9 @@
 </head>
 <body>
 
-<div id="uploadContainer" onclick="document.getElementById('fileInput').click()">
+<div id="uploadContainer" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
   <div id="uploadText">ファイルを選択またはドラッグ＆ドロップしてください</div>
-  <input type="file" id="fileInput" multiple>
+  <input type="file" id="fileInput" multiple onchange="handleFileSelect(event)">
 </div>
 
 <div id="resultContainer"></div>
@@ -78,6 +78,23 @@
 </div>
 
 <script type="module" src="/AI/uploader.js">
+</script>
+
+<script>
+  function handleFileSelect(event) {
+    // 選択されたファイルを処理するロジックを追加
+    console.log(event.target.files);
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    // ドロップされたファイルを処理するロジックを追加
+    console.log(event.dataTransfer.files);
+  }
+
+  function handleDragOver(event) {
+    event.preventDefault();
+  }
 </script>
 
 </body>
