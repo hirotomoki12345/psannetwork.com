@@ -3,20 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
-    <link rel="stylesheet" type="text/css" href="https://psannetwork.com/styles.css">
+  <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
+  <link rel="stylesheet" type="text/css" href="https://psannetwork.com/styles.css">
 
   <title>ファイルアップロードとダウンロード</title>
   <style>
     #fileInput {
-      padding: 200px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
+      display: none;
+    }
+
+    .custom-file-upload {
+      border: 2px dashed #4CAF50;
+      color: #4CAF50;
       border-radius: 20px;
       cursor: pointer;
-      display: block;
-      margin: 20px auto;
+      display: inline-block;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #4CAF50;
+      color: white;
     }
 
     #resultContainer {
@@ -26,6 +35,7 @@
     #downloadSection {
       margin-top: 50px;
     }
+
     #uploadButton {
       padding: 20px;
       background-color: #4CAF50;
@@ -38,8 +48,11 @@
     }
 
     #fileIdInput {
-      padding: 30px;
-      margin-bottom: 90px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
     }
 
     .fileLink {
@@ -59,29 +72,29 @@
     #downloadButton:hover {
       background-color: #45a049;
     }
-
   </style>
 </head>
 <body>
 <canvas id="canvas"></canvas>
+<h2>ファイル共有サイト</h2>
+<p>ファイルを選択してアップするとファイルのURLかIDを知っているユーザーとファイルを共有できます</p>
 
+<label for="fileInput" class="custom-file-upload">ファイルを選択</label>
 <input type="file" id="fileInput" multiple>
+
 <p class="msr_btn08">
   <button id="uploadButton">ファイルをアップロード</button>
 </p>
+
 <div id="resultContainer"></div>
 
 <div id="downloadSection" class="msr_btn08">
   <label for="fileIdInput">ファイルIDを入力してダウンロード：</label>
-  <input type="text" id="fileIdInput">
+  <input type="text" id="fileIdInput" placeholder="ファイルIDを入力">
   <button id="downloadButton">ダウンロード</button>
 </div>
 
-<script type="module" src="/AI/uploader.js">
-</script>
-
+<script type="module" src="/AI/uploader.js"></script>
 <script src="https://psannetwork.com/script.js"></script>
-
-
 </body>
 </html>
