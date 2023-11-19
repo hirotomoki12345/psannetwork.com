@@ -5,35 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ファイルアップロードとダウンロード</title>
   <style>
-    #uploadButton {
-      border: 1px solid green; /* "border" のスペルミス修正 */
-      background-color: green; /* 背景色を追加 */
-      color: white;
-      padding: 5px 10px; /* パディングを追加してボタンのサイズを調整 */
-      cursor: pointer; /* カーソルをポインターに変更 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
 
-    /* スタイルの追加 */
-    body {
-      font-family: Arial, sans-serif; /* フォントを指定 */
-      margin: 20px; /* 余白を追加 */
+    #fileInput {
+      display: none; /* デフォルトのファイル選択ボタンを非表示 */
+    }
+
+    #uploadContainer {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #uploadContainer:hover {
+      background-color: #f8f8f8;
+    }
+
+    #uploadText {
+      font-size: 16px;
+      color: #555;
+    }
+
+    #resultContainer {
+      margin-top: 20px;
     }
 
     #downloadSection {
-      margin-top: 20px; /* ダウンロードセクションの上部に余白を追加 */
+      margin-top: 20px;
     }
 
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"], button {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
 
-<input type="file" id="fileInput" multiple>
-<p class="msr_btn08">
-  <button id="uploadButton">ファイルをアップロード</button>
-</p>
+<div id="uploadContainer" onclick="document.getElementById('fileInput').click()">
+  <div id="uploadText">ファイルを選択またはドラッグ＆ドロップしてください</div>
+  <input type="file" id="fileInput" multiple>
+</div>
+
 <div id="resultContainer"></div>
 
-<div id="downloadSection" class="msr_btn08">
+<div id="downloadSection">
   <label for="fileIdInput">ファイルIDを入力してダウンロード：</label>
   <input type="text" id="fileIdInput">
   <button id="downloadButton">ダウンロード</button>
