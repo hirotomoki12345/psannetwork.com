@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
+  <link rel="stylesheet" type="text/css" href="https://psannetwork.com/styles.css">
+
+  <title>ファイルアップロード</title>
+  <style>
+    /* CSS スタイルは変更なし */
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<h2>ファイル共有サイト</h2>
+<p>ファイルを選択してアップするとファイルのURLを知っているユーザーとファイルを共有できます</p>
+
+<label for="fileInput" class="custom-file-upload">ファイルを選択</label>
+<input type="file" id="fileInput" multiple>
+
+<button id="uploadButton">ファイルをアップロード</button>
+
+<div id="resultContainer"></div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-app.js';
+  import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.3.0/firebase-storage.js';
+
+  // Firebase構成
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQ6Wxch09h7hBaevt2tMa6los7DoKp-EE",
+    authDomain: "psan-file.firebaseapp.com",
+    projectId: "psan-file",
+    storageBucket: "psan-file.appspot.com",
+    messagingSenderId: "608944420732",
+    appId: "1:608944420732:web:9fed02b5c6e9e8185fd6f9",
+  };
+
+  // Firebaseアプリの初期化
+  const app = initializeApp(firebaseConfig);
+
+  // Storageへの参照を取得
+  const storage = getStorage(app);
+
+  // ファイル選択時の処理
+  const fileInput = document.getElementById('fileInput');
+  const resultContainer = document.getElementById('resultContainer');
+  const uploadButton = document.getElementById('uploadButton');
+
+  uploadButton.addEventListener('click', handleFileUpload);
+
+  function handleFileUpload() {
+    const files = fileInput.files;
+    if (!files || files.length === 0) {
+      alert('ファイルを選択してください。');
+      return;
+    }
+
+    resultContainer.innerHTML = ''; // 既存の結果をクリア
+
+    // 各ファイルに対して処理を行う
+    Array.from(files).forEach((file, index) => {
+      const filePath = generateFilePath(file); // ファイルの保存先のパスを生成
+
+      // ファイルをアップロード
+      const storageRef = ref(storage, filePath);
+      uploadBytes(storageRef, file)
+        .then(() => {
+          console.log(`ファイル ${index + 1} のアップロードに成功しました。`);
+
+          // ファイルのダウンロードURLを取得
+          return getDownloadURL(storageRef);
+        })
+        .then((url) => {
+          // ファイルのダウンロードURLを表示
+          const linkElement = document.createElement('a');
+          linkElement.href = url;
+          linkElement.target = '_blank';
+          linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
+          linkElement.classList.add('fileLink');
+          resultContainer.appendChild(linkElement);
+        })
+        .catch((error) => {
+          // エラーが発生した場合の処理
+          console.error(`ファイル ${index + 1} のアップロードに失敗しました。`, error);
+        });
+    });
+  }
+
+  // ファイルの保存先のパスを生成する関数
+  function generateFilePath(file) {
+    return `data/${encodeURIComponent(file.name)}`;
+  }
+</script>
+<script src="https://psannetwork.com/script.js"></script>
+</body>
+</html>
