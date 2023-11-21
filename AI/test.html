@@ -80,6 +80,9 @@
           linkElement.textContent = file.name; // ファイル名をリンクの名前として表示
           linkElement.classList.add('fileLink');
           resultContainer.appendChild(linkElement);
+
+          // FirebaseのURLを短縮して表示
+          shortenFirebaseUrl(url);
         })
         .catch((error) => {
           // エラーが発生した場合の処理
@@ -91,6 +94,23 @@
   // ファイルの保存先のパスを生成する関数
   function generateFilePath(file) {
     return `data/${encodeURIComponent(file.name)}`;
+  }
+
+  // FirebaseのURLを短縮して表示する関数
+  function shortenFirebaseUrl(url) {
+    // FirebaseのURLをrinu.cfで短縮する
+    fetch(`https://api.activetk.jp/urlmin/set?url=${encodeURIComponent(url)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 'OK') {
+          console.log(`短縮URL: ${data.ResultURL}`);
+        } else {
+          console.error(`短縮URLの発行に失敗しました。`, data);
+        }
+      })
+      .catch((error) => {
+        console.error(`短縮URLの発行に失敗しました。`, error);
+      });
   }
 </script>
 <script src="https://psannetwork.com/script.js"></script>
