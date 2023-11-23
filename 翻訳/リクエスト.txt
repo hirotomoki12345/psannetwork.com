@@ -1,0 +1,18 @@
+// デプロイしたウェブアプリケーションのURL
+var webAppUrl = 'https://script.google.com/macros/s/AKfycbwsMk89uITXGc4WriL0vJFRRs17PdvdKizATVhFfRYjWxd8vsVy70FKcoa0YCW2PZE/exec';
+
+// 翻訳したいテキストと言語設定
+var textToTranslate = 'Hello, world!';
+var sourceLanguage = 'en';
+var targetLanguage = 'ja';
+
+// Google Apps Scriptにリクエストを送信
+fetch(`${webAppUrl}?text=${textToTranslate}&source=${sourceLanguage}&target=${targetLanguage}`)
+  .then(response => response.json())
+  .then(result => {
+    // 結果をログに表示
+    console.log(result);
+  })
+  .catch(error => {
+    console.error('エラー:', error);
+  });
