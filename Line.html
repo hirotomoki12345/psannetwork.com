@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Line AIボットについて</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-      h1 {
-        color: #4CAF50;
-      }
-      h2 {
-        color: #2196F3;
-      }
-      p {
-        color: #333;
-      }
-      a.button {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        text-align: center;
-        text-decoration: none;
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 5px;
-        margin-top: 10px;
-      }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-size: cover;
+            background-position: center;
+            color: #fff; /* テキストの色を白に設定 */
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+        p {
+            line-height: 1.5;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 18px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .note {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* 背景の透過度を調整 */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <h1>Line AIボットについて</h1>
     <p>今回は、グループラインでも使用可能な、AIチャットボットを作りました。</p>
     <h2>使用方法</h2>
@@ -40,9 +59,12 @@
     <h2>注意点!</h2>
     <p>・送る際、暴発防止のため、<strong>/psan[質問内容]</strong> この形式のものしか読み取らない様になっていますので、</p>
     <p>・質問したいときは、必ず先頭に<strong>/psan</strong>をつけてください。</p>
-    <p>・まだ、開発中のため、誤作動や、動かなかったりすることが稀にあります。</p>
-    <p>・一度質問を送ってから、平均で10秒程度で回答が返ってくるはずなので、何度も短時間で質問を送らないでください。</p>
-    <p>・また、このボットはできる限りコストを抑えて無料で作っているので、AIの処理はすべて同じAIに行わせています。</p>
-    <p>・何人かが一度にたくさんリクエストしたり、アクセスが集中すると動かない可能性があるので、時間をおいて実行してください（約1分程度おけばつながるはずです。）</p>
-  </body>
+    <div class="note">
+        <p>・まだ、開発中のため、誤作動や、動かなかったりすることが稀にあります。</p>
+        <p>・一度質問を送ってから、平均で10秒程度で回答が返ってくるはずなので、何度も短時間で質問を送らないでください。</p>
+        <p>・また、このボットはできる限りコストを抑えて無料で作っているので、AIの処理はすべて同じAIに行わせています。</p>
+        <p>・何人かが一度にたくさんリクエストしたり、アクセスが集中すると動かない可能性があるので、時間をおいて実行してください（約1分程度おけばつながるはずです。）</p>
+    </div>
+    <a class="button" href="https://line.me/R/ti/p/%40898vnrsz">ボットに質問する</a>
+</body>
 </html>
