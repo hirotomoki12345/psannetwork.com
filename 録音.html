@@ -8,6 +8,8 @@
 <body>
   <h1>リアルタイム音声文字起こし</h1>
   <div id="transcriptionResult"></div>
+  <button id="startButton">開始</button>
+  <button id="stopButton">停止</button>
 
   <script>
     const recognition = new webkitSpeechRecognition(); // Chrome/Edge 用のプレフィックスが必要
@@ -15,11 +17,23 @@
     recognition.continuous = true;
     recognition.interimResults = true;
 
+    const transcriptionResult = document.getElementById('transcriptionResult');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+
+    startButton.addEventListener('click', () => {
+      recognition.start();
+      transcriptionResult.textContent = '音声認識中...';
+    });
+
+    stopButton.addEventListener('click', () => {
+      recognition.stop();
+      transcriptionResult.textContent = '音声認識が停止しました。';
+    });
+
     recognition.onresult = event => {
       const result = event.results[event.results.length - 1];
       const transcript = result[0].transcript;
-
-      const transcriptionResult = document.getElementById('transcriptionResult');
       transcriptionResult.textContent = transcript;
     };
 
@@ -28,10 +42,8 @@
     };
 
     recognition.onend = () => {
-      // 音声認識が終了したときの処理（必要に応じて追加）
+      transcriptionResult.textContent = '音声認識が終了しました。';
     };
-
-    recognition.start();
   </script>
 </body>
 </html>
