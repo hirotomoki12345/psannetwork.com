@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Upload</title>
+  <title>Image Upload and OCR</title>
 </head>
 <body>
   <input type="file" id="imageInput" accept="image/*">
   <button onclick="uploadImage()">Upload Image</button>
+  <div id="result"></div>
 
   <script>
     // 画像データをBase64にエンコードする関数
@@ -22,7 +23,7 @@
 
     // サーバーに画像データを送信し、結果を取得する関数
     async function sendImageToServer(imageData) {
-      var apiUrl = 'https://script.google.com/macros/s/AKfycbyP_rFpLNvdnHnoaN0F0wGhNLvjU9YDTlfC2iIXQpaVqEkYHWZGz2KhHxfHoJcUZm9j/exec'; // ここにGoogle Apps Scriptの公開URLを入力する
+      var apiUrl = 'https://script.google.com/macros/s/your-script-id/exec'; // ここにGoogle Apps Scriptの公開URLを入力する
 
       var data = {
         imageData: imageData,
@@ -38,8 +39,7 @@
         });
 
         var result = await response.json();
-        console.log(result);
-        // ここで結果を使って何か処理を行う
+        document.getElementById('result').innerText = result.ocrResult;
       } catch (error) {
         console.error('Error:', error);
       }
