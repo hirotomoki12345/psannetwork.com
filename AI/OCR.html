@@ -1,68 +1,61 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>画像リクエスト</title>
+  <title>Image Upload</title>
 </head>
 <body>
   <input type="file" id="imageInput" accept="image/*">
-  <button onclick="sendImage()">画像を送信</button>
+  <button onclick="uploadImage()">Upload Image</button>
 
   <script>
-    async function sendImage() {
-      var fileInput = document.getElementById('imageInput');
-      var file = fileInput.files[0];
+    // 画像データをBase64にエンコードする関数
+    function encodeImageToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
 
-      if (file) {
-        try {
-          var imageData = await readFileAsBase64(file);
+    // サーバーに画像データを送信し、結果を取得する関数
+    async function sendImageToServer(imageData) {
+      var apiUrl = 'https://script.google.com/macros/s/AKfycbxM4eQy1B4_KfWQL8d8XqoLaNnsHGxpcd4gkALDQSfvJQMD8beGfbYHXREfqF2bcEqi/exec'; // ここにGoogle Apps Scriptの公開URLを入力する
 
-          // Google Apps ScriptのWebアプリのURLを指定
-          var scriptUrl = 'https://script.google.com/macros/s/AKfycbzT3190PJIvOTBTyRbhlQIfzijwG2CG08QdJBflvCJq_GUfsrvKLLMyzfI7XgRkBBr3/exec';
+      var data = {
+        imageData: imageData,
+      };
 
-          // POSTリクエストを送信
-          var response = await fetch(scriptUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ imageData: imageData }),
-          });
+      try {
+        var response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-          if (response.ok) {
-            var responseData = await response.json();
-
-            // レスポンスの処理
-            if (responseData.ocrResult) {
-              alert('OCR結果:\n' + responseData.ocrResult);
-            } else if (responseData.error) {
-              alert('エラー: ' + responseData.error);
-            } else {
-              alert('不明なエラーが発生しました');
-            }
-          } else {
-            alert('リクエストが失敗しました');
-          }
-        } catch (error) {
-          console.error('エラー:', error);
-        }
-      } else {
-        alert('画像を選択してください');
+        var result = await response.json();
+        console.log(result);
+        // ここで結果を使って何か処理を行う
+      } catch (error) {
+        console.error('Error:', error);
       }
     }
 
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        var reader = new FileReader();
-        reader.onload = function () {
-          resolve(reader.result.split(',')[1]);
-        };
-        reader.onerror = function (error) {
-          reject(error);
-        };
-        reader.readAsDataURL(file);
-      });
+    // 画像データを取得してサーバーに送信する処理
+    async function uploadImage() {
+      var imageInput = document.getElementById('imageInput');
+      var file = imageInput.files[0];
+
+      if (file) {
+        var imageData = await encodeImageToBase64(file);
+        sendImageToServer(imageData);
+      } else {
+        console.error('No file selected');
+      }
     }
   </script>
 </body>
