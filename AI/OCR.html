@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>画像リクエスト</title>
+</head>
+<body>
+  <input type="file" id="imageInput" accept="image/*">
+  <button onclick="sendImage()">画像を送信</button>
+
+  <script>
+    function sendImage() {
+      var fileInput = document.getElementById('imageInput');
+      var file = fileInput.files[0];
+
+      if (file) {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+          var imageData = reader.result.split(',')[1]; // base64データ部分のみ取得
+          
+          // Google Apps ScriptのWebアプリのURLを指定
+          var scriptUrl = 'https://script.google.com/macros/s/AKfycbyhHGCcYoII7SXXu1hTfubCHJhqAyvqB3KNRWwjBeCGGpPhmGla50ggxSxw_v0osVN9/exec';
+
+          // POSTリクエストを送信
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', scriptUrl, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+
+              // レスポンスの処理
+              if (response.ocrResult) {
+                alert('OCR結果:\n' + response.ocrResult);
+              } else if (response.error) {
+                alert('エラー: ' + response.error);
+              } else {
+                alert('不明なエラーが発生しました');
+              }
+            } else {
+              alert('リクエストが失敗しました');
+            }
+          };
+
+          // 画像データを含むJSONを送信
+          var data = {
+            imageData: imageData
+          };
+          xhr.send(JSON.stringify(data));
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        alert('画像を選択してください');
+      }
+    }
+  </script>
+</body>
+</html>
