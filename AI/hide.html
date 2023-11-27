@@ -96,7 +96,30 @@
             const encodedQuestion = encodeURIComponent(question);
 
             // Google Apps ScriptのウェブアプリケーションのURL
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbx0FJNySg-D0JUuWn5oT2xC1u2qbQe0NByU-fyIZB6h_7nNFBAG2sn-V74NAIDxULyb/exec';
+            const scriptUrl = '// ユーザーに質問をプロンプトで表示
+const question = prompt('質問内容を入力してください:');
+
+// Google Apps ScriptのウェブアプリケーションのURL
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbwdIXSbyp4lNALrsktvEgvXIsj7mySVu1P17kVgNxouMuQ0a22PLzpL2N3efSOHuhKI/exec';
+
+// GETリクエストのURLを構築
+const getRequestUrl = `${scriptUrl}?text=${question}`;
+
+// GETリクエストを送信
+fetch(getRequestUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // レスポンスデータを利用して何かを行う（例: アラートで表示）
+    alert(data.text);
+  })
+  .catch(error => {
+    console.error('Error:', error.message);
+  });';
 
             // GETリクエストのURLを構築
             const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
