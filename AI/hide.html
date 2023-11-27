@@ -91,13 +91,13 @@
     <script>
         // ページの読み込みが終わったら実行
         document.addEventListener("DOMContentLoaded", function() {
-            const question = '今日の天気、気温を教えてください。ここは浜松です。私は学生です。ためになる話を添えて。';
+            const question = '今日の天気、気温、ニュースを教えてください。ここは浜松です。私は学生です。';
 
             // 質問内容をエンコードする
             const encodedQuestion = encodeURIComponent(question);
 
             // Google Apps ScriptのウェブアプリケーションのURL
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwdMXsu1sA0yEnVS4MC3n56zpxL3kjK4hfFJfuv61DCxDgctZdbLUIbVGQsLJYwBRk/exec';
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbytA2og4D-lQAsp-7g5_mNuAgBW5kJtk_LudMhoJmKJyHTwDNxXNU-Su6TpR06qHwkU/exec';
 
             // GETリクエストのURLを構築
             const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
