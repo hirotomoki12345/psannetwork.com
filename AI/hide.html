@@ -103,37 +103,37 @@
 
     <script src="https://psannetwork.com/script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            async function submitQuestion() {
-                const questionInput = document.getElementById('questionInput');
-                const question = questionInput.value.trim();
+    async function submitQuestion() {
+        const questionInput = document.getElementById('questionInput');
+        const question = questionInput.value.trim();
 
-                if (question !== '') {
-                    const scriptUrl = 'https://script.google.com/macros/s/AKfycbwdIXSbyp4lNALrsktvEgvXIsj7mySVu1P17kVgNxouMuQ0a22PLzpL2N3efSOHuhKI/exec';
-                    const getRequestUrl = `${scriptUrl}?text=${question}`;
+        if (question !== '') {
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwdIXSbyp4lNALrsktvEgvXIsj7mySVu1P17kVgNxouMuQ0a22PLzpL2N3efSOHuhKI/exec';
+            const getRequestUrl = `${scriptUrl}?text=${question}`;
 
-                    try {
-                        const response = await fetch(getRequestUrl);
+            try {
+                const response = await fetch(getRequestUrl);
 
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-
-                        const data = await response.json();
-                        const bardResponse = data.text;
-
-                        document.getElementById('responseText').innerText = bardResponse;
-                    } catch (error) {
-                        console.error('Error:', error.message);
-                    }
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
+                const data = await response.json();
+                const bardResponse = data.text;
+
+                document.getElementById('responseText').innerText = bardResponse;
+            } catch (error) {
+                console.error('Error:', error.message);
             }
+        }
+    }
 
-            const questionInput = document.getElementById('questionInput');
-            const submitBtn = document.getElementById('submitBtn');
+    document.addEventListener("DOMContentLoaded", function () {
+        const questionInput = document.getElementById('questionInput');
+        const submitBtn = document.getElementById('submitBtn');
 
-            submitBtn.addEventListener('click', submitQuestion);
-        });
+        submitBtn.addEventListener('click', submitQuestion);
+    });
     </script>
 </body>
 </html>
