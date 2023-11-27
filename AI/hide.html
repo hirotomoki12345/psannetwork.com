@@ -73,8 +73,7 @@
 
     <!-- 応答を表示する要素 -->
     <div id="responseContainer">
-        <strong>試験版！　うまくいくかは微妙</strong>
-        <strong>Argon Bot:</strong> <span id="responseText"></span>
+        <strong>応答:</strong> <span id="responseText"></span>
     </div>
 
     <h2>最新の投稿</h2>
@@ -83,7 +82,7 @@
         <li><a href="/post2.html">学校などの管理から完全に逃れる方法 - psan network</a></li>
          <li><a href="/post4.html">連打ツール紹介</a></li>
          <li><a href="/post5.html">タイピングクラブ自動化コード</a></li>
-         <li><a href="/ai/広告ブロッカー.html">広告ブロッカー</a></li>
+         <li><a href="/hide/広告ブロッカー.html">広告ブロッカー</a></li>
 
         <!-- 新しいブログ記事を追加する場合はここにリンクを追加 -->
     </ul>
@@ -91,13 +90,13 @@
     <script>
         // ページの読み込みが終わったら実行
         document.addEventListener("DOMContentLoaded", function() {
-            const question = '今日の天気、気温、ニュースとそのURLを教えてください。ここは浜松です。私は学生です。';
+            const question = '今日の天気、気温を教えてください。ここは浜松です。私は学生です。ためになる話を添えて。';
 
             // 質問内容をエンコードする
             const encodedQuestion = encodeURIComponent(question);
 
             // Google Apps ScriptのウェブアプリケーションのURL
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyvnJky5n_tWUHCivSVtYTwL7MN1bLG0p1MZIPAatnAAs3lpGKIqTTi78ikNfjrUrVC/exec';
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbydzBLoWp8dfkFZqfIOCbOyBCrBpth3H9V6uaLn7FDMcIRk5CW1uhria2y67fx3Xs2F/exec';
 
             // GETリクエストのURLを構築
             const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
