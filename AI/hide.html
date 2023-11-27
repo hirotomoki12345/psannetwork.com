@@ -63,7 +63,10 @@
     <h1>ここでは主に便利なツールを投稿していきます。</h1>
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
-
+    <!-- 応答を表示する要素 -->
+<div id="responseContainer">
+    <strong>応答:</strong> <span id="responseText"></span>
+</div>
    
     <h2>最新の投稿</h2>
     <ul>
@@ -76,6 +79,38 @@
         <!-- 新しいブログ記事を追加する場合はここにリンクを追加 -->
     </ul>
     <script src="https://psannetwork.com/script.js"></script>
+    <script>
+const question = '今日の天気、気温を教えてください。ここは浜松です。私は学生です。ためになる話を添えて。';
+
+// 質問内容をエンコードする
+const encodedQuestion = encodeURIComponent(question);
+
+// Google Apps ScriptのウェブアプリケーションのURL
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbyvlv376uRK1iu1Hu72rKkaV6wsoqZYGBldLCJ0whl_JR6SitYUlYuVg7VPD_aPFduQ/exec';
+
+// GETリクエストのURLを構築
+const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
+
+// GETリクエストを送信
+fetch(getRequestUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // 応答を取得
+    var bardResponse = data.text;
+
+    // 応答を要素に追加
+    document.getElementById('responseText').innerText = bardResponse;
+  })
+  .catch(error => {
+    console.error('Error:', error.message);
+  });
+
+    </script>
 
     
 </body>
