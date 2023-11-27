@@ -88,35 +88,38 @@
     </ul>
     <script src="https://psannetwork.com/script.js"></script>
     <script>
-        const question = '今日の天気、気温を教えてください。ここは浜松です。私は学生です。ためになる話を添えて。';
+        // ページの読み込みが終わったら実行
+        document.addEventListener("DOMContentLoaded", function() {
+            const question = '今日の天気、気温を教えてください。ここは浜松です。私は学生です。ためになる話を添えて。';
 
-        // 質問内容をエンコードする
-        const encodedQuestion = encodeURIComponent(question);
+            // 質問内容をエンコードする
+            const encodedQuestion = encodeURIComponent(question);
 
-        // Google Apps ScriptのウェブアプリケーションのURL
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyvlv376uRK1iu1Hu72rKkaV6wsoqZYGBldLCJ0whl_JR6SitYUlYuVg7VPD_aPFduQ/exec';
+            // Google Apps ScriptのウェブアプリケーションのURL
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbyvlv376uRK1iu1Hu72rKkaV6wsoqZYGBldLCJ0whl_JR6SitYUlYuVg7VPD_aPFduQ/exec';
 
-        // GETリクエストのURLを構築
-        const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
+            // GETリクエストのURLを構築
+            const getRequestUrl = `${scriptUrl}?text=${encodedQuestion}`;
 
-        // GETリクエストを送信
-        fetch(getRequestUrl)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(data => {
-            // 応答を取得
-            var bardResponse = data.text;
+            // GETリクエストを送信
+            fetch(getRequestUrl)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+              })
+              .then(data => {
+                // 応答を取得
+                var bardResponse = data.text;
 
-            // 応答を要素に追加
-            document.getElementById('responseText').innerText = bardResponse;
-          })
-          .catch(error => {
-            console.error('Error:', error.message);
-          });
+                // 応答を要素に追加
+                document.getElementById('responseText').innerText = bardResponse;
+              })
+              .catch(error => {
+                console.error('Error:', error.message);
+              });
+        });
     </script>
 </body>
 </html>
