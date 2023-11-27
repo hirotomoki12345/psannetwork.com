@@ -1,7 +1,11 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Video Search</title>
 </head>
 <body>
   <h1>YouTube Video Search</h1>
@@ -11,18 +15,21 @@
   <p id="result"></p>
 
   <script>
-    function searchAndPlayVideo() {
-      var query = document.getElementById('query').value;
-      google.script.run.withSuccessHandler(displayResult).doGet({query: query});
+    async function searchAndPlayVideo() {
+      const query = document.getElementById('query').value;
+      const response = await fetch(`/.netlify/functions/searchAndPlayVideo?query=${query}`);
+      const result = await response.json();
+      displayResult(result);
     }
 
     function displayResult(result) {
+      const resultElement = document.getElementById('result');
       if (result.error) {
-        document.getElementById('result').textContent = result.error;
+        resultElement.textContent = result.error;
       } else {
-        var videoTitle = result.videoTitle;
-        var videoUrl = result.videoUrl;
-        document.getElementById('result').innerHTML = '<strong>' + videoTitle + '</strong><br><a href="' + videoUrl + '" target="_blank">Watch Video</a>';
+        const videoTitle = result.videoTitle;
+        const videoUrl = result.videoUrl;
+        resultElement.innerHTML = `<strong>${videoTitle}</strong><br><a href="${videoUrl}" target="_blank">Watch Video</a>`;
       }
     }
   </script>
