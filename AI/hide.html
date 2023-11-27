@@ -6,7 +6,6 @@
     <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
 
     <style>
-        /* スタイルをきれいに */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -33,7 +32,6 @@
             text-decoration: none;
         }
 
-        /* キャンバスのスタイル */
         canvas {
             position: fixed;
             top: 0;
@@ -41,7 +39,6 @@
             z-index: -1;
         }
 
-        /* New styles for parallax effect */
         .parallax-header,
         .parallax-text {
             opacity: 0;
@@ -55,14 +52,12 @@
             transform: translateY(0);
         }
 
-        /* 追加: 応答を表示する要素のスタイル */
         #responseContainer {
             margin-top: 20px;
             font-size: 18px;
             color: yellow;
         }
 
-        /* 追加: フォームのスタイル */
         #questionForm {
             margin-top: 20px;
         }
@@ -87,12 +82,10 @@
     <p>ツールの作成希望は、以下のリンクからインスタグラムをご覧ください。</p>
     <p>Follow me on Instagram: <a href="https://www.instagram.com/psannetwork/" target="_blank">psan's Instagram</a></p>
 
-    <!-- 応答を表示する要素 -->
     <div id="responseContainer">
         <strong>応答:</strong> <span id="responseText"></span>
     </div>
 
-    <!-- フォーム -->
     <div id="questionForm">
         <label for="questionInput">質問内容を入力してください:</label>
         <input type="text" id="questionInput">
@@ -103,51 +96,44 @@
     <ul>
         <li><a href="/post1.html">簡易Proxy</a></li>
         <li><a href="/post2.html">学校などの管理から完全に逃れる方法 - psan network</a></li>
-         <li><a href="/post4.html">連打ツール紹介</a></li>
-         <li><a href="/post5.html">タイピングクラブ自動化コード</a></li>
-         <li><a href="/hide/広告ブロッカー.html">広告ブロッカー</a></li>
-
-        <!-- 新しいブログ記事を追加する場合はここにリンクを追加 -->
+        <li><a href="/post4.html">連打ツール紹介</a></li>
+        <li><a href="/post5.html">タイピングクラブ自動化コード</a></li>
+        <li><a href="/hide/広告ブロッカー.html">広告ブロッカー</a></li>
     </ul>
+
     <script src="https://psannetwork.com/script.js"></script>
     <script>
-        function submitQuestion() {
-            // ユーザーに質問をプロンプトで表示
-            const questionInput = document.getElementById('questionInput');
-            const question = questionInput.value.trim();
+        document.addEventListener("DOMContentLoaded", function() {
+            async function submitQuestion() {
+                const questionInput = document.getElementById('questionInput');
+                const question = questionInput.value.trim();
 
-            if (question !== '') {
-                // Google Apps ScriptのウェブアプリケーションのURL
-                const scriptUrl = 'https://script.google.com/macros/s/AKfycbx0FJNySg-D0JUuWn5oT2xC1u2qbQe0NByU-fyIZB6h_7nNFBAG2sn-V74NAIDxULyb/exec';
+                if (question !== '') {
+                    const scriptUrl = 'https://script.google.com/macros/s/AKfycbx0FJNyS';
+                    const getRequestUrl = `${scriptUrl}?text=${question}`;
 
-                // GETリクエストのURLを構築
-                const getRequestUrl = `${scriptUrl}?text=${encodeURIComponent(question)}`;
+                    try {
+                        const response = await fetch(getRequestUrl);
 
-                // GETリクエストを送信
-                fetch(getRequestUrl)
-                    .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! Status: ${response.status}`);
                         }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // 応答を取得
-                        var bardResponse = data.text;
 
-                        // 応答を要素に追加
+                        const data = await response.json();
+                        const bardResponse = data.text;
+
                         document.getElementById('responseText').innerText = bardResponse;
-
-                        // 入力フォームをクリア
-                        questionInput.value = '';
-                    })
-                    .catch(error => {
+                    } catch (error) {
                         console.error('Error:', error.message);
-                    });
-            } else {
-                alert('質問内容を入力してください。');
+                    }
+                }
             }
-        }
+
+            const questionInput = document.getElementById('questionInput');
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.addEventListener('click', submitQuestion);
+        });
     </script>
 </body>
 </html>
