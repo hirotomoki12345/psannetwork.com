@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+<body>
+  <h1>YouTube Video Search</h1>
+  <label for="query">Enter your search query:</label>
+  <input type="text" id="query" name="query">
+  <button onclick="searchAndPlayVideo()">Search and Play</button>
+  <p id="result"></p>
+
+  <script>
+    function searchAndPlayVideo() {
+      var query = document.getElementById('query').value;
+      google.script.run.withSuccessHandler(displayResult).doGet({query: query});
+    }
+
+    function displayResult(result) {
+      if (result.error) {
+        document.getElementById('result').textContent = result.error;
+      } else {
+        var videoTitle = result.videoTitle;
+        var videoUrl = result.videoUrl;
+        document.getElementById('result').innerHTML = '<strong>' + videoTitle + '</strong><br><a href="' + videoUrl + '" target="_blank">Watch Video</a>';
+      }
+    }
+  </script>
+</body>
+</html>
