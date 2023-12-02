@@ -29,6 +29,12 @@
     button:hover {
       background-color: #2980b9;
     }
+
+    #response {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
   </style>
 </head>
 <body>
@@ -51,7 +57,7 @@
           return response.json();
         })
         .then(data => {
-          alert(data.text);
+          document.getElementById("response").textContent = data.text;
         })
         .catch(error => {
           console.error('There has been a problem with your fetch operation:', error);
@@ -63,5 +69,6 @@
     });
   </script>
   <button id="askButton">質問する</button>
+  <div id="response"></div>
 </body>
 </html>
