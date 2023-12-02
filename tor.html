@@ -45,6 +45,9 @@ sudo apt-get install tor</pre>
 
     <h2>5. ディレクトリのアクセス権を調整</h2>
     <pre>sudo chown -R www-data:www-data /home/hirotomoki12345/psannetwork</pre>
+    <p>もどす（編集時）</p>
+    <pre>sudo chown -R hirotomoki12345:hirotomoki12345 /home/hirotomoki12345/psannetwork
+sudo chmod -R u+rwx /home/hirotomoki12345/psannetwork</pre>
 
     <h2>6. TorとNginxを再起動</h2>
     <pre>sudo service tor restart
