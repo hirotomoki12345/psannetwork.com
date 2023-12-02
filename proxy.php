@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロキシ経由で取得したコンテンツの表示</title>
+</head>
+<body>
+    
 <?php
 // プロキシを介してコンテンツを取得
 $data = file_get_contents("https://www.ugtop.com/spill.shtml", false,
@@ -10,14 +19,7 @@ $data = file_get_contents("https://www.ugtop.com/spill.shtml", false,
 );
 ?>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>プロキシ経由で取得したコンテンツの表示</title>
-</head>
-<body>
+
     <!-- 取得したデータをiframeで表示 -->
     <iframe width="100%" height="600" srcdoc="<?php echo htmlentities($data); ?>"></iframe>
 </body>
