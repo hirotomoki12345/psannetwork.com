@@ -49,5 +49,13 @@
     }
   </script>
 
+  <script>
+    // 改行とインデントを自動で整形する関数
+    function formatCode() {
+      var jsCode = document.getElementById('jsCode');
+      jsCode.value = jsCode.value.replace(/(\bfunction\b\s*\([^)]*\)\s*\{|\bif\b\s*\([^)]*\)\s*\{|\belse\b\s*\{|\bfor\b\s*\([^)]*\)\s*\{|\bwhile\b\s*\([^)]*\)\s*\{|\bdo\b\s*\{\s*)/g, "$1\n  ").trim();
+    }
+  </script>
+
 </body>
 </html>
