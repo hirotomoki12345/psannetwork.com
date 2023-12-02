@@ -11,9 +11,16 @@
       margin: 0;
       padding: 0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
     }
 
     button {
@@ -38,9 +45,13 @@
   </style>
 </head>
 <body>
+  <input type="text" id="questionInput" placeholder="質問を入力してください">
+  <button id="askButton">質問する</button>
+  <div id="response"></div>
+
   <script>
     function askQuestion() {
-      var userQuestion = prompt("質問を入力してください:");
+      var userQuestion = document.getElementById("questionInput").value;
       if (!userQuestion.trim()) {
         alert("質問が空白です。");
         return;
@@ -68,7 +79,5 @@
       document.getElementById("askButton").addEventListener("click", askQuestion);
     });
   </script>
-  <button id="askButton">質問する</button>
-  <div id="response"></div>
 </body>
 </html>
