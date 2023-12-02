@@ -5,40 +5,39 @@
     <link>https://psannetwork.com</link>
     <description>PSA Network公式サイト</description>
     <item>
-    <title>bard</title>
-    <link>https://psannetwork.com/blogbooks/bard.html</link>
-    <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
+      <title>bard</title>
+      <link>https://psannetwork.com/blogbooks/bard.html</link>
+      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>進数変換</title>
-    <link>https://psannetwork.com/進数変換.html</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <title>進数変換</title>
+      <link>https://psannetwork.com/進数変換.html</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>位置情報特定ツール</title>
-    <link>https://psannetwork.net</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <title>位置情報特定ツール</title>
+      <link>https://psannetwork.net</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>ファイル共有サイト</title>
-    <link>https://psannetwork.com/ai/uploader.html</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <title>ファイル共有サイト</title>
+      <link>https://psannetwork.com/ai/uploader.html</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>hide</title>
-    <link>https://psannetwork.com/ai/hide</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <title>hide</title>
+      <link>https://psannetwork.com/ai/hide</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>簡易Proxy</title>
-    <link>https://psannetwork.com/post1</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
-    </item>
+      <title>簡易Proxy</title>
+      <link>https://psannetwork.com/post1</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
     <item>
-    <title>タイピングクラブ自動化コード</title>
-    <link>https://psannetwork.com/post5</link>
-    <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <title>タイピングクラブ自動化コード</title>
+      <link>https://psannetwork.com/post5</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
     </item>
   </channel>
 </rss>
