@@ -40,13 +40,29 @@
     #response {
       margin-top: 20px;
       font-size: 18px;
-      color: #333;
+      color: yellow;
+    }
+
+    #loadingMessage {
+      display: none;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    #errorMessage {
+      display: none;
+      margin-top: 20px;
+      font-size: 16px;
+      color: #ff0000;
     }
   </style>
 </head>
 <body>
   <input type="text" id="questionInput" placeholder="質問を入力してください">
-  <button id="askButton">質問する</button>
+  <button id="askButton" onclick="askQuestion()">質問する</button>
+  <div id="loadingMessage">質問中...</div>
+  <div id="errorMessage"></div>
   <div id="response"></div>
 
   <script>
@@ -56,10 +72,15 @@
         alert("質問が空白です。");
         return;
       }
-    
+
+      document.getElementById("askButton").disabled = true;
+
+      document.getElementById("loadingMessage").style.display = "block";
+      document.getElementById("errorMessage").style.display = "none";
+
       var gasScriptUrl = "https://script.google.com/macros/s/AKfycbwr_BSlLobuQkMKsAMDLTFlYCbPs_hGv7gO3LZrwcBCCvNu1K3VVwqhQ_S56T10N_3j/exec";
       gasScriptUrl += "?question=" + encodeURIComponent(userQuestion);
-    
+
       fetch(gasScriptUrl)
         .then(response => {
           if (!response.ok) {
@@ -68,16 +89,18 @@
           return response.json();
         })
         .then(data => {
+          
           document.getElementById("response").textContent = data.text;
         })
         .catch(error => {
-          console.error('There has been a problem with your fetch operation:', error);
+          document.getElementById("errorMessage").textContent = 'エラーが発生しました: ' + error.message;
+          document.getElementById("errorMessage").style.display = "block";
+        })
+        .finally(() => {
+          document.getElementById("askButton").disabled = false;
+          document.getElementById("loadingMessage").style.display = "none";
         });
     }
-    
-    document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("askButton").addEventListener("click", askQuestion);
-    });
   </script>
 </body>
 </html>
