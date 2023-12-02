@@ -33,7 +33,12 @@
       cursor: pointer;
     }
 
-    button:hover {
+    button[disabled] {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+
+    button:hover:enabled {
       background-color: #2980b9;
     }
 
@@ -56,14 +61,31 @@
       font-size: 16px;
       color: #ff0000;
     }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-  <input type="text" id="questionInput" placeholder="質問を入力してください">
-  <button id="askButton" onclick="askQuestion()">質問する</button>
-  <div id="loadingMessage">質問中...</div>
-  <div id="errorMessage"></div>
   <div id="response"></div>
+  <div id="errorMessage"></div>
+  <div id="loadingMessage">質問中...</div>
+  <input type="text" id="questionInput" placeholder="質問を入力してください">
+  <button id="askButton" onclick="askQuestion()">
+    <span id="loadingIcon" class="loader" style="display: none;"></span>
+    質問する
+  </button>
 
   <script>
     function askQuestion() {
@@ -73,7 +95,11 @@
         return;
       }
 
-      document.getElementById("askButton").disabled = true;
+      var askButton = document.getElementById("askButton");
+      askButton.disabled = true;
+
+      var loadingIcon = document.getElementById("loadingIcon");
+      loadingIcon.style.display = "inline-block";
 
       document.getElementById("loadingMessage").style.display = "block";
       document.getElementById("errorMessage").style.display = "none";
@@ -89,7 +115,6 @@
           return response.json();
         })
         .then(data => {
-          
           document.getElementById("response").textContent = data.text;
         })
         .catch(error => {
@@ -97,7 +122,8 @@
           document.getElementById("errorMessage").style.display = "block";
         })
         .finally(() => {
-          document.getElementById("askButton").disabled = false;
+          askButton.disabled = false;
+          loadingIcon.style.display = "none";
           document.getElementById("loadingMessage").style.display = "none";
         });
     }
