@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TorとNginxを使用したデプロイ</title>
+</head>
+<body>
+
+    <h1>TorとNginxを使用してウェブサイトをデプロイする手順</h1>
+
+    <h2>1. Torをインストール</h2>
+    <pre>sudo apt-get update
+sudo apt-get install tor</pre>
+
+    <h2>2. Torの設定を編集</h2>
+    <pre>sudo nano /etc/tor/torrc</pre>
+
+    Torの設定ファイルに以下の行を追加して保存します。
+    <pre>
+    HiddenServiceDir /var/lib/tor/hidden_service/
+    HiddenServicePort 80 127.0.0.1:8080
+    </pre>
+
+    <h2>3. Nginxをインストール</h2>
+    <pre>sudo apt-get install nginx</pre>
+
+    <h2>4. Nginxの設定を変更</h2>
+    <pre>sudo nano /etc/nginx/sites-available/default</pre>
+
+    Nginxのデフォルトサーバーブロックを以下のように変更します。
+    <pre>
+    server {
+        listen 127.0.0.1:8080;
+        root /home/hirotomoki12345/psannetwork;
+        index index.html;
+
+        server_name _;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+    </pre>
+
+    <h2>5. ディレクトリのアクセス権を調整</h2>
+    <pre>sudo chown -R www-data:www-data /home/hirotomoki12345/psannetwork</pre>
+
+    <h2>6. TorとNginxを再起動</h2>
+    <pre>sudo service tor restart
+sudo systemctl restart nginx</pre>
+
+    <h2>7. Hidden Serviceのアドレスを確認</h2>
+    <pre>cat /var/lib/tor/hidden_service/hostname</pre>
+
+    これで、Torを通じてアクセス可能なアドレスが表示されます。
+
+</body>
+</html>
