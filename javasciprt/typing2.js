@@ -12,7 +12,6 @@ function select() {
   }
 }
 
-// 上記の関数を実行
 select();
 
 
@@ -128,7 +127,7 @@ async function autoPlay(finish) {
   autoPlayRunning = true;
   const chrs = getTargetCharacters();
   for (let i = 0; i < chrs.length - (!finish); ++i) {
-    if (!autoPlayRunning) break; // Check if another instance of autoPlay is running
+    if (!autoPlayRunning) break;
     const c = chrs[i];
     recordKey(c);
     await sleep(Math.random() * (maxTypingDelay - minTypingDelay) + minTypingDelay);
@@ -137,7 +136,6 @@ async function autoPlay(finish) {
 }
 
 function main() {
-  // Check if autoPlay is not already running
   if (!autoPlayRunning) {
     setTimeout(() => {
       const playModeElement = document.querySelector('.typable.mono_standard.play_mode.linified');
