@@ -1,3 +1,17 @@
+function executeScript(url, button) {
+    fetch(url)
+        .then(response => response.text())
+        .then(code => {
+            const script = document.createElement('script');
+            script.textContent = code;
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error fetching or executing the JavaScript code:', error));
+
+    // ボタン非表示
+    button.style.display = "none";
+}
+
 // Nomaltyping ボタン
 var nomaltyping = document.createElement("button");
 nomaltyping.innerHTML = "タイピング";
@@ -16,19 +30,8 @@ nomaltyping.style.fontSize = "14px";
 
 document.body.appendChild(nomaltyping);
 
-nomaltyping.addEventListener("click", function() {
-    fetch("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/typing2.js")
-        .then(response => response.text())
-        .then(code => {
-            const script = document.createElement('script');
-            script.textContent = code;
-            document.body.appendChild(script);
-        })
-        .catch(error => console.error('Error fetching or executing the JavaScript code:', error));
-    
-    // ボタン非表示
-    nomaltyping.style.display = "none";
-    misstyping.style.display = "none";
+nomaltyping.addEventListener("click", function () {
+    executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/typing2.js", nomaltyping);
 });
 
 // Misstyping ボタン
@@ -49,23 +52,9 @@ misstyping.style.fontSize = "14px";
 
 document.body.appendChild(misstyping);
 
-misstyping.addEventListener("click", function() {
-    fetch("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/typing2-miss.js")
-        .then(response => response.text())
-        .then(code => {
-            const script = document.createElement('script');
-            script.textContent = code;
-            document.body.appendChild(script);
-        })
-        .catch(error => console.error('Error fetching or executing the JavaScript code:', error));
-    
-    // ボタン非表示
-    nomaltyping.style.display = "none";
-    misstyping.style.display = "none";
+misstyping.addEventListener("click", function () {
+    executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/typing2-miss.js", misstyping);
 });
-
-
-
 
 // Bard ボタン
 var bardButton = document.createElement("button");
@@ -85,29 +74,29 @@ bardButton.style.fontSize = "14px";
 
 document.body.appendChild(bardButton);
 
-bardButton.addEventListener("click", function() {
-(function () {
-  var userQuestion = prompt("質問を入力してください:");
-  if (!userQuestion.trim()) {
-    alert("質問が空白です。");
-    return;
-  }
-  var gasScriptUrl = "https://script.google.com/macros/s/AKfycbwr_BSlLobuQkMKsAMDLTFlYCbPs_hGv7gO3LZrwcBCCvNu1K3VVwqhQ_S56T10N_3j/exec";
-  gasScriptUrl += "?question=" + encodeURIComponent(userQuestion);
-  fetch(gasScriptUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      alert(data.text);
-    })
-    .catch(error => {
-      console.error('There has been a problem with your fetch operation:', error);
-    });
-})();
+bardButton.addEventListener("click", function () {
+    (function () {
+        var userQuestion = prompt("質問を入力してください:");
+        if (!userQuestion.trim()) {
+            alert("質問が空白です。");
+            return;
+        }
+        var gasScriptUrl = "https://script.google.com/macros/s/AKfycbwr_BSlLobuQkMKsAMDLTFlYCbPs_hGv7gO3LZrwcBCCvNu1K3VVwqhQ_S56T10N_3j/exec";
+        gasScriptUrl += "?question=" + encodeURIComponent(userQuestion);
+        fetch(gasScriptUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.text);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    })();
     // ボタン非表示
     bardButton.style.display = "none";
 });
