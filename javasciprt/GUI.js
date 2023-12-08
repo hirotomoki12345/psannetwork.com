@@ -98,5 +98,4 @@ bardButton.addEventListener("click", function () {
             });
     })();
     // ボタン非表示
-    bardButton.style.display = "none";
 });
