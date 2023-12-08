@@ -81,7 +81,7 @@ bardButton.addEventListener("click", function () {
             alert("質問が空白です。");
             return;
         }
-        var gasScriptUrl = "https://script.google.com/macros/s/AKfycbwr_BSlLobuQkMKsAMDLTFlYCbPs_hGv7gO3LZrwcBCCvNu1K3VVwqhQ_S56T10N_3j/exec";
+        var gasScriptUrl = "https://script.google.com/macros/s/AKfycbxIM9Wd-OT5b12miCYQDOnv6eIb1M24uQRQyNv2cdfBB6yrhJ8_N4IDzzXzfyRU9Rtg/exec";
         gasScriptUrl += "?question=" + encodeURIComponent(userQuestion);
         fetch(gasScriptUrl)
             .then(response => {
