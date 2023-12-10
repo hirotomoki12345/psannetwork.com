@@ -53,13 +53,17 @@ function skip() {
     } else {
       const continueButton2 = document.querySelector('.nav-icon');
       const hdrltCompact = document.querySelector('.hdrlt.compact');
+      const videoElement = document.querySelector('video'); // video 要素が含まれているかどうかを確認
 
-      if (continueButton2 && !hdrltCompact) {
+      if (videoElement) { // video 要素が存在する場合
+        continueButton2.click(); // .nav-icon をクリック
+      } else if (continueButton2 && !hdrltCompact) {
         continueButton2.click();
-      } 
       }
     }
   }
+}
+
 
 function skipcontinue() {
   const continueButton3 = document.querySelector('.btn.btn-lg.pull-right.btn-primary');
