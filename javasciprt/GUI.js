@@ -107,11 +107,21 @@ bardButton.addEventListener("click", function () {
 var newDiv = document.createElement('div');
 
 // 新しいdivにテキストを追加
-var divText = document.createTextNode('This code was writen by Psan.\n©Psannetwork.com');
+var divText = document.createTextNode('This code was written by Psan.\n©Psannetwork.com');
 newDiv.appendChild(divText);
 
 // 新しいdivにIDを設定
 newDiv.id = 'newDiv';
 
-// 既存のbody要素に新しいdivを追加
-document.body.appendChild(newDiv);
+// スタイルを設定
+newDiv.style.position = 'fixed';
+newDiv.style.bottom = '0';
+newDiv.style.right = '0';
+newDiv.style.color = 'red';
+newDiv.style.padding = '10px';
+newDiv.style.margin = '10px';
+newDiv.style.backgroundColor = 'black';
+
+// 既存のbody要素に新しいdivを一番手前に追加
+document.body.prepend(newDiv);
+
