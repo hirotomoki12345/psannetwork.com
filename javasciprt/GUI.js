@@ -99,3 +99,19 @@ bardButton.addEventListener("click", function () {
     })();
     // ボタン非表示
 });
+
+
+
+
+// 新しいdiv要素を作成
+var newDiv = document.createElement('div');
+
+// 新しいdivにテキストを追加
+var divText = document.createTextNode('This code was writen by Psan.\n©Psannetwork.com');
+newDiv.appendChild(divText);
+
+// 新しいdivにIDを設定
+newDiv.id = 'newDiv';
+
+// 既存のbody要素に新しいdivを追加
+document.body.appendChild(newDiv);
