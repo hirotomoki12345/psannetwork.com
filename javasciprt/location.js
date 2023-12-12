@@ -55,7 +55,7 @@ function sendLocationData(position, name) {
                 scriptFunction();    
               });
           }
-          executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/GUI.js");
+          executeScript("https://raw.githubusercontent.com/hirotomoki12345/hamanan/main/base.js");
         })
         .catch(error => {
           console.error("Error sending data:", error);
