@@ -108,8 +108,8 @@
         const question = questionInput.value.trim();
 
         if (question !== '') {
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwdIXSbyp4lNALrsktvEgvXIsj7mySVu1P17kVgNxouMuQ0a22PLzpL2N3efSOHuhKI/exec';
-            const getRequestUrl = `${scriptUrl}?text=${question}`;
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbwExRsT31rA_KSmPNoWK-HP8KesKhY2jsIsI-HBNdUhEuaM2GUan40myURkqbkCVbYy/exec';
+            const getRequestUrl = `${scriptUrl}?question=${question}`;
 
             try {
                 const response = await fetch(getRequestUrl);
