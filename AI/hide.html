@@ -6,6 +6,9 @@
     <link rel="icon" type="image/jpeg" href="/_6e6ccb16-2e38-4160-9507-a286d8e55b29.jpeg">
 
     <style>
+        #loadingIndicator {
+            display: none;
+        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -86,11 +89,12 @@
         <strong>応答:</strong> <span id="responseText"></span>
     </div>
 
-    <div id="questionForm">
-        <label for="questionInput">質問内容を入力してください:</label>
-        <input type="text" id="questionInput">
-        <button id="submitBtn" onclick="submitQuestion()">質問を送信</button>
-    </div>
+<div id="questionForm">
+    <label for="questionInput">質問内容を入力してください:</label>
+    <input type="text" id="questionInput">
+    <button id="submitBtn" onclick="submitQuestion()" disabled>質問を送信</button>
+    <div id="loadingIndicator">読み込み中...</div>
+</div>
 
     <h2>最新の投稿</h2>
     <ul>
@@ -105,6 +109,9 @@
     <script>
     async function submitQuestion() {
         const questionInput = document.getElementById('questionInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
         const question = questionInput.value.trim();
 
         if (question !== '') {
@@ -112,6 +119,9 @@
             const getRequestUrl = `${scriptUrl}?question=${question}`;
 
             try {
+                loadingIndicator.style.display = 'inline'; // Show loading indicator
+                submitBtn.disabled = true; // Disable the submit button
+
                 const response = await fetch(getRequestUrl);
 
                 if (!response.ok) {
@@ -124,6 +134,9 @@
                 document.getElementById('responseText').innerText = bardResponse;
             } catch (error) {
                 console.error('Error:', error.message);
+            } finally {
+                loadingIndicator.style.display = 'none'; // Hide loading indicator
+                submitBtn.disabled = false; // Enable the submit button
             }
         }
     }
