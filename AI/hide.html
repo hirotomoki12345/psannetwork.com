@@ -140,9 +140,8 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        const questionInput = document.getElementById('questionInput');
         const submitBtn = document.getElementById('submitBtn');
-
+        submitBtn.disabled = false; // Enable the submit button on page load
         submitBtn.addEventListener('click', submitQuestion);
     });
     </script>
