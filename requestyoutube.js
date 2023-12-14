@@ -2,7 +2,7 @@
 var scriptUrl = 'https://script.google.com/macros/s/AKfycbyDO4z3Msz0NRuJb8lolw8X71fCdcuhUH0O9dihMvYdlZyU0IRILNwAdOSKJS7a0Ca-/exec';
 
 // 検索クエリと取得する動画数を指定
-var query = 'your_search_query';
+var query = prompt("ここに検索したいyoutubeのキーワードを入れてください。");
 var maxResults = 5;
 
 // Google Apps ScriptのdoGet関数にリクエストを送信 (GETリクエスト)
