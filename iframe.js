@@ -12,16 +12,14 @@ self.addEventListener('fetch', event => {
   // Handle fetch events if needed
 });
 
-self.addEventListener('message', event => {
-  if (event.data && event.data.action === 'createIframe') {
-    // 新しい iframe を作成
-    var iframeHTML = '<iframe src="https://google.com?igu=1" width="600" height="400" frameborder="0"></iframe>';
+// サービスワーカーからメッセージを受信
+navigator.serviceWorker.addEventListener('message', event => {
+  if (event.data && event.data.action === 'showIframe') {
+    // 新しい div 要素を作成し、HTML文字列をそのまま追加
+    var div = document.createElement('div');
+    div.innerHTML = event.data.iframeHTML;
 
-    // 作成した iframe をブラウザに表示
-    clients.matchAll().then(clients => {
-      clients.forEach(client => {
-        client.postMessage({ action: 'showIframe', iframeHTML: iframeHTML });
-      });
-    });
+    // 作成した iframe を body 要素に追加
+    document.body.appendChild(div.firstChild);
   }
 });
