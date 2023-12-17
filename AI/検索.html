@@ -37,7 +37,7 @@
 
         // 結果を新しい要素に追加して表示
         var resultsContainer = document.getElementById('searchResults');
-        resultsContainer.innerHTML = '<p>検索結果:</p><ul><li>' + results.join('</li><li>') + '</li></ul>';
+        resultsContainer.innerHTML = '<p>検索結果:</p><ul>' + results.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('') + '</ul>';
       })
       .catch(error => {
         // エラーが発生した場合はアラートで表示
