@@ -1,37 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="ja">
+
+  <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login with Google</title>
-</head>
-<body>
-    <header>
-        <h1>Welcome to My Site</h1>
-    </header>
-    <main>
-        <section id="login-section">
-            <h2>Login</h2>
-            <a href="/.netlify/functions/auth" class="login-button">Login with Google</a>
-        </section>
-        <section id="user-section" style="display:none;">
-            <h2>Hello, <span id="user-display-name"></span>!</h2>
-            <a href="/logout" class="logout-button">Logout</a>
-        </section>
-    </main>
+    <title>Document</title>
+  </head>
 
-    <script>
-        // Assuming you have a user object available after login
-        const user = {
-            displayName: "John Doe" // Replace with actual user data
-        };
+  <body>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload" data-client_id="469637175846-8974sb0cb2c7bt7u03tcdvsmuge40oeb.apps.googleusercontent.com"
+      data-login_uri="/ai/hide.html" data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+      data-shape="rectangular" data-logo_alignment="left">
+    </div>
+  </body>
 
-        // Check if the user is authenticated (you may have a more robust check)
-        if (user) {
-            document.getElementById("login-section").style.display = "none";
-            document.getElementById("user-section").style.display = "block";
-            document.getElementById("user-display-name").textContent = user.displayName;
-        }
-    </script>
-</body>
 </html>
