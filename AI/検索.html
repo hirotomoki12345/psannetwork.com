@@ -3,63 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Apps Script検索</title>
+  <title>検索アプリ</title>
 </head>
 <body>
 
-  <!-- フォームを追加 -->
-  <form id="searchForm">
-    <label for="keyword">検索キーワード:</label>
-    <input type="text" id="keyword" name="keyword" required>
-    <button type="submit">検索</button>
-  </form>
+<!-- キーワード入力用のフォーム -->
+<form id="searchForm">
+  <label for="keyword">検索キーワード:</label>
+  <input type="text" id="keyword" name="keyword">
+  <button type="button" onclick="performSearch()">検索</button>
+</form>
 
-  <!-- 検索結果を表示するための要素 -->
-  <div id="resultsContainer"></div>
+<!-- 結果を表示するための要素 -->
+<div id="searchResults"></div>
 
-  <script>
-    // フォームがサブミットされたときの処理
-    document.getElementById('searchForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // フォームのデフォルトの動作を無効化
+<script>
+  function performSearch() {
+    // Google Apps ScriptのウェブアプリケーションのURL
+    var url = 'https://script.google.com/macros/s/AKfycbw6QRmHXwKJo39yG7J4JGy7lBUsAA7OrfPoKZjs8fAi7xKXscoTqG9w4-gDYVwVHLM/exec';
 
-      // ユーザーが入力したキーワードを取得
-      var keyword = document.getElementById('keyword').value;
+    // フォームからキーワードを取得
+    var keyword = document.getElementById('keyword').value;
 
-      // Google Apps ScriptのウェブアプリケーションのURL
-      var url = 'https://script.google.com/macros/s/AKfycbw6QRmHXwKJo39yG7J4JGy7lBUsAA7OrfPoKZjs8fAi7xKXscoTqG9w4-gDYVwVHLM/exec';
+    // キーワードをURLに追加
+    url += '?text=' + encodeURIComponent(keyword);
 
-      // キーワードをURLに追加
-      url += '?text=' + encodeURIComponent(keyword);
+    // データを取得して処理する
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        // レスポンスデータから必要な情報を抽出
+        var results = data.results.map(result => result.columnB);
 
-      // 検索結果を表示するための要素
-      var resultsContainer = document.getElementById('resultsContainer');
-      resultsContainer.innerHTML = ''; // すでに表示されている結果をクリア
+        // 結果を新しい要素に追加して表示
+        var resultsContainer = document.getElementById('searchResults');
+        resultsContainer.innerHTML = '<p>検索結果:</p><ul><li>' + results.join('</li><li>') + '</li></ul>';
+      })
+      .catch(error => {
+        // エラーが発生した場合はアラートで表示
+        alert('エラー:\n' + error);
+      });
+  }
+</script>
 
-      // データを取得して処理する
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          // レスポンスデータから必要な情報を抽出
-          var results = data.results;
-
-          // 各結果に対してリンクを作成して要素に追加
-          results.forEach(result => {
-            var resultLink = document.createElement('a');
-            resultLink.href = result.columnB; // 列Bがリンク先のURLと仮定
-            resultLink.textContent = result.columnC; // 列Cがリンクの表示テキストと仮定
-            resultLink.target = '_blank'; // 新しいタブで開くように設定
-
-            var resultElement = document.createElement('div');
-            resultElement.appendChild(resultLink);
-
-            resultsContainer.appendChild(resultElement);
-          });
-        })
-        .catch(error => {
-          // エラーが発生した場合はアラートで表示
-          alert('エラー:\n' + error);
-        });
-    });
-  </script>
 </body>
 </html>
