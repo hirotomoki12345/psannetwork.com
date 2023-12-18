@@ -87,7 +87,7 @@
 <!-- キーワード入力用のフォーム -->
 <form id="searchForm">
   <label for="keyword">検索キーワード:</label>
-  <input type="text" id="keyword" name="keyword">
+  <input type="text" id="keyword" name="keyword" onkeydown="if (event.key === 'Enter') performSearch()">
   <button type="button" onclick="performSearch()">検索</button>
 </form>
 
@@ -96,6 +96,9 @@
 
 <script>
   function performSearch() {
+    // 表示中の結果をリセット
+    document.getElementById('searchResults').innerHTML = '<p>読込中...</p>';
+
     // Google Apps ScriptのウェブアプリケーションのURL
     var scriptUrl = 'https://script.google.com/macros/s/AKfycbw6QRmHXwKJo39yG7J4JGy7lBUsAA7OrfPoKZjs8fAi7xKXscoTqG9w4-gDYVwVHLM/exec';
 
