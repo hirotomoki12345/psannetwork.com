@@ -95,6 +95,7 @@
 <div id="searchResults"></div>
 
 <script>
+  // 検索ボタンがクリックされたときとエンターキーが押されたときの処理を同じ関数にまとめる
   function performSearch() {
     // 表示中の結果をリセット
     document.getElementById('searchResults').innerHTML = '<p>読込中...</p>';
@@ -128,6 +129,7 @@
     });
   }
 
+  // 翻訳テキストを取得する関数
   function translateText(text, sourceLang, targetLang, callback) {
     // Google Apps Scriptの翻訳ウェブアプリケーションのURL
     var translateUrl = 'https://script.google.com/macros/s/AKfycbxjMc7MapfqNjQIBcr0AvIRhBfdrQMuLCB1sOPK3LXJRtYCOmVgqw5cAqudhWVwB-9g/exec';
