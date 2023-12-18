@@ -20,28 +20,55 @@
 <script>
   function performSearch() {
     // Google Apps ScriptのウェブアプリケーションのURL
-    var url = 'https://script.google.com/macros/s/AKfycbw6QRmHXwKJo39yG7J4JGy7lBUsAA7OrfPoKZjs8fAi7xKXscoTqG9w4-gDYVwVHLM/exec';
+    var scriptUrl = 'https://script.google.com/macros/s/AKfycbw6QRmHXwKJo39yG7J4JGy7lBUsAA7OrfPoKZjs8fAi7xKXscoTqG9w4-gDYVwVHLM/exec';
 
     // フォームからキーワードを取得
     var keyword = document.getElementById('keyword').value;
 
-    // キーワードをURLに追加
-    url += '?text=' + encodeURIComponent(keyword);
+    // 翻訳リクエストを送信
+    translateText(keyword, 'ja', 'en', function(translatedText) {
+      // 検索用のURLに翻訳されたテキストを追加
+      var searchUrl = `${scriptUrl}?text=${encodeURIComponent(translatedText)}`;
 
-    // データを取得して処理する
-    fetch(url)
+      // データを取得して処理する
+      fetch(searchUrl)
+        .then(response => response.json())
+        .then(data => {
+          // レスポンスデータから必要な情報を抽出
+          var results = data.results.map(result => result.columnB);
+
+          // 結果を新しい要素に追加して表示
+          var resultsContainer = document.getElementById('searchResults');
+          resultsContainer.innerHTML = '<p>検索結果:</p><ul>' + results.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('') + '</ul>';
+        })
+        .catch(error => {
+          // エラーが発生した場合はコンソールに表示
+          console.error('エラー:', error);
+        });
+    });
+  }
+
+  function translateText(text, sourceLang, targetLang, callback) {
+    // Google Apps Scriptの翻訳ウェブアプリケーションのURL
+    var translateUrl = 'https://script.google.com/macros/s/AKfycbxjMc7MapfqNjQIBcr0AvIRhBfdrQMuLCB1sOPK3LXJRtYCOmVgqw5cAqudhWVwB-9g/exec';
+
+    // 翻訳リクエストのデータ
+    var requestData = {
+      text: text,
+      source: sourceLang,
+      target: targetLang
+    };
+
+    // 翻訳リクエストを送信
+    fetch(`${translateUrl}?${new URLSearchParams(requestData)}`)
       .then(response => response.json())
-      .then(data => {
-        // レスポンスデータから必要な情報を抽出
-        var results = data.results.map(result => result.columnB);
-
-        // 結果を新しい要素に追加して表示
-        var resultsContainer = document.getElementById('searchResults');
-        resultsContainer.innerHTML = '<p>検索結果:</p><ul>' + results.map(link => `<li><a href="${link}" target="_blank">${link}</a></li>`).join('') + '</ul>';
+      .then(result => {
+        var translatedText = result.text;
+        callback(translatedText);
       })
       .catch(error => {
-        // エラーが発生した場合はアラートで表示
-        alert('エラー:\n' + error);
+        // エラーが発生した場合はコンソールに表示
+        console.error('翻訳エラー:', error);
       });
   }
 </script>
