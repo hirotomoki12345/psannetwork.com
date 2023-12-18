@@ -85,7 +85,7 @@
 <body>
 
 <!-- キーワード入力用のフォーム -->
-<form id="searchForm">
+<form id="searchForm" onsubmit="event.preventDefault(); performSearch();">
   <label for="keyword">検索キーワード:</label>
   <input type="text" id="keyword" name="keyword" onkeydown="if (event.key === 'Enter') performSearch()">
   <button type="button" onclick="performSearch()">検索</button>
