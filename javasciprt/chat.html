@@ -1,67 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Apps Script Request Example</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET Request with Form Data</title>
 </head>
 <body>
 
-<!-- フォーム -->
-<form id="dataForm">
-  <label for="idInput">ID:</label>
-  <input type="text" id="idInput" name="id">
-  <button type="button" onclick="fetchData()">データ取得</button>
-</form>
+    <form id="myForm">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="id" value="a">
+        
+        <!-- 他のフォーム要素もここに追加 -->
 
-<!-- データを表示するためのリスト -->
-<ul id="dataList"></ul>
+        <button type="button" onclick="sendRequest()">Send Request</button>
+    </form>
 
-<script>
-function fetchData() {
-  // フォームからIDを取得
-  var idInput = document.getElementById("idInput");
-  var idValue = idInput.value;
+    <script>
+        function sendRequest() {
+            // XMLHttpRequestオブジェクトを作成
+            var xhr = new XMLHttpRequest();
 
-  // Google Apps ScriptのURLを指定
-  var url = "https://script.google.com/macros/s/AKfycbwVVjVYNY4vqzL-WCR3f0pRqOqiPDSsKVrhefoeD5UNlj2o_VRJgRe410vD6CANdNhq/exec";
+            // フォームからidの値を取得
+            var idValue = document.getElementById("id").value;
 
-  var params = {
-    mode: 2,
-    id: idValue
-  };
+            // パラメーターを追加したURL
+            var url = "https://script.google.com/macros/s/AKfycbxJCt7Oz7aIHVypOd2nvN5UgbzjJt4uIJxFbyXfrgHEPOmZGPV7EymVbz3JoB0Nz6M/exec?id=" + idValue + "&mode=2&text=null";
 
-  // URLにパラメーターを追加
-  url += "?" + new URLSearchParams(params);
+            // リクエストの種類とURLを指定（GETリクエスト）
+            xhr.open("GET", url, true);
 
-  // fetch関数を使用してリクエストを送信
-  fetch(url, {
-    method: 'GET'
-  })
-    .then(response => response.json())
-    .then(data => {
-      updateDataList(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
+            // リクエストが成功した場合の処理
+            xhr.onload = function () {
+                // HTTPステータスが200の場合は成功
+                if (xhr.status == 200) {
+                    console.log(xhr.responseText); // レスポンスの内容をコンソールに出力
+                }
+            };
 
-function updateDataList(data) {
-  // dataList要素を取得
-  var dataList = document.getElementById("dataList");
-
-  // 既存の要素をクリア
-  dataList.innerHTML = "";
-
-  // データを逆順に処理して新しいものから上に追加
-  for (var i = data.length - 1; i >= 0; i--) {
-    var listItem = document.createElement("li");
-    listItem.textContent = data[i].timestamp + ": " + data[i].text;
-    dataList.appendChild(listItem);
-  }
-}
-</script>
+            // リクエストの送信
+            xhr.send();
+        }
+    </script>
 
 </body>
 </html>
