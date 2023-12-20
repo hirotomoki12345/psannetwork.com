@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Apps Script Request Example</title>
+</head>
+<body>
+
+<!-- フォーム -->
+<form id="dataForm">
+  <label for="textInput">テキスト入力:</label>
+  <input type="text" id="textInput" name="text">
+  <button type="button" onclick="submitForm()">送信</button>
+</form>
+
+<!-- データを表示するためのリスト -->
+<ul id="dataList"></ul>
+
+<script>
+function fetchData() {
+  // Google Apps ScriptのURLを指定
+  var url = "https://script.google.com/macros/s/AKfycbxud-CSu91RYbNOhmsCMLqPiZ5I84d1vAzEONuhF66tfu2soWLFLwNR6SnssWOXwrK4/exec?mode=2";
+
+  // fetch関数を使用してリクエストを送信
+  fetch(url, {
+    method: 'GET'
+  })
+    .then(response => response.json())
+    .then(data => {
+      // データを取得してHTMLに追加
+      updateDataList(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+function updateDataList(data) {
+  // dataList要素を取得
+  var dataList = document.getElementById("dataList");
+
+  // 既存の要素をクリア
+  dataList.innerHTML = "";
+
+  // データを逆順に処理して新しいものから上に追加
+  for (var i = data.length - 1; i >= 0; i--) {
+    var listItem = document.createElement("li");
+    listItem.textContent = data[i].timestamp + ": " + data[i].text;
+    dataList.appendChild(listItem);
+  }
+}
+
+function submitForm() {
+  // フォームからテキストを取得
+  var textInput = document.getElementById("textInput");
+  var textValue = textInput.value;
+
+  // Google Apps ScriptのURLを指定
+  var url = "https://script.google.com/macros/s/AKfycbxud-CSu91RYbNOhmsCMLqPiZ5I84d1vAzEONuhF66tfu2soWLFLwNR6SnssWOXwrK4/exec?mode=1";
+
+  // fetch関数を使用してリクエストを送信
+  fetch(url + "&text=" + encodeURIComponent(textValue), {
+    method: 'GET'
+  })
+    .then(response => response.text())
+    .then(data => {
+      console.log('Response:', data);
+      // データを再読み込み
+      fetchData();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+// 初回のデータ取得
+fetchData();
+
+// 10秒ごとにデータを更新
+setInterval(fetchData, 10000);
+</script>
+
+</body>
+</html>
