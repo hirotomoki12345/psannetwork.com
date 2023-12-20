@@ -17,6 +17,8 @@
         <button type="button" onclick="sendRequest()">Send Request</button>
     </form>
 
+    <div id="responseContainer"></div>
+
     <script>
         function sendRequest() {
             // XMLHttpRequestオブジェクトを作成
@@ -35,7 +37,11 @@
             xhr.onload = function () {
                 // HTTPステータスが200の場合は成功
                 if (xhr.status == 200) {
-                    console.log(xhr.responseText); // レスポンスの内容をコンソールに出力
+                    // レスポンスの内容を取得
+                    var responseText = xhr.responseText;
+
+                    // レスポンスの内容をdivに表示
+                    document.getElementById("responseContainer").innerHTML = responseText;
                 }
             };
 
