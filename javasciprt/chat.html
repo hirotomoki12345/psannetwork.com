@@ -5,6 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GET Request with Form Data</title>
+    <style>
+        #responseContainer {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,8 +20,6 @@
         <label for="id">ID:</label>
         <input type="text" id="id" name="id" value="a">
         
-        <!-- 他のフォーム要素もここに追加 -->
-
         <button type="button" onclick="sendRequest()">Send Request</button>
     </form>
 
@@ -21,32 +27,34 @@
 
     <script>
         function sendRequest() {
-            // XMLHttpRequestオブジェクトを作成
             var xhr = new XMLHttpRequest();
-
-            // フォームからidの値を取得
             var idValue = document.getElementById("id").value;
-
-            // パラメーターを追加したURL
             var url = "https://script.google.com/macros/s/AKfycbxJCt7Oz7aIHVypOd2nvN5UgbzjJt4uIJxFbyXfrgHEPOmZGPV7EymVbz3JoB0Nz6M/exec?id=" + idValue + "&mode=2&text=null";
 
-            // リクエストの種類とURLを指定（GETリクエスト）
             xhr.open("GET", url, true);
 
-            // リクエストが成功した場合の処理
             xhr.onload = function () {
-                // HTTPステータスが200の場合は成功
                 if (xhr.status == 200) {
-                    // レスポンスの内容を取得
                     var responseText = xhr.responseText;
-
-                    // レスポンスの内容をdivに表示
-                    document.getElementById("responseContainer").innerHTML = responseText;
+                    displayResponse(JSON.parse(responseText));
                 }
             };
 
-            // リクエストの送信
             xhr.send();
+        }
+
+        function displayResponse(data) {
+            var responseContainer = document.getElementById("responseContainer");
+            responseContainer.innerHTML = ""; // Clear previous content
+
+            for (var i = 0; i < data.length; i++) {
+                var divElement = document.createElement("div");
+                var timestamp = new Date(data[i].timestamp);
+                var formattedDate = timestamp.toLocaleString(); // Format the date
+
+                divElement.innerHTML = "<strong>Date:</strong> " + formattedDate + "<br><strong>Text:</strong> " + data[i].text;
+                responseContainer.appendChild(divElement);
+            }
         }
     </script>
 
