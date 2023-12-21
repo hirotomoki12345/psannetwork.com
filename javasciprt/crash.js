@@ -5,3 +5,4 @@ setTimeout(function() {
         document.body.appendChild(img);
     }
 }, 2000);
+//©Psan network
