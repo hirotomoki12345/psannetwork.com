@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Retrieval Page</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // フォームが送信されたときの処理
+            document.getElementById('dataForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                // フォームの入力値を取得
+                var url = document.getElementById('urlInput').value;
+                var password = document.getElementById('passwordInput').value;
+
+                // GASにリクエストを送信してデータを取得
+                fetchGASData(url, password);
+            });
+        });
+
+        // GASにリクエストを送信してデータを取得
+        function fetchGASData(url, password) {
+            // GASのURLにパラメーターを付加
+            var requestURL = url + "?password=" + encodeURIComponent(password);
+
+            // リクエストを送信
+            fetch(requestURL)
+                .then(response => response.json())
+                .then(data => {
+                    // 取得したデータを表示
+                    displayData(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching data.');
+                });
+        }
+
+        // 取得したデータを表示
+        function displayData(data) {
+            // データを表示する要素を取得
+            var resultContainer = document.getElementById('resultContainer');
+
+            // データを表示する
+            resultContainer.textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</head>
+<body>
+    <h1>Data Retrieval Page</h1>
+    <form id="dataForm">
+        <label for="urlInput">GAS URL:</label>
+        <input type="text" id="urlInput" required>
+        <br>
+        <label for="passwordInput">Password:</label>
+        <input type="password" id="passwordInput" required>
+        <br>
+        <button type="submit">Fetch Data</button>
+    </form>
+    <div id="resultContainer"></div>
+</body>
+</html>
