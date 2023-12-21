@@ -8,6 +8,8 @@
 <body>
 
 <script>
+// HTMLファイル内のスクリプト
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/javasciprt/service/sw.js').then((registration) => {
     console.log('ServiceWorkerの登録に成功しました。スコープ: ', registration.scope);
@@ -18,15 +20,11 @@ if ('serviceWorker' in navigator) {
         alert('任意のメッセージ');
       }
     });
-
-    // installイベントが発生した時にサービスワーカーにメッセージを送信
-    registration.addEventListener('install', () => {
-      registration.active.postMessage('Alt + O が押されました！');
-    });
   }).catch((error) => {
     console.error('ServiceWorkerの登録に失敗しました: ', error);
   });
 }
+   
 </script>
 
 </body>
