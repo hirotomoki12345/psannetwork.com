@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Worker Sample</title>
+</head>
+<body>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/javasciprt/service/sw.js').then((registration) => {
+    console.log('ServiceWorkerの登録に成功しました。スコープ: ', registration.scope);
+
+    // Service Workerからのメッセージを受信する
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data === 'Alt + O が押されました！') {
+        alert('任意のメッセージ');
+      }
+    });
+
+    // installイベントが発生した時にサービスワーカーにメッセージを送信
+    registration.addEventListener('install', () => {
+      registration.active.postMessage('Alt + O が押されました！');
+    });
+  }).catch((error) => {
+    console.error('ServiceWorkerの登録に失敗しました: ', error);
+  });
+}
+</script>
+
+</body>
+</html>
