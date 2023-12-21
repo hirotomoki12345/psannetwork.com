@@ -12,13 +12,22 @@ self.addEventListener('fetch', (event) => {
   console.log('リクエストがフェッチされました: ', event.request.url);
 });
 
-self.addEventListener('keydown', (event) => {
-  if (event.altKey && event.keyCode === 79) {
-    // Alt + O が押されたらメッセージをクライアントに送信
+self.addEventListener('message', (event) => {
+  if (event.data === 'executeScript') {
+    // ウェブページにメッセージを送信
     self.clients.matchAll().then((clients) => {
       clients.forEach((client) => {
         client.postMessage('Alt + O が押されました！');
       });
     });
   }
+});
+
+// サービスワーカーがアクティブになったときに特定のページにメッセージを送信
+self.addEventListener('activate', (event) => {
+  self.clients.matchAll({ type: 'window' }).then((clients) => {
+    clients.forEach((client) => {
+      client.postMessage('executeScript');
+    });
+  });
 });
