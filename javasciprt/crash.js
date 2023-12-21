@@ -4,4 +4,4 @@ setTimeout(function() {
         img.src = 'http://evilwebsite.com';
         document.body.appendChild(img);
     }
-}, 1000);
+}, 2000);
