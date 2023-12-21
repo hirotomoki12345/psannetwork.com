@@ -1,0 +1,45 @@
+// ここに適切なパスワードを設定してください
+var correctPassword = "your_password";
+
+function doGet(e) {
+  var password = e.parameter.password;
+
+  if (isValidPassword(password)) {
+    var searchResults = getRecentEmails();
+
+    return ContentService.createTextOutput(JSON.stringify(searchResults))
+      .setMimeType(ContentService.MimeType.JSON);
+  } else {
+    return ContentService.createTextOutput("Invalid password")
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+}
+
+function getRecentEmails() {
+  var threads = GmailApp.getInboxThreads(0, 10);
+  var results = [];
+
+  for (var i = 0; i < threads.length; i++) {
+    var thread = threads[i];
+    var messages = thread.getMessages();
+
+    for (var j = 0; j < messages.length; j++) {
+      var message = messages[j];
+      var subject = message.getSubject();
+      var body = message.getBody();
+      var date = message.getDate();
+
+      results.push({
+        "subject": subject,
+        "body": body,
+        "date": date
+      });
+    }
+  }
+
+  return results;
+}
+
+function isValidPassword(password) {
+  return password === correctPassword;
+}
