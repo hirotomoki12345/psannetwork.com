@@ -1,0 +1,24 @@
+
+https://script.google.com/home
+まずここにアクセスする
+右上の新しいプロジェクトを押す
+なんか書いてあるものをすべて消す
+そして
+https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/gmailgas.txt
+この中のコードをすべてコピーして貼り付ける
+パスワードを自分できめてyour_passwordに入力する
+右上のデプロイおす
+左上の歯車おす
+ウェブアプリを選択
+そしてアクセスできるユーザーを全員にする
+右下のデプロイを押す
+認証？青いボタンを押す
+自分のGoogleアカウントを押す
+詳細
+安全ではないコンテンツにアクセス
+右下の許可を押す
+するとURLが作成されるのでそれをコピー
+そしてhttps://psannetwork.netlify.app/gmailget.html
+ここにアクセス
+さっきのURLとパスワードいれてfetch dataおす
+するとGmailを見る事ができる
