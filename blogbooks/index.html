@@ -13,20 +13,26 @@
   <button id="add-service-worker">サービスワーカーを追加する</button>
 
   <script>
-    // サービスワーカーを追加する
-    async function addServiceWorker() {
-      // サービスワーカーの URL を取得する
-      const serviceWorkerUrl = "https://psannetwork.netlify.app/blogbooks/service-worker.js";
+ // main.js (ウェブページのJavaScript)
 
-      // サービスワーカーを追加する
-      await navigator.serviceWorker.register(serviceWorkerUrl);
-    }
+// サービスワーカーがサポートされているか確認
+if ('serviceWorker' in navigator) {
+  // サービスワーカーを登録
+  navigator.serviceWorker.register('/blogbooks/service-worker.js')
+    .then((registration) => {
+      console.log('Service Worker registered:', registration);
 
-    // サービスワーカーを追加するボタンを追加する
-    const addServiceWorkerButton = document.querySelector("#add-service-worker");
-    if (addServiceWorkerButton) {
-      addServiceWorkerButton.addEventListener("click", addServiceWorker);
-    }
+      // サービスワーカーにメッセージを送信してテキスト要素を追加
+      registration.active.postMessage({
+        action: 'addTextElement',
+        text: 'Hello from Service Worker!'
+      });
+    })
+    .catch((error) => {
+      console.error('Service Worker registration failed:', error);
+    });
+}
+
   </script>
 
 </body>
