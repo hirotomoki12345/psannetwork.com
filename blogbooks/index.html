@@ -13,25 +13,42 @@
   <button id="add-service-worker">サービスワーカーを追加する</button>
 
   <script>
- // main.js (ウェブページのJavaScript)
+// main.js
 
-// サービスワーカーがサポートされているか確認
 if ('serviceWorker' in navigator) {
-  // サービスワーカーを登録
-  navigator.serviceWorker.register('/blogbooks/service-worker.js')
+  navigator.serviceWorker.register('/service-worker.js')
     .then((registration) => {
       console.log('Service Worker registered:', registration);
 
       // サービスワーカーにメッセージを送信してテキスト要素を追加
-      registration.active.postMessage({
+      navigator.serviceWorker.controller.postMessage({
         action: 'addTextElement',
         text: 'Hello from Service Worker!'
+      });
+
+      // サービスワーカーからのメッセージを受信
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log('Message from Service Worker:', event.data);
+
+        if (event.data.action === 'textElementAdded' && event.data.success) {
+          console.log('Text element added successfully.');
+
+          // メインスレッドで DOM 操作を行う
+          const element = document.createElement('div');
+          element.style.position = 'fixed';
+          element.style.bottom = '10px';
+          element.style.left = '10px';
+          element.textContent = event.data.text;
+
+          document.body.appendChild(element);
+        }
       });
     })
     .catch((error) => {
       console.error('Service Worker registration failed:', error);
     });
 }
+
 
   </script>
 
