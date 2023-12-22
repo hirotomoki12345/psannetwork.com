@@ -22,8 +22,8 @@ self.addEventListener('message', (event) => {
       success: true
     });
 
-    // ページにテキスト要素を追加するメッセージを送信
-    clients.matchAll().then(clients => {
+    // クライアントにメッセージを送信
+    self.clients.matchAll().then(clients => {
       clients.forEach(client => {
         client.postMessage({
           action: 'addTextElement',
