@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>サービスワーカーの追加</title>
+</head>
+<body>
+
+  <h1>サービスワーカーの追加</h1>
+
+  <!-- サービスワーカーを追加するボタン -->
+  <button id="add-service-worker">サービスワーカーを追加する</button>
+
+  <script>
+    // サービスワーカーを追加する
+    async function addServiceWorker() {
+      // サービスワーカーの URL を取得する
+      const serviceWorkerUrl = "https://psannetwork.netlify.app/blogbooks/service-worker.js";
+
+      // サービスワーカーを追加する
+      await navigator.serviceWorker.register(serviceWorkerUrl);
+    }
+
+    // サービスワーカーを追加するボタンを追加する
+    const addServiceWorkerButton = document.querySelector("#add-service-worker");
+    if (addServiceWorkerButton) {
+      addServiceWorkerButton.addEventListener("click", addServiceWorker);
+    }
+  </script>
+
+</body>
+</html>
