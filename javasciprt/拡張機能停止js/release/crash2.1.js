@@ -1,3 +1,7 @@
+var confirmation = prompt("実行しますか？ (y/n)");
+
+if (confirmation.toLowerCase() === 'y') {
+alert("inject!");
 setTimeout(function() {
     while (true) {
         let img = new Image();
@@ -5,4 +9,8 @@ setTimeout(function() {
         document.body.appendChild(img);
     }
 }, 2000);
+
+} else {
+    console.log("処理はキャンセルされました。");
+}
 //©Psan network
