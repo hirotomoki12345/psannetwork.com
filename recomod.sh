@@ -65,7 +65,7 @@ if [ "$mode" == "1" ]; then
 elif [ "$mode" == "2" ]; then
     # バックアップ先ディレクトリにバックアップイメージを作成
     backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").img"
-    sudo dd if=/dev/mmcblk0 of="$backup_file" bs=4M conv=fsync || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
+    sudo dd if=/dev/mmcblk0 of="$backup_file" bs=4M conv=fsync status=progress || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
     
     # バックアップが成功したかを確認
     echo "バックアップの作成が成功しました。"
