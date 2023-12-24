@@ -36,18 +36,26 @@ if [ "$mode" == "1" ]; then
     echo "Chromebookを再起動してください。"
     reboot
 
+# ...
 elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
     current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*" / | cut -f1)
     echo "現在のOSのイメージサイズ: $current_os_size"
-    
+    echo "スクリプトがここまで実行されました。"
+
     read -p "このディスク容量でバックアップしますか？(y/n): " confirm
     [ "$confirm" != "y" ] && cleanup_and_exit "バックアップを中止しました."
 
     read -p "このサイズでバックアップしますか？(y/n): " confirm
     [ "$confirm" != "y" ] && cleanup_and_exit "バックアップを中止しました."
+
+    sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
+    echo "OSのバックアップが成功しました."
+    echo "スクリプトがここまで実行されました。"
+
+# ...
 
     sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
     echo "OSのバックアップが成功しました."
