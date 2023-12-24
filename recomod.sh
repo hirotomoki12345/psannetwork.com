@@ -77,8 +77,9 @@ elif [ "$mode" == "2" ]; then
     # Check if zip command is available
     if command -v zip &> /dev/null; then
         echo "バックアップの作成中..."
-        sudo zip -r "$backup_file" "$DOWNLOAD_DIR" || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
-        echo "バックアップの作成が成功しました."
+        sudo dd if=/dev/mmcblk0 of="$backup_file" bs=4M conv=fsync status=progress || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
+        sudo zip -r "$backup_file" "$DOWNLOAD_DIR" || cleanup_and_exit "バックアップの圧縮中にエラーが発生しました."
+        echo "バックアップの作成が成功しました。"
     else
         cleanup_and_exit "zipコマンドが見つかりません。zipパッケージをインストールしてください。"
     fi
