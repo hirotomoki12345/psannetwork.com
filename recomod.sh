@@ -23,15 +23,21 @@ fi
 mode="$1"
 
 if [ "$mode" == "1" ]; then
+    echo "Mode 1 開始"
     unzip -d "$DOWNLOAD_DIR/temp" "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
+    echo "イメージ展開成功"
     sudo cp "$DOWNLOAD_DIR/temp/sbin/chromeos-recovery" "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin"
+    echo "必要なファイルのコピー成功"
     rm -rf "$DOWNLOAD_DIR/temp"
+    echo "一時ディレクトリ削除成功"
     sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
+    echo "イメージの書き込み成功"
     echo "イメージの書き込みが成功しました。"
     echo "Chromebookを再起動してください。"
     reboot
 
 elif [ "$mode" == "2" ]; then
+    echo "Mode 2 開始"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
     current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*" / | cut -f1)
