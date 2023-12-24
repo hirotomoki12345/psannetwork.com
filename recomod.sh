@@ -66,13 +66,25 @@ if [ "$mode" == "1" ]; then
     reboot
 
 elif [ "$mode" == "2" ]; then
+    # 残りのディスク容量を確認
+    remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
+
+    # 残りのディスク容量を表示
+    echo "残りのディスク容量: $remaining_space"
+
     # 現在のOSのイメージサイズを確認
     current_os_size=$(sudo du -sh / | cut -f1)
     
     # 現在のOSのイメージサイズを表示
     echo "現在のOSのイメージサイズ: $current_os_size"
 
-    # ユーザーに足りるか足りないかを確認
+    # ユーザーに確認メッセージを表示
+    read -p "このディスク容量でバックアップしますか？(y/n): " confirm
+    if [ "$confirm" != "y" ]; then
+        cleanup_and_exit "バックアップを中止しました。"
+    fi
+
+    # ユーザーに確認メッセージを表示
     read -p "このサイズでバックアップしますか？(y/n): " confirm
     if [ "$confirm" != "y" ]; then
         cleanup_and_exit "バックアップを中止しました。"
