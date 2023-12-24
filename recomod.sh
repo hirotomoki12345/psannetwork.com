@@ -5,6 +5,7 @@ DOWNLOAD_DIR="/home/chronos/user/Downloads"
 ERROR_DIR="$DOWNLOAD_DIR/flasherror"
 ERROR_LOG="$ERROR_DIR/error_log.txt"
 BACKUP_DIR="$DOWNLOAD_DIR"
+BACKUP_DIR="/home/chronos/user/Downloads"
 
 mkdir -p "$ERROR_DIR" "$BACKUP_DIR"
 
@@ -39,7 +40,7 @@ if [ "$mode" == "1" ]; then
 # ...
 elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
-    echo "remaining_space=$(df -h \"$BACKUP_DIR\" | awk 'NR==2 {print $4}')"
+    remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
 
