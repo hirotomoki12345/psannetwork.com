@@ -16,18 +16,24 @@ mkdir -p "$ERROR_DIR"
 function cleanup_and_exit {
     local exit_code=$?
     echo "エラー: $1"
-
+    
     # エラーメッセージをファイルに保存
     echo "エラー: $1" >> "$ERROR_LOG"
-
+    
     # ダウンロードしたファイルを削除
     rm -f "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip"
-
+    
     exit $exit_code
 }
 
 # トラップを設定してエラーが発生した場合に cleanup_and_exit を呼ぶ
 trap 'cleanup_and_exit "スクリプトの実行中にエラーが発生しました."' ERR
+
+# ルートディレクトリのマウントを確認
+if mount | grep " / " | grep -q "rw"; then
+    # ルートディレクトリが読み取り専用でない場合はアンマウント
+    sudo umount / || cleanup_and_exit "ルートディレクトリのアンマウント中にエラーが発生しました。"
+fi
 
 # ダウンロードしたイメージをディスクに書き込み
 curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -o "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
@@ -35,8 +41,8 @@ curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_k
 # Chromebookでは標準のunzipコマンドではなくbsdtarを使用する
 bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 
-# ChromeOSをディスクに焼く
-sudo /usr/sbin/chromeos-install --dst /dev/mmcblk0 --src "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" || cleanup_and_exit "ChromeOSの書き込み中にエラーが発生しました."
+# イメージをディスクに書き込み
+sudo /usr/sbin/chromeos-install --dst /dev/mmcblk0 --src "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" --resize_partition 2 || cleanup_and_exit "ChromeOSの書き込み中にエラーが発生しました."
 
 # 書き込みが成功したかを確認
 echo "ChromeOSの書き込みが成功しました。"
