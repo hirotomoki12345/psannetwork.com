@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# すべてのパーティションをアンマウント
-sudo umount /dev/sda*
+set -e
 
-# ルートディレクトリをフォーマット
-sudo mkfs.ext4 /dev/sda
+# ルートディレクトリをアンマウント
+sudo umount /
+
+# ディスクを検索し、ルートディレクトリをフォーマット
+DISK=$(lsblk -no NAME,MOUNTPOINT | awk '$2=="/"{print $1}')
+sudo mkfs.ext4 /dev/$DISK
 
 # ダウンロードしたイメージを展開
 curl -o os-image.zip https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip
@@ -12,7 +15,7 @@ unzip os-image.zip
 rm os-image.zip
 
 # イメージをディスクに書き込み
-sudo dd if=os-image.bin of=/dev/sda bs=1M
+sudo dd if=os-image.bin of=/dev/$DISK bs=1M
 
 # 書き込みが成功したかを確認
 if [ $? -eq 0 ]; then
