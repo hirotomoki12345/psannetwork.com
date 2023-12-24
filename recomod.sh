@@ -47,41 +47,28 @@ mode="$1"
 # 選択されたモードに応じて処理を実行
 if [ "$mode" == "1" ]; then
     # ダウンロードしたイメージをディスクに書き込み
-    download_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip"
-    output_file="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip"
-    
-    echo "ダウンロード中..."
-    
-    # ダウンロード進捗を表示
-    curl -L "$download_url" -o "$output_file" --progress-bar || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
-    
-    echo "ダウンロードが完了しました."
+    curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -o "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
 
     # Chromebookでは標準のunzipコマンドではなくbsdtarを使用する
-    bsdtar -xvf "$output_file" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
+    bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 
     # イメージをディスクに書き込み
-    echo "イメージをディスクに書き込み中..."
-    sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync status=progress || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
+    sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
 
     # 書き込みが成功したかを確認
-    echo "イメージの書き込みが成功しました."
+    echo "イメージの書き込みが成功しました。"
 
     # Chromebookでは再起動はできないため、メッセージの表示のみ
-    echo "イメージの書き込みが成功しました。Chromebookを再起動してください。"
+    echo "Chromebookを再起動してください。"
+    reboot
 
 elif [ "$mode" == "2" ]; then
-    # バックアップ先ディレクトリにtar.gz形式でバックアップを作成
-    backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").tar.gz"
+    # バックアップ先ディレクトリにバックアップイメージを作成
+    backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").img"
+    sudo dd if=/dev/mmcblk0 of="$backup_file" bs=4M conv=fsync || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
     
-    # Check if tar command is available
-    if command -v tar &> /dev/null; then
-        echo "バックアップの作成中..."
-        sudo tar -czf "$backup_file" -C "$DOWNLOAD_DIR" . || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
-        echo "バックアップの作成が成功しました。"
-    else
-        cleanup_and_exit "tarコマンドが見つかりません。tarパッケージをインストールしてください。"
-    fi
+    # バックアップが成功したかを確認
+    echo "バックアップの作成が成功しました。"
     
 else
     # 無効なモードが選択された場合のエラー処理
