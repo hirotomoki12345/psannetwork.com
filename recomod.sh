@@ -73,7 +73,7 @@ elif [ "$mode" == "2" ]; then
     echo "残りのディスク容量: $remaining_space"
 
     # 現在のOSのイメージサイズを確認
-    current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude='/tmp/*' --exclude='/mnt/stateful_partition/home/.shadow/*' / | cut -f1)
+    current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude='/mnt/stateful_partition/home/chronos/user/Downloads/*' / | cut -f1)
     
     # 現在のOSのイメージサイズを表示
     echo "現在のOSのイメージサイズ: $current_os_size"
