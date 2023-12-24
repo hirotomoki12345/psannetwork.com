@@ -75,7 +75,7 @@ elif [ "$mode" == "2" ]; then
     # バックアップ先ディレクトリにZIP形式でバックアップを作成
     backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").zip"
     echo "バックアップの作成中..."
-    sudo zip -r "$backup_file" "$DOWNLOAD_DIR" || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
+    sudo zip -r -v "$backup_file" "$DOWNLOAD_DIR"/* || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
     
     # バックアップが成功したかを確認
     echo "バックアップの作成が成功しました。"
