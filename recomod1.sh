@@ -41,8 +41,8 @@ if mount | grep " / " | grep -q "rw"; then
     sudo umount / || cleanup_and_exit "ルートディレクトリのアンマウント中にエラーが発生しました。"
 fi
 
-# ユーザーにモードを選択させる
-read -p "モードを選択してください（1: イメージ書き込み, 2: バックアップ作成）: " mode
+# モードを引数から取得する
+mode="$1"
 
 # 選択されたモードに応じて処理を実行
 if [ "$mode" == "1" ]; then
