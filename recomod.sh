@@ -34,7 +34,9 @@ fi
 
 # ダウンロードしたイメージを展開
 curl -L -o os-image.zip https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
-unzip os-image.zip || cleanup_and_exit "イメージの展開中にエラーが発生しました."
+
+# Chromebookでは標準のunzipコマンドではなくbsdtarを使用する
+bsdtar -xvf os-image.zip || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 rm -f os-image.zip || cleanup_and_exit "ダウンロードしたZIPファイルの削除中にエラーが発生しました."
 
 # イメージをディスクに書き込み
