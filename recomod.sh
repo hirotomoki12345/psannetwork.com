@@ -5,7 +5,6 @@ DOWNLOAD_DIR="/home/chronos/user/Downloads"
 ERROR_DIR="$DOWNLOAD_DIR/flasherror"
 ERROR_LOG="$ERROR_DIR/error_log.txt"
 BACKUP_DIR="$DOWNLOAD_DIR"
-BACKUP_DIR="/home/chronos/user/Downloads"
 
 mkdir -p "$ERROR_DIR" "$BACKUP_DIR"
 
@@ -33,33 +32,21 @@ if [ "$mode" == "1" ]; then
     echo "一時ディレクトリ削除成功"
     sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
     echo "イメージの書き込み成功"
-    echo "イメージの書き込みが成功しました。"
-    echo "Chromebookを再起動してください。"
+    echo "Chromebookを再起動してください."
     reboot
 
-# ...
 elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
-    remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
-
     current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*" / | cut -f1)
     echo "現在のOSのイメージサイズ: $current_os_size"
-    echo "スクリプトがここまで実行されました。"
-
-    read -p "このディスク容量でバックアップしますか？(y/n): " confirm
-    [ "$confirm" != "y" ] && cleanup_and_exit "バックアップを中止しました."
-
-    read -p "このサイズでバックアップしますか？(y/n): " confirm
-    [ "$confirm" != "y" ] && cleanup_and_exit "バックアップを中止しました."
+    echo "スクリプトがここまで実行されました."
 
     sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
     echo "OSのバックアップが成功しました."
-    echo "スクリプトがここまで実行されました。"
-
-    echo "OSのバックアップが成功しました."
+    echo "スクリプトがここまで実行されました."
 
 else
-    cleanup_and_exit "無効なモードが選択されました。"
+    cleanup_and_exit "無効なモードが選択されました."
 fi
