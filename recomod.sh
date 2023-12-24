@@ -39,8 +39,10 @@ if [ "$mode" == "1" ]; then
 # ...
 elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
+    echo "remaining_space=$(df -h \"$BACKUP_DIR\" | awk 'NR==2 {print $4}')"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
+
     current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*" / | cut -f1)
     echo "現在のOSのイメージサイズ: $current_os_size"
     echo "スクリプトがここまで実行されました。"
