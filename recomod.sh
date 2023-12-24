@@ -2,10 +2,20 @@
 
 set -e
 
+# エラーファイルのディレクトリとファイル名
+ERROR_DIR="/home/chronos/user/Downloads/flasherror"
+ERROR_LOG="$ERROR_DIR/error_log.txt"
+
+# エラーファイルのディレクトリが存在しなければ作成
+mkdir -p "$ERROR_DIR"
+
 # エラー時の処理を定義
 function cleanup_and_exit {
     local exit_code=$?
     echo "エラー: $1"
+    
+    # エラーメッセージをファイルに保存
+    echo "エラー: $1" >> "$ERROR_LOG"
     
     # 作業ディレクトリから出る
     cd ~
