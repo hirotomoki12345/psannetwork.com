@@ -21,7 +21,7 @@ function cleanup_and_exit {
     echo "エラー: $1" >> "$ERROR_LOG"
     
     # ダウンロードしたファイルを削除
-    rm -f "$DOWNLOAD_DIR/os-image.zip" "$DOWNLOAD_DIR/os-image.bin"
+    rm -f "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip"
     
     exit $exit_code
 }
@@ -35,18 +35,18 @@ if mount | grep " / " | grep -q "rw"; then
     sudo umount / || cleanup_and_exit "ルートディレクトリのアンマウント中にエラーが発生しました。"
 fi
 
-# ダウンロードしたイメージを展開
-curl -L -o "$DOWNLOAD_DIR/os-image.zip" https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
+# ダウンロードしたイメージをディスクに書き込み
+curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -o "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
 
 # Chromebookでは標準のunzipコマンドではなくbsdtarを使用する
-bsdtar -xvf "$DOWNLOAD_DIR/os-image.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
-rm -f "$DOWNLOAD_DIR/os-image.zip" || cleanup_and_exit "ダウンロードしたZIPファイルの削除中にエラーが発生しました."
+bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 
 # イメージをディスクに書き込み
-sudo dd if="$DOWNLOAD_DIR/os-image.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
+sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
 
 # 書き込みが成功したかを確認
 echo "イメージの書き込みが成功しました。"
 
 # Chromebookでは再起動はできないため、メッセージの表示のみ
 echo "Chromebookを再起動してください。"
+reboot
