@@ -33,12 +33,12 @@ if mount | grep " / " | grep -q "rw"; then
 fi
 
 # ダウンロードしたイメージを展開
-curl -o os-image.zip https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
+curl -L -o os-image.zip https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
 unzip os-image.zip || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 rm -f os-image.zip || cleanup_and_exit "ダウンロードしたZIPファイルの削除中にエラーが発生しました."
 
 # イメージをディスクに書き込み
-sudo dd if=os-image.bin of=/dev/mmcblk0 bs=1M || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
+sudo dd if=os-image.bin of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
 
 # 書き込みが成功したかを確認
 echo "イメージの書き込みが成功しました。"
