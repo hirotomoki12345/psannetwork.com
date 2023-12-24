@@ -66,6 +66,18 @@ if [ "$mode" == "1" ]; then
     reboot
 
 elif [ "$mode" == "2" ]; then
+    # 現在のOSのイメージサイズを確認
+    current_os_size=$(sudo du -sh / | cut -f1)
+    
+    # 現在のOSのイメージサイズを表示
+    echo "現在のOSのイメージサイズ: $current_os_size"
+
+    # ユーザーに足りるか足りないかを確認
+    read -p "このサイズでバックアップしますか？(y/n): " confirm
+    if [ "$confirm" != "y" ]; then
+        cleanup_and_exit "バックアップを中止しました。"
+    fi
+
     # 現在のOSを起動可能なイメージとしてバックアップ先ディレクトリに保存
     sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
     
