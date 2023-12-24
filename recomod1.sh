@@ -16,13 +16,13 @@ mkdir -p "$ERROR_DIR"
 function cleanup_and_exit {
     local exit_code=$?
     echo "エラー: $1"
-    
+
     # エラーメッセージをファイルに保存
     echo "エラー: $1" >> "$ERROR_LOG"
-    
+
     # ダウンロードしたファイルを削除
     rm -f "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip"
-    
+
     exit $exit_code
 }
 
@@ -32,7 +32,7 @@ trap 'cleanup_and_exit "スクリプトの実行中にエラーが発生しま�
 # ルートディレクトリのマウントを確認
 if mount | grep " / " | grep -q "rw"; then
     # ルートディレクトリが読み取り専用でない場合はアンマウント
-    sudo umount / || cleanup_and_exit "ルートディレクトリのアンマウント中にエラーが発生しました。"
+    sudo umount / || cleanup_and_exit "ルートディレクトリのアンマウント中にエラーが発生しました."
 fi
 
 # ダウンロードしたイメージが存在しない場合のみダウンロード
@@ -44,8 +44,8 @@ if [ ! -f "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6
     bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 fi
 
-# イメージをディスクに書き込み
-sudo /usr/sbin/chromeos-install --dst /dev/mmcblk0 "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" || cleanup_and_exit "ChromeOSの書き込み中にエラーが発生しました."
+# イメージをディスクに書き込み (ddコマンドを使用)
+sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M status=progress
 
 # 書き込みが成功したかを確認
 echo "ChromeOSの書き込みが成功しました。"
