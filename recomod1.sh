@@ -42,7 +42,7 @@ curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_k
 bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
 
 # イメージをディスクに書き込み
-sudo /usr/sbin/chromeos-install --dst /dev/mmcblk0 "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" --resize_partition 2 || cleanup_and_exit "ChromeOSの書き込み中にエラーが発生しました."
+sudo /usr/sbin/chromeos-install --dst /dev/mmcblk0 "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" 2 || cleanup_and_exit "ChromeOSの書き込み中にエラーが発生しました."
 
 # 書き込みが成功したかを確認
 echo "ChromeOSの書き込みが成功しました。"
