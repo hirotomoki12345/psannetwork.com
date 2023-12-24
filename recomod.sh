@@ -1,6 +1,6 @@
 #!/bin/bash
+set -ex
 
-set -e
 
 # ダウンロード先ディレクトリ
 DOWNLOAD_DIR="/home/chronos/user/Downloads"
