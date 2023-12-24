@@ -55,9 +55,6 @@ elif [ "$mode" == "2" ]; then
     echo "OSのバックアップが成功しました."
     echo "スクリプトがここまで実行されました。"
 
-# ...
-
-    sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
     echo "OSのバックアップが成功しました."
 
 else
