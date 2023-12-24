@@ -65,20 +65,23 @@ if [ "$mode" == "1" ]; then
     sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync status=progress || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
 
     # 書き込みが成功したかを確認
-    echo "イメージの書き込みが成功しました。"
+    echo "イメージの書き込みが成功しました."
 
     # Chromebookでは再起動はできないため、メッセージの表示のみ
-    echo "Chromebookを再起動してください。"
-    reboot
+    echo "イメージの書き込みが成功しました。Chromebookを再起動してください。"
 
 elif [ "$mode" == "2" ]; then
     # バックアップ先ディレクトリにZIP形式でバックアップを作成
     backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").zip"
-    echo "バックアップの作成中..."
-    sudo zip -r -v "$backup_file" "$DOWNLOAD_DIR"/* || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
     
-    # バックアップが成功したかを確認
-    echo "バックアップの作成が成功しました。"
+    # Check if zip command is available
+    if command -v zip &> /dev/null; then
+        echo "バックアップの作成中..."
+        sudo zip -r "$backup_file" "$DOWNLOAD_DIR" || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
+        echo "バックアップの作成が成功しました."
+    else
+        cleanup_and_exit "zipコマンドが見つかりません。zipパッケージをインストールしてください。"
+    fi
     
 else
     # 無効なモードが選択された場合のエラー処理
