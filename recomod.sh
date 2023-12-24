@@ -71,17 +71,16 @@ if [ "$mode" == "1" ]; then
     echo "イメージの書き込みが成功しました。Chromebookを再起動してください。"
 
 elif [ "$mode" == "2" ]; then
-    # バックアップ先ディレクトリにZIP形式でバックアップを作成
-    backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").zip"
+    # バックアップ先ディレクトリにtar.gz形式でバックアップを作成
+    backup_file="$BACKUP_DIR/chromeos_backup_$(date +"%Y%m%d_%H%M%S").tar.gz"
     
-    # Check if zip command is available
-    if command -v zip &> /dev/null; then
+    # Check if tar command is available
+    if command -v tar &> /dev/null; then
         echo "バックアップの作成中..."
-        sudo dd if=/dev/mmcblk0 of="$backup_file" bs=4M conv=fsync status=progress || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
-        sudo zip -r "$backup_file" "$DOWNLOAD_DIR" || cleanup_and_exit "バックアップの圧縮中にエラーが発生しました."
+        sudo tar -czf "$backup_file" -C "$DOWNLOAD_DIR" . || cleanup_and_exit "バックアップの作成中にエラーが発生しました."
         echo "バックアップの作成が成功しました。"
     else
-        cleanup_and_exit "zipコマンドが見つかりません。zipパッケージをインストールしてください。"
+        cleanup_and_exit "tarコマンドが見つかりません。tarパッケージをインストールしてください。"
     fi
     
 else
