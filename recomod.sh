@@ -50,7 +50,11 @@ if [ "$mode" == "1" ]; then
     curl -L "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -o "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
 
     # Chromebookでは標準のunzipコマンドではなくbsdtarを使用する
-    bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
+    bsdtar -xvf "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" -C "$DOWNLOAD_DIR" --exclude "usr/local" --exclude "usr/share" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
+
+    # 不要なファイルやディレクトリを削除
+    sudo rm -rf "$DOWNLOAD_DIR/usr/local"
+    sudo rm -rf "$DOWNLOAD_DIR/usr/share"
 
     # イメージをディスクに書き込み
     sudo dd if="$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin" of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "イメージの書き込み中にエラーが発生しました."
