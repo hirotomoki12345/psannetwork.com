@@ -39,11 +39,17 @@ elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
     echo "残りのディスク容量: $remaining_space"
-    current_os_size=$(sudo du -sh --exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*" / | cut -f1)
-    echo "現在のOSのイメージサイズ: $current_os_size"
-    echo "スクリプトがここまで実行されました."
+    
+    # Ensure the backup directory is empty
+    sudo rm -rf "$BACKUP_DIR/current_os_backup"
+    sudo mkdir -p "$BACKUP_DIR/current_os_backup"
+    
+    # Exclude unnecessary directories during backup
+    exclude_dirs="--exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*""
 
-    sudo dd if=/dev/mmcblk0 of="$BACKUP_DIR/current_os_backup_$(date +"%Y%m%d_%H%M%S").img" bs=4M conv=fsync status=progress || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
+    # Use dd to create a disk image excluding unnecessary directories
+    sudo dd if=/dev/mmcblk0 bs=4M conv=fsync status=progress | gzip > "$BACKUP_DIR/current_os_backup/chromeos_backup_$(date +"%Y%m%d_%H%M%S").img.gz" || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
+    
     echo "OSのバックアップが成功しました."
     echo "スクリプトがここまで実行されました."
 
