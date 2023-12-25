@@ -27,6 +27,7 @@ if [ "$mode" == "1" ]; then
     echo "Mode 1 開始"
     
     # リカバリイメージから必要な部分だけを取り出す
+    curl -L -o "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" "https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージのダウンロード中にエラーが発生しました."
     unzip -d "$DOWNLOAD_DIR/temp" "$DOWNLOAD_DIR/chromeos_15359.58.0_kukui_recovery_stable-channel_mp-v6.bin.zip" || cleanup_and_exit "イメージの展開中にエラーが発生しました."
     sudo dd if="$DOWNLOAD_DIR/temp/sbin/chromeos-recovery" of="$DOWNLOAD_DIR/chromeos.img" bs=4M conv=fsync || cleanup_and_exit "イメージの取得中にエラーが発生しました."
     rm -rf "$DOWNLOAD_DIR/temp"
