@@ -1,55 +1,43 @@
 #!/bin/bash
 
-# Error log file path
+# エラーログファイルのパス
 error_log="/home/chronos/user/Downloads/error_log.txt"
 
-# Recovery image URL
-recovery_image_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip"
+# リカバリイメージのURL
+recovery_image_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.gz"
 
-# Download directory
+# ダウンロード先のディレクトリ
 download_directory="/home/chronos/user/Downloads"
 
-# Downloaded file name
-downloaded_file="$download_directory/chromeos_recovery_image.zip"
+# ダウンロード先のファイル名
+downloaded_file="$download_directory/chromeos_recovery_image.bin.gz"
 
-# Function to install unzip if not present
-install_unzip() {
-    echo "Installing unzip..."
-    sudo apt-get update
-    sudo apt-get install -y unzip
-}
-
-# Check if unzip is installed
-if ! command -v unzip &> /dev/null; then
-    install_unzip
-fi
-
-# Download the recovery image
-echo "Downloading the recovery image..."
+# リカバリイメージをダウンロード
+echo "リカバリイメージをダウンロードしています..."
 if ! curl -L -o $downloaded_file $recovery_image_url 2>> $error_log; then
-    echo "Download error: Failed to download the recovery image."
+    echo "ダウンロードエラー: リカバリイメージのダウンロードに失敗しました。"
     exit 1
 fi
-echo "Recovery image download completed."
+echo "リカバリイメージのダウンロードが完了しました."
 
-# Unzip the downloaded file
-echo "Unzipping the recovery image..."
-if ! unzip $downloaded_file -d $download_directory 2>> $error_log; then
-    echo "Unzip error: Failed to unzip the downloaded file."
+# ダウンロードしたファイルをgzipを使用して展開
+echo "リカバリイメージを展開しています..."
+if ! gzip -d $downloaded_file 2>> $error_log; then
+    echo "展開エラー: ダウンロードしたファイルの展開に失敗しました。"
     exit 1
 fi
-echo "Recovery image unzip completed."
+echo "リカバリイメージの展開が完了しました."
 
-# Path to the unzipped image file
+# 展開されたイメージファイルのパス
 recovery_image_file="$download_directory/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin"
 
-# Use chromeos-install to restore the recovery image to the device
-echo "Writing the recovery image to the device..."
+# chromeos-install を使ってリカバリイメージをデバイスに復元
+echo "リカバリイメージをデバイスに書き込んでいます..."
 if ! sudo chromeos-install --dst /dev/mmcblk0 --src $recovery_image_file 2>> $error_log; then
-    echo "Installation error: Failed to install the recovery image."
-    cat $error_log  # Display the error log
+    echo "インストールエラー: リカバリイメージのインストールに失敗しました。"
+    cat $error_log  # エラーログを表示
     exit 1
 fi
-echo "Recovery image installation completed."
+echo "リカバリイメージのインストールが完了しました."
 
-echo "Process completed successfully."
+echo "プロセスが正常に終了しました."
