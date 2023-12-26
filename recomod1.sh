@@ -23,7 +23,7 @@ echo "インストールを開始します..."
 
 # インストール（内部ディスクを指定）
 install_command="chromeos-install --dst /dev/sda ${image_file}"
-${install_command} 2> "${download_dir}/install_error.txt"
+sudo ${install_command} 2> "${download_dir}/install_error.txt"
 
 # インストールの成功確認
 if [ $? -eq 0 ]; then
