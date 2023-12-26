@@ -5,13 +5,13 @@ set -e
 error_log="/home/chronos/user/Downloads/error_log.txt"
 
 # リカバリイメージのURL
-recovery_image_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.gz"
+recovery_image_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin"
 
 # ダウンロード先のディレクトリ
 download_directory="/home/chronos/user/Downloads"
 
 # ダウンロード先のファイル名
-downloaded_file="$download_directory/chromeos_recovery_image.bin.gz"
+downloaded_file="$download_directory/chromeos_recovery_image.bin"
 
 # リカバリイメージをダウンロード
 echo "リカバリイメージをダウンロードしています..."
@@ -21,20 +21,9 @@ if ! curl -L -o $downloaded_file $recovery_image_url 2>> $error_log; then
 fi
 echo "リカバリイメージのダウンロードが完了しました."
 
-# ダウンロードしたファイルをgunzipを使用して展開
-echo "リカバリイメージを展開しています..."
-if ! gunzip $downloaded_file 2>> $error_log; then
-    echo "展開エラー: ダウンロードしたファイルの展開に失敗しました。"
-    exit 1
-fi
-echo "リカバリイメージの展開が完了しました."
-
-# 展開されたイメージファイルのパス
-recovery_image_file="$download_directory/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin"
-
 # chromeos-install を使ってリカバリイメージをデバイスに復元
 echo "リカバリイメージをデバイスに書き込んでいます..."
-if ! sudo chromeos-install --dst /dev/mmcblk0 --src $recovery_image_file 2>> $error_log; then
+if ! sudo chromeos-install --dst /dev/mmcblk0 --src $downloaded_file 2>> $error_log; then
     echo "インストールエラー: リカバリイメージのインストールに失敗しました。"
     cat $error_log  # エラーログを表示
     exit 1
