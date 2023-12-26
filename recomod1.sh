@@ -21,8 +21,8 @@ fi
 # デバッグ情報
 echo "インストールを開始します..."
 
-# インストール
-install_command="chromeos-install --dst /dev/mmcblk0 ${image_file}"
+# インストール（内部ディスクを指定）
+install_command="chromeos-install --dst /dev/sda ${image_file}"
 ${install_command} 2> "${download_dir}/install_error.txt"
 
 # インストールの成功確認
