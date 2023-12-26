@@ -12,6 +12,18 @@ download_directory="/home/chronos/user/Downloads"
 # Downloaded file name
 downloaded_file="$download_directory/chromeos_recovery_image.zip"
 
+# Function to install unzip if not present
+install_unzip() {
+    echo "Installing unzip..."
+    sudo apt-get update
+    sudo apt-get install -y unzip
+}
+
+# Check if unzip is installed
+if ! command -v unzip &> /dev/null; then
+    install_unzip
+fi
+
 # Download the recovery image
 echo "Downloading the recovery image..."
 if ! curl -L -o $downloaded_file $recovery_image_url 2>> $error_log; then
