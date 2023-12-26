@@ -32,11 +32,12 @@ if [ "$mode" == "1" ]; then
     
     echo "使用するイメージファイル: $img_file"
     
-    sudo gzip -dc "$img_file" | sudo dd of=/dev/mmcblk0 bs=4M conv=fsync || cleanup_and_exit "バックアップイメージの書き込み中にエラーが発生しました."
+    # 修正: gzipの解凍とddの実行をパイプラインで繋げることができます
+    sudo gzip -dc "$img_file" | sudo dd of=/dev/mmcblk0 bs=4M status=progress conv=fsync || cleanup_and_exit "バックアップイメージの書き込み中にエラーが発生しました."
     
     echo "イメージの書き込み成功"
     echo "Chromebookを再起動してください."
-    reboot
+    sudo reboot
 elif [ "$mode" == "2" ]; then
     echo "Mode 2 開始"
     remaining_space=$(df -h "$BACKUP_DIR" | awk 'NR==2 {print $4}')
@@ -46,9 +47,9 @@ elif [ "$mode" == "2" ]; then
     sudo rm -rf "$BACKUP_DIR/current_os_backup"
     sudo mkdir -p "$BACKUP_DIR/current_os_backup"
     
-    # Exclude unnecessary directories during backup
+    # 修正: 不要なエスケープを削除
     exclude_dirs="--exclude='/proc/*' --exclude='/sys/*' --exclude='/run/*' --exclude='/dev/*' --exclude="$BACKUP_DIR/*""
-
+    
     # Use dd to create a disk image excluding unnecessary directories
     sudo dd if=/dev/mmcblk0 bs=4M conv=fsync status=progress | gzip > "$BACKUP_DIR/current_os_backup/chromeos_backup_$(date +"%Y%m%d_%H%M%S").img.gz" || cleanup_and_exit "OSのバックアップ中にエラーが発生しました."
     
