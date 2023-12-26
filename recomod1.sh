@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# ブロックデバイスの一覧を表示
-lsblk
-
 # Chrome OSをインストールするデバイスを指定
 device="/dev/mmcblk0"  # 実際の環境に応じてデバイス名を変更してください
 
@@ -26,11 +23,11 @@ fi
 echo "インストールを開始します..."
 
 # Chrome OSをインストール
-sudo chromeos-install --skip_src_removable --dst "${device}"
+sudo chromeos-install --skip_src_removable --dst "${device}" 2> "${download_dir}/install_error.txt"
 
 # インストールの成功確認
 if [ $? -eq 0 ]; then
   echo "インストールが成功しました。"
 else
-  echo "インストールに失敗しました。エラーの詳細は上記の出力を確認してください。"
+  echo "インストールに失敗しました。エラーの詳細は ${download_dir}/install_error.txt を確認してください。"
 fi
