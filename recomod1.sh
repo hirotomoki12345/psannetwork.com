@@ -10,6 +10,21 @@ image_file="${download_dir}/chromeos_15117.112.0_kukui_recovery_stable-channel_m
 # イメージのダウンロード
 curl -L -o "${image_file}" "${image_url}"
 
+# ダウンロードの成功確認
+if [ $? -eq 0 ]; then
+  echo "イメージのダウンロードが成功しました。"
+else
+  echo "イメージのダウンロードに失敗しました。スクリプトを終了します。"
+  exit 1
+fi
+
 # インストール
 install_command="chromeos-install --dst /dev/mmcblk0 --image ${image_file}"
 ${install_command} 2> "${download_dir}/install_error.txt"
+
+# インストールの成功確認
+if [ $? -eq 0 ]; then
+  echo "インストールが成功しました。"
+else
+  echo "インストールに失敗しました。エラーの詳細は ${download_dir}/install_error.txt を確認してください。"
+fi
