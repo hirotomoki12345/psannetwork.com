@@ -1,43 +1,43 @@
 #!/bin/bash
 
-# エラーログファイルのパス
+# Error log file path
 error_log="/home/chronos/user/Downloads/error_log.txt"
 
-# リカバリイメージのURL
+# Recovery image URL
 recovery_image_url="https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip"
 
-# ダウンロード先のディレクトリ
+# Download directory
 download_directory="/home/chronos/user/Downloads"
 
-# ダウンロード先のファイル名
+# Downloaded file name
 downloaded_file="$download_directory/chromeos_recovery_image.zip"
 
-# ダウンロード
-echo "リカバリイメージをダウンロードしています..."
+# Download the recovery image
+echo "Downloading the recovery image..."
 if ! curl -L -o $downloaded_file $recovery_image_url 2>> $error_log; then
-    echo "ダウンロードエラー: リカバリイメージのダウンロードに失敗しました。"
+    echo "Download error: Failed to download the recovery image."
     exit 1
 fi
-echo "リカバリイメージのダウンロードが完了しました."
+echo "Recovery image download completed."
 
-# ダウンロードしたファイルの解凍
-echo "リカバリイメージを解凍しています..."
+# Unzip the downloaded file
+echo "Unzipping the recovery image..."
 if ! unzip $downloaded_file -d $download_directory 2>> $error_log; then
-    echo "解凍エラー: ダウンロードしたファイルの解凍に失敗しました。"
+    echo "Unzip error: Failed to unzip the downloaded file."
     exit 1
 fi
-echo "リカバリイメージの解凍が完了しました."
+echo "Recovery image unzip completed."
 
-# 解凍されたイメージファイルのパス
+# Path to the unzipped image file
 recovery_image_file="$download_directory/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin"
 
-# chromeos-install を使ってリカバリイメージをデバイスに復元
-echo "リカバリイメージをデバイスに書き込んでいます..."
+# Use chromeos-install to restore the recovery image to the device
+echo "Writing the recovery image to the device..."
 if ! sudo chromeos-install --dst /dev/mmcblk0 --src $recovery_image_file 2>> $error_log; then
-    echo "インストールエラー: リカバリイメージのインストールに失敗しました。"
-    cat $error_log  # エラーログを表示
+    echo "Installation error: Failed to install the recovery image."
+    cat $error_log  # Display the error log
     exit 1
 fi
-echo "リカバリイメージのインストールが完了しました."
+echo "Recovery image installation completed."
 
-echo "プロセスが正常に終了しました."
+echo "Process completed successfully."
