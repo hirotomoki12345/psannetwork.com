@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # エラーログファイルのパス
 error_log="/home/chronos/user/Downloads/error_log.txt"
@@ -20,9 +21,9 @@ if ! curl -L -o $downloaded_file $recovery_image_url 2>> $error_log; then
 fi
 echo "リカバリイメージのダウンロードが完了しました."
 
-# ダウンロードしたファイルをgzipを使用して展開
+# ダウンロードしたファイルをgunzipを使用して展開
 echo "リカバリイメージを展開しています..."
-if ! gzip -d $downloaded_file 2>> $error_log; then
+if ! gunzip $downloaded_file 2>> $error_log; then
     echo "展開エラー: ダウンロードしたファイルの展開に失敗しました。"
     exit 1
 fi
