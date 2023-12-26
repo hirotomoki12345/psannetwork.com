@@ -18,8 +18,11 @@ else
   exit 1
 fi
 
+# デバッグ情報
+echo "インストールを開始します..."
+
 # インストール
-install_command="chromeos-install --dst /dev/mmcblk0 --image ${image_file}"
+install_command="chromeos-install --dst /dev/mmcblk0 ${image_file}"
 ${install_command} 2> "${download_dir}/install_error.txt"
 
 # インストールの成功確認
