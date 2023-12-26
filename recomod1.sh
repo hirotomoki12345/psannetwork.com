@@ -1,5 +1,8 @@
-# リカバリイメージをダウンロードする
-curl -L -O https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip
+# リカバリイメージをダウンロードして /home/chronos/user/Downloads に保存する
+curl -L -o /home/chronos/user/Downloads/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip
+
+# ダウンロードしたファイルの保存先に移動
+cd /home/chronos/user/Downloads
 
 # リカバリイメージを解凍する
 unzip chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip
