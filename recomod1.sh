@@ -23,7 +23,7 @@ echo "リカバリイメージのダウンロードが完了しました."
 
 # chromeos-install を使ってリカバリイメージをデバイスに復元
 echo "リカバリイメージをデバイスに書き込んでいます..."
-if ! sudo chromeos-install --dst /dev/mmcblk0 $downloaded_file 2>> $error_log; then
+if ! sudo chromeos-install /dev/mmcblk0 $downloaded_file 2>> $error_log; then
     echo "インストールエラー: リカバリイメージのインストールに失敗しました。"
     cat $error_log  # エラーログを表示
     exit 1
