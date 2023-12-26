@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+cd /usr/sbin
+
 # Chrome OSをインストールするデバイスを指定
 device="/dev/mmcblk0"  # 実際の環境に応じてデバイス名を変更してください
 
