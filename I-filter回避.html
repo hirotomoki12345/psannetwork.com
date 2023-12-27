@@ -17,21 +17,31 @@
             color: #007BFF;
             border-bottom: 2px solid #007BFF;
             padding-bottom: 5px;
+            font-size: 32px;
+            text-align: center;
         }
 
         h2 {
             color: #007BFF;
             margin-top: 20px;
+            font-size: 24px;
         }
 
         p {
             color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
         a {
             color: #007BFF;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s ease-in-out;
+        }
+
+        a:hover {
+            color: #0056b3;
         }
 
         img {
@@ -39,21 +49,40 @@
             height: auto;
             margin-top: 10px;
         }
+
+        #name {
+            color: #FF4500; /* オレンジ色 */
+        }
+
+        #instructions {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <h1>I-filter回避</h1>
-    <p>こんにちは、Psanです。</p>
+    <h1 id="title">I-filter回避</h1>
+    <p>こんにちは、<span id="name">Psan</span>です。</p>
     <p>今回は、I-filterを回避する方法を紹介します。</p>
 
     <h2>やり方</h2>
-    <p>1. まず、<a href="https://appdb.to/" target="_blank">AppDB</a> にアクセスしてください。</p>
-    <p>2. サイト内で "<strong>link your device</strong>" ボタンを見つけ、それをクリックします。</p>
-    <p>3. 次に、適当なメールアドレスを入力し、"<strong>link your device</strong>" ボタンを再度クリックします。</p>
-    <p>4. これにより、プロファイルのインストール許可が求められるので、許可ボタンをクリックします。</p>
-    <p>5. 設定を開きます</p>
-    <p>6. 一般 ＝＞ VPNとデバイス ＝＞ <strong>appdb device link</strong> インストールをしてください</p>
-    <p>7. ホームにアイコンが追加されているので、それを押してください</p>
-    <p>8. あとはサイトから好きなアプリをインストールできます。</p>
+    <p id="instructions">1. まず、<a href="https://appdb.to/" target="_blank">AppDB</a> にアクセスしてください。</p>
+    <p id="instructions">2. サイト内で "<strong>link your device</strong>" ボタンを見つけ、それをクリックします。</p>
+    <p id="instructions">3. 次に、適当なメールアドレスを入力し、"<strong>link your device</strong>" ボタンを再度クリックします。</p>
+    <p id="instructions">4. これにより、プロファイルのインストール許可が求められるので、許可ボタンをクリックします。</p>
+    <p id="instructions">5. 設定を開きます</p>
+    <p id="instructions">6. 一般 ＝＞ VPNとデバイス ＝＞ <strong>appdb device link</strong> インストールをしてください</p>
+    <p id="instructions">7. ホームにアイコンが追加されているので、それを押してください</p>
+    <p id="instructions">8. あとはサイトから好きなアプリをインストールできます。</p>
+
+    <script>
+        const nameElement = document.getElementById('name');
+        nameElement.addEventListener('mouseover', () => {
+            nameElement.style.color = '#FF6347'; 
+        });
+
+        nameElement.addEventListener('mouseout', () => {
+            nameElement.style.color = '#666';
+        });
+    </script>
 </body>
 </html>
