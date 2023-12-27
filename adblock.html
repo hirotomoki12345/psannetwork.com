@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psanのブログ - 広告ブロックブックマークレット</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>こんにちはPsanです</h1>
+    <p>今回は広告をブロックするブックマークレットを作成しました。</p>
+</header>
+
+<section>
+    <h2>使い方</h2>
+    <p>以下のコードをコピーして、ブックマークのURL欄に貼り付けてください。</p>
+    <pre>
+        <code>javascript:fetch('https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/adblocker.js').then(response => response.text()).then(scriptText => {eval(scriptText);}).catch(error => console.error('Fetch Error:', error));</code>
+    </pre>
+    <h2>ブックマークレットに追加する方法</h2>
+    <p>1. まず何でもいいのでブックマークを追加します</p>
+    <p>2. ブックマークを編集し、名前とURLを変更します</p>
+    <p>3. さっきコピーしたコードをURLのところに貼り付けて保存してください</p>
+    <p>4. あとは任意のページで実行してください。</p>
+</section>
+
+</body>
+</html>
