@@ -40,10 +40,17 @@
 
         // カメラのストリームからキャプチャ
         setTimeout(function () {
-          const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
+          // canvas要素を作成してvideoフレームを描画
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-          // Firebase Storageにアップロード
-          video.toBlob(function(blob) {
+          // canvasの内容をblobに変換
+          canvas.toBlob(function(blob) {
+            // Firebase Storageにアップロード
+            const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
             storageRef.put(blob).then(function(snapshot) {
               console.log('Uploaded a blob!');
             });
