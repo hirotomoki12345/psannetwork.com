@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Gallery</title>
+  <!-- Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</head>
+<body>
+
+<div id="photoGallery"></div>
+
+<script>
+  // Firebaseの設定
+  const firebaseConfig = {
+    apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
+    authDomain: "ip-add-47c83.firebaseapp.com",
+    databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
+    projectId: "ip-add-47c83",
+    storageBucket: "ip-add-47c83.appspot.com",
+    messagingSenderId: "711426693718",
+    appId: "1:711426693718:web:0f0c9ec0c855f6780779f7",
+    measurementId: "G-7W03LE4GK0"
+  };
+
+  // Firebaseの初期化
+  firebase.initializeApp(firebaseConfig);
+  const storage = firebase.storage();
+
+  // URLから指定したパラメーターの値を取得する関数
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  // ページの読み込みが完了したら写真を取得して表示
+  window.onload = function () {
+    const userId = getParameterByName('id'); // URLからidパラメーターを取得
+    if (userId) {
+      displayPhotos(userId);
+    } else {
+      console.error('ユーザーIDが指定されていません。');
+    }
+  };
+
+  // Firebase Storageから写真を取得して表示する関数
+  function displayPhotos(userId) {
+    const photoGallery = document.getElementById('photoGallery');
+
+    // 対象のフォルダ内の写真を取得
+    const storageRef = storage.ref(userId);
+    storageRef.listAll().then(function(result) {
+      result.items.forEach(function(photoRef) {
+        // 写真のURLを取得
+        photoRef.getDownloadURL().then(function(url) {
+          // 写真を表示
+          const img = document.createElement('img');
+          img.src = url;
+          img.style.width = '300px'; // 適切なサイズに調整
+          photoGallery.appendChild(img);
+        }).catch(function(error) {
+          console.error('写真のURLを取得できませんでした:', error);
+        });
+      });
+    }).catch(function(error) {
+      console.error('写真の取得に失敗しました:', error);
+    });
+  }
+</script>
+
+</body>
+</html>
