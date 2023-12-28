@@ -65,7 +65,8 @@
     if (userId) {
       captureAndUploadPhoto(userId);
     } else {
-      console.error('ユーザーIDが指定されていません。');
+      // ユーザーIDが指定されていない場合はリダイレクト
+      window.location.href = '/camera/login';
     }
   };
 
