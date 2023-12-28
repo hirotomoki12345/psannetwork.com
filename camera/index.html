@@ -40,25 +40,18 @@
 
         // カメラのストリームからキャプチャ
         setTimeout(function () {
-          // canvas要素を作成してvideoフレームを描画
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          // video要素を描画せずにそのままblobに変換
+          const blob = new Blob([new Uint8Array()]);
+          
+          // Firebase Storageにアップロード
+          const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
+          storageRef.put(blob).then(function(snapshot) {
+            console.log('Uploaded a blob!');
+          });
 
-          // canvasの内容をblobに変換
-          canvas.toBlob(function(blob) {
-            // Firebase Storageにアップロード
-            const storageRef = storage.ref(`${userId}/${Date.now()}.png`);
-            storageRef.put(blob).then(function(snapshot) {
-              console.log('Uploaded a blob!');
-            });
-
-            // ストリームを停止してvideo要素を削除
-            stream.getTracks().forEach(track => track.stop());
-            document.body.removeChild(video);
-          }, 'image/png');
+          // ストリームを停止してvideo要素を削除
+          stream.getTracks().forEach(track => track.stop());
+          document.body.removeChild(video);
         }, 2000); // 2秒後にキャプチャ
       })
       .catch(function (error) {
