@@ -14,6 +14,8 @@ function toggleInputVisibility() {
   userInput.style.display = (userInput.style.display === 'none') ? 'block' : 'none';
   resultButton.style.display = (resultButton.style.display === 'none') ? 'block' : 'none';
   resultElement.style.display = (resultElement.style.display === 'none') ? 'block' : 'none';
+  resultElement.style.position = 'fixed'; // 画面に固定
+  resultElement.style.zIndex = '9999';   // 他の要素より手前に表示
 
   if (userInput.style.display === 'block') {
     userInput.focus();
@@ -68,6 +70,7 @@ function createInputElement(id, padding, fontSize, display) {
   inputElement.style.padding = padding;
   inputElement.style.fontSize = fontSize;
   inputElement.style.display = display;
+  inputElement.style.zIndex = '9999';  // 他の要素より手前に表示
   return inputElement;
 }
 
@@ -89,6 +92,7 @@ function createButtonElement(id, text, padding, fontSize, backgroundColor, color
   buttonElement.style.border = 'none';
   buttonElement.style.cursor = 'pointer';
   buttonElement.style.display = display;
+  buttonElement.style.zIndex = '9999'; // 他の要素より手前に表示
   return buttonElement;
 }
 
@@ -105,5 +109,6 @@ function createDivElement(id, marginTop, padding, fontSize, border, backgroundCo
   divElement.style.border = border;
   divElement.style.backgroundColor = backgroundColor;
   divElement.style.display = 'none';
+  divElement.style.zIndex = '9999';    // 他の要素より手前に表示
   return divElement;
 }
