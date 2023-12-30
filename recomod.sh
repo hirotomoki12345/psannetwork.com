@@ -1,15 +1,26 @@
 #!/bin/bash
 
-# エラーを保存するファイルを作成
-touch /home/chronos/user/Downloads/recovery_error.txt
+# コマンドラインオプションを解析する
+args=$(getopt -o rno -l recovery,no-os-check,image: -- "$@")
 
-# デバイスから recovery-image.bin ファイルを検索
-RECOVERY_IMAGE=$(find /dev/disk/by-id -name '*-part3' -exec grep recovery-image.bin {} \; | head -1)
+# 解析結果を変数に格納する
+eval set -- "$args"
 
-# リカバリイメージが見つからなければ、/home/p/chromeos_recovery.bin を使用する
-if [ -z "$RECOVERY_IMAGE" ]; then
-  RECOVERY_IMAGE=/home/p/chromeos_recovery.bin
+# リカバリオプションが指定されているか確認する
+if [ -n "${1}" ]; then
+  # エラーメッセージを表示する
+  echo "エラー: コマンドラインオプションが正しくありません。"
+  echo "chromeos-install -h を実行して、コマンドのヘルプを表示してください。"
+  exit 1
 fi
 
-# リカバリを実行し、エラーを保存する
-chromeos-install --recovery --no-os-check --image=$RECOVERY_IMAGE 2>&1 | tee -a /home/chronos/user/Downloads/recovery_error.txt
+# リカバリイメージが指定されているか確認する
+if [ -z "${image}" ]; then
+  # エラーメッセージを表示する
+  echo "エラー: リカバリイメージが指定されていません。"
+  echo "chromeos-install -h を実行して、コマンドのヘルプを表示してください。"
+  exit 1
+fi
+
+# リカバリを実行する
+chromeos-install --recovery --no-os-check --image="${image}"
