@@ -1,2 +1,1 @@
-
-chromeos-install --dst /dev/mmcblk0 --payload-image '/home/chronos/user/Downloads/recovery-image.bin' 2>&1 | tee /home/chronos/user/Downloads/chromeos-install.txt
+chromeos-install --dst /dev/mmcblk0 2>&1 | tee /home/chronos/user/Downloads/chromeos-install.txt
