@@ -26,11 +26,8 @@ function submitQuestion(question) {
     return;
   }
 
-  // ボタンを無効にする
   resultButton.disabled = true;
-  // ボタンのテキストを変更
   resultButton.innerText = '処理中...';
-  // ボタンの背景色を変更
   resultButton.style.backgroundColor = '#808080';
 
   var gasScriptUrl = 'https://script.google.com/macros/s/AKfycbwExRsT31rA_KSmPNoWK-HP8KesKhY2jsIsI-HBNdUhEuaM2GUan40myURkqbkCVbYy/exec';
@@ -39,18 +36,22 @@ function submitQuestion(question) {
   fetch(gasScriptUrl)
     .then(function (response) {
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('ネットワークの応答が正しくありませんでした');
       }
       return response.json();
     })
     .then(function (data) {
+      if (data.error) {
+        throw new Error('GASからのエラー: ' + data.error);
+      }
+
       resultElement.innerText = data.text;
     })
     .catch(function (error) {
-      console.error('There has been a problem with your fetch operation:', error);
+      console.error('フェッチ操作で問題が発生しました:', error);
+      alert('サーバーエラー　お手数ですがもう一度送ってみてください');
     })
     .finally(function () {
-      // ボタンを有効にし、元の状態に戻す
       resultButton.disabled = false;
       resultButton.innerText = '結果表示';
       resultButton.style.backgroundColor = '#4caf50';
