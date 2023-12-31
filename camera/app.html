@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カメラアプリ</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #cameraContainer {
+            position: relative;
+        }
+
+        #video {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+
+        #captureBtn, #startRecordBtn, #stopRecordBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #captureBtn:hover, #startRecordBtn:hover, #stopRecordBtn:hover {
+            background-color: #2e5baf;
+        }
+
+        #recordedVideo {
+            margin-top: 10px;
+            max-width: 100%;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>カメラアプリ</h1>
+
+    <div id="cameraContainer">
+        <video id="video" autoplay playsinline></video>
+        <button id="captureBtn">写真を撮影</button>
+        <button id="startRecordBtn">録画開始</button>
+        <button id="stopRecordBtn">録画停止</button>
+    </div>
+
+    <video id="recordedVideo" controls style="display:none"></video>
+
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('カメラへのアクセスに失敗しました:', error);
+            });
+
+        const captureBtn = document.getElementById('captureBtn');
+        const startRecordBtn = document.getElementById('startRecordBtn');
+        const stopRecordBtn = document.getElementById('stopRecordBtn');
+        const recordedVideo = document.getElementById('recordedVideo');
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        captureBtn.addEventListener('click', () => {
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const capturedData = canvas.toDataURL('image/png');
+            const capturedImage = new Image();
+            capturedImage.src = capturedData;
+            document.body.appendChild(capturedImage);
+        });
+
+        startRecordBtn.addEventListener('click', () => {
+            const video = document.getElementById('video').captureStream();
+            recordedChunks = [];
+            mediaRecorder = new MediaRecorder(video);
+
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                recordedVideo.src = URL.createObjectURL(recordedBlob);
+                recordedVideo.style.display = 'block';
+            };
+
+            mediaRecorder.start();
+            startRecordBtn.disabled = true;
+            stopRecordBtn.disabled = false;
+        });
+
+        stopRecordBtn.addEventListener('click', () => {
+            mediaRecorder.stop();
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>
