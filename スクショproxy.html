@@ -5,20 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Apps Script Iframe & Screenshot</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        iframe, label, input { margin-top: 10px; }
-        input { width: 70%; padding: 5px; }
-        button { padding: 8px 16px; margin-top: 10px; cursor: pointer; background-color: #4CAF50; color: #fff; border: none; border-radius: 4px; }
-        button:hover { background-color: #45a049; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            margin-top: 10px;
+            border: none;
+        }
+
+        label, input {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            width: 70%;
+            padding: 5px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <iframe src="https://www.google.com/?igu=1" width="800" height="600" frameborder="0"></iframe>
-    <iframe id="resultFrame" width="800" height="600" frameborder="0"></iframe>
-    <label for="urlInput">Enter URL:</label>
+    <iframe src="https://www.google.com/?igu=1" frameborder="0"></iframe>
+    <label for="urlInput">CorsにひっかかったらこちらにURLを:</label>
     <input type="text" id="urlInput" placeholder="https://www.example.com">
     <button onclick="fetchAndEmbed()">Fetch and Embed</button>
     <button onclick="takeScreenshot()">Take Screenshot</button>
+    <iframe id="resultFrame" frameborder="0"></iframe>
 
     <script>
         const resultFrame = document.getElementById("resultFrame");
