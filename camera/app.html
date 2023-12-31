@@ -5,95 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カメラアプリ</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        #cameraContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #video {
-            width: 100%;
-            max-width: 640px;
-            height: auto;
-            border: 2px solid #333;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background-color: #eee;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2e5baf;
-        }
-
-        #recordedVideo {
-            margin-top: 10px;
-            max-width: 100%;
-            border: 2px solid #333;
-            border-radius: 8px;
-            display: none;
-        }
-
-        #downloadBtn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4caf50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            display: none;
-        }
-
-        #downloadBtn:hover {
-            background-color: #45a049;
-        }
-
-        #recordingIndicator {
-            font-size: 20px;
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-
-        #capturedImage {
-            max-width: 100%;
-            border: 2px solid #333;
-            border-radius: 8px;
-            display: none;
-        }
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        #cameraContainer { position: relative; display: flex; flex-direction: column; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #video { width: 100%; max-width: 640px; height: auto; border: 2px solid #333; border-radius: 8px; margin-bottom: 10px; background-color: #eee; }
+        button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4285f4; color: #fff; border: none; border-radius: 5px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #2e5baf; }
+        #recordedVideo, #capturedImage { margin-top: 10px; max-width: 100%; border: 2px solid #333; border-radius: 8px; display: none; }
+        #downloadBtn { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4caf50; color: #fff; border: none; border-radius: 5px; display: none; }
+        #downloadBtn:hover { background-color: #45a049; }
+        #recordingIndicator { font-size: 20px; color: red; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -103,7 +24,7 @@
         <button onclick="toggleCapture()">写真/録画</button>
         <button onclick="switchCamera()">切り替えカメラ</button>
         <button onclick="switchMode()">切り替えモード</button>
-        <button id="downloadBtn" onclick="download()">ダウンロード</button>
+        <button id="downloadBtn" onclick="downloadFile()">ダウンロード</button>
         <video id="recordedVideo" controls style="display:none"></video>
         <div id="recordingIndicator">録画中...</div>
         <img id="capturedImage" alt="captured-image">
@@ -115,9 +36,7 @@
         async function startCamera() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
                 const constraints = { video: { facingMode: 'user' } };
-                if (currentStream) currentStream.getTracks().forEach(track => track.stop());
                 currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.getElementById('video');
                 video.srcObject = currentStream;
@@ -137,11 +56,7 @@
         }
 
         function toggleCapture() {
-            if (isPhotoMode) {
-                capturePhoto();
-            } else {
-                isRecording ? stopRecording() : startRecording();
-            }
+            isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording();
         }
 
         function capturePhoto() {
@@ -172,8 +87,7 @@
                 recordedVideo.style.display = 'block';
                 enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
                 document.getElementById('recordingIndicator').style.display = 'none';
-                // 自動でダウンロード
-                download();
+                downloadFile(); // 自動でダウンロード
             };
             mediaRecorder.start();
             isRecording = true;
@@ -192,7 +106,7 @@
             downloadBtn.style.display = 'block';
         }
 
-        function download() {
+        function downloadFile() {
             document.getElementById('downloadBtn').click();
         }
 
