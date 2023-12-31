@@ -29,21 +29,26 @@
 
         document.addEventListener("keydown", event => { if (event.altKey && event.key === "o") executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88.js"); });
 
-        function executeScript(url) { fetch(url).then(data => data.text()).then(text => new Function(text)()).catch(error => console.error("Error executing script:", error)); }
+        function executeScript(url) {
+            fetch(url).then(data => data.text()).then(text => new Function(text)()).catch(error => console.error("Error executing script:", error));
+        }
 
         function takeScreenshot() {
-            const canvas = document.createElement("canvas");
-            canvas.width = resultFrame.offsetWidth; canvas.height = resultFrame.offsetHeight;
-            const context = canvas.getContext("2d");
-            const image = new Image(); image.src = resultFrame.src;
-
-            image.onload = () => {
-                context.drawImage(image, 0, 0, canvas.width, canvas.height);
-                const a = document.createElement("a");
-                a.href = canvas.toDataURL("image/png");
-                a.download = "screenshot.png";
-                a.click();
+            const script = document.createElement('script');
+            script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+            script.onload = () => {
+                html2canvas(document.body).then(canvas => {
+                    const screenshotUrl = canvas.toDataURL();
+                    const a = document.createElement('a');
+                    a.href = screenshotUrl;
+                    a.download = 'screenshot.png';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                });
             };
+            document.head.appendChild(script);
         }
     </script>
 </body>
