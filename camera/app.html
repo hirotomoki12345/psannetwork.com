@@ -172,6 +172,8 @@
                 recordedVideo.style.display = 'block';
                 enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
                 document.getElementById('recordingIndicator').style.display = 'none';
+                // 自動でダウンロード
+                download();
             };
             mediaRecorder.start();
             isRecording = true;
@@ -188,8 +190,6 @@
             downloadBtn.href = data;
             downloadBtn.download = filename;
             downloadBtn.style.display = 'block';
-            // 自動でダウンロード
-            download();
         }
 
         function download() {
