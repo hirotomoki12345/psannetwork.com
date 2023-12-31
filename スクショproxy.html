@@ -3,12 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Apps Script Iframe Embedding</title>
+    <title>Google Apps Script Iframe Embedding with Fetch</title>
 </head>
 <body>
 
-<!-- URLパラメータで指定されたGoogle Apps Scriptのエンドポイントにアクセスし、結果を表示するiframe -->
-<iframe src="https://script.google.com/macros/s/AKfycbz55_ySqBs9VBtvCHIU15qx_OP0GqF1cCLQ5oEMAifcFE1lAbfPuuanp3a-byQJ5w/exec?url=https://www.google.com/?igu=1" width="800" height="600" frameborder="0"></iframe>
+<!-- URLを入力するためのinput要素 -->
+<label for="urlInput">Enter URL:</label>
+<input type="text" id="urlInput" placeholder="https://www.example.com">
+<button onclick="fetchAndEmbed()">Fetch and Embed</button>
+
+<!-- 結果を表示するiframe -->
+<iframe id="resultFrame" width="800" height="600" frameborder="0"></iframe>
+
+<script>
+function fetchAndEmbed() {
+    // Google Apps Scriptのエンドポイントと入力されたURL
+    const scriptEndpoint = "https://script.google.com/macros/s/AKfycbz55_ySqBs9VBtvCHIU15qx_OP0GqF1cCLQ5oEMAifcFE1lAbfPuuanp3a-byQJ5w/exec";
+    const inputURL = document.getElementById("urlInput").value;
+
+    // fetchを使用してGoogle Apps Scriptからデータを取得
+    fetch(`${scriptEndpoint}?url=${encodeURIComponent(inputURL)}`)
+        .then(response => response.text())
+        .then(data => {
+            // 取得したデータをiframeに埋め込む
+            const iframe = document.getElementById("resultFrame");
+            iframe.srcdoc = data;
+        })
+        .catch(error => console.error("Error fetching data:", error));
+}
+</script>
 
 </body>
 </html>
