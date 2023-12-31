@@ -21,6 +21,7 @@
         <video id="video" autoplay playsinline></video>
         <button onclick="toggleCapture()">写真/録画</button>
         <button onclick="switchCamera()">切り替えカメラ</button>
+        <button id="downloadBtn" onclick="downloadFile()">ダウンロード</button>
         <video id="recordedVideo" controls style="display:none"></video>
         <div id="recordingIndicator">録画中...</div>
         <img id="capturedImage" alt="captured-image">
@@ -50,7 +51,7 @@
             const img = document.getElementById('capturedImage');
             img.src = canvas.toDataURL('image/png');
             img.style.display = 'block';
-            downloadFile(img.src, 'captured-image.png');
+            enableDownloadButton(img.src, 'captured-image.png');
         }
 
         function startRecording() {
@@ -63,7 +64,7 @@
                 const video = document.getElementById('recordedVideo');
                 video.src = URL.createObjectURL(blob);
                 video.style.display = 'block';
-                downloadFile(video.src, 'recorded-video.webm');
+                enableDownloadButton(video.src, generateFilename('recorded-video', 'webm'));
                 document.getElementById('recordingIndicator').style.display = 'none';
             };
             mediaRecorder.start();
@@ -73,11 +74,21 @@
 
         function stopRecording() { mediaRecorder.stop(); isRecording = false; }
 
-        function downloadFile(data, filename) {
-            const a = document.createElement('a');
-            a.href = data;
-            a.download = filename;
-            a.click();
+        function enableDownloadButton(data, filename) {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = data;
+            downloadBtn.download = filename;
+            downloadBtn.style.display = 'block';
+        }
+
+        function generateFilename(prefix, extension) {
+            const now = new Date();
+            const timestamp = `${now.getFullYear()}${now.getMonth() + 1}${now.getDate()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+            return `${prefix}_${timestamp}.${extension}`;
+        }
+
+        function downloadFile() {
+            document.getElementById('downloadBtn').click();
         }
 
         startCamera();
