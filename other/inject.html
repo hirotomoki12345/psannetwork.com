@@ -9,20 +9,13 @@
 </head>
 <body>
 
-  <input type="file" id="fileInput" accept=".js">
   <button onclick="registerServiceWorker()">Register Service Worker</button>
 
   <script>
     function registerServiceWorker() {
-      const fileInput = document.getElementById('fileInput');
-      const selectedFile = fileInput.files[0];
-
-      if (selectedFile) {
-        const reader = new FileReader();
-
-        reader.onload = function(event) {
-          const scriptContent = event.target.result;
-
+      fetch('/other/inject.js') // fetch the inject.js content
+        .then(response => response.text())
+        .then(scriptContent => {
           // Register the Service Worker with the injected script content
           navigator.serviceWorker.register('/service-worker.js')
             .then(function(registration) {
@@ -39,10 +32,10 @@
             .catch(function(error) {
               console.error('Service Worker registration failed:', error);
             });
-        };
-
-        reader.readAsText(selectedFile);
-      }
+        })
+        .catch(error => {
+          console.error('Error fetching inject.js:', error);
+        });
     }
   </script>
 
