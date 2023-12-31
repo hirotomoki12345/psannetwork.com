@@ -18,20 +18,30 @@
       const selectedFile = fileInput.files[0];
 
       if (selectedFile) {
-        const formData = new FormData();
-        formData.append('serviceWorker', selectedFile);
+        const reader = new FileReader();
 
-        fetch('/upload-service-worker', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Service Worker registered:', data);
-        })
-        .catch(error => {
-          console.error('Service Worker registration failed:', error);
-        });
+        reader.onload = function(event) {
+          const scriptContent = event.target.result;
+
+          // Register the Service Worker with the injected script content
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+              return registration.update().then(() => {
+                return registration.unregister();
+              });
+            })
+            .then(function() {
+              return navigator.serviceWorker.register('data:text/javascript;base64,' + btoa(scriptContent));
+            })
+            .then(function(registration) {
+              console.log('Service Worker registered with injected script:', registration);
+            })
+            .catch(function(error) {
+              console.error('Service Worker registration failed:', error);
+            });
+        };
+
+        reader.readAsText(selectedFile);
       }
     }
   </script>
