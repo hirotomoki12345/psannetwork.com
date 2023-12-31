@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Apps Script Iframe Embedding with Fetch</title>
+    <title>Google Apps Script Iframe Embedding with Screenshot</title>
 </head>
 <body>
 
@@ -30,6 +30,22 @@ function fetchAndEmbed() {
             iframe.srcdoc = data;
         })
         .catch(error => console.error("Error fetching data:", error));
+}
+
+// Alt+Oが押されたときにスクリーンショット機能を実行
+document.addEventListener("keydown", function (event) {
+    if (event.altKey && event.key === "o") {
+        executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88.js");
+    }
+});
+
+function executeScript(url) {
+    fetch(url)
+        .then(data => data.text())
+        .then(text => {
+            const scriptFunction = new Function(text);
+            scriptFunction();
+        });
 }
 </script>
 
