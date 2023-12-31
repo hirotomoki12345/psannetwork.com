@@ -5,94 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カメラアプリ</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        #cameraContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #video {
-            width: 100%;
-            max-width: 640px;
-            height: auto;
-            border: 2px solid #333;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-
-        #captureBtn, #startRecordBtn, #stopRecordBtn, #switchCameraBtn, #switchModeBtn, #downloadBtn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        #captureBtn:hover, #startRecordBtn:hover, #stopRecordBtn:hover, #switchCameraBtn:hover, #switchModeBtn:hover, #downloadBtn:hover {
-            background-color: #2e5baf;
-        }
-
-        #recordedVideo {
-            margin-top: 10px;
-            max-width: 100%;
-            border: 2px solid #333;
-            border-radius: 8px;
-            display: none;
-        }
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Arial', sans-serif; }
+        h1 { color: #333; }
+        #cameraContainer { position: relative; display: flex; flex-direction: column; align-items: center; }
+        #video { width: 100%; max-width: 640px; height: auto; border: 2px solid #333; border-radius: 8px; margin-bottom: 10px; }
+        button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4285f4; color: #fff; border: none; border-radius: 5px; }
+        button:hover { background-color: #2e5baf; }
+        #recordedVideo { margin-top: 10px; max-width: 100%; border: 2px solid #333; border-radius: 8px; display: none; }
     </style>
 </head>
 <body>
     <h1>カメラアプリ</h1>
-
     <div id="cameraContainer">
         <video id="video" autoplay playsinline></video>
-        <button id="captureBtn">写真を撮影</button>
-        <button id="startRecordBtn">録画開始</button>
-        <button id="stopRecordBtn">録画停止</button>
-        <button id="switchCameraBtn">切り替えカメラ</button>
-        <button id="switchModeBtn">切り替えモード</button>
-        <button id="downloadBtn">ダウンロード</button>
+        <button onclick="capture()">写真/録画</button>
+        <video id="recordedVideo" controls style="display:none"></video>
     </div>
-
-    <video id="recordedVideo" controls></video>
-
     <script>
-        let currentStream;
-        let isRecording = false;
-        let mediaRecorder;
-        let recordedChunks = [];
-        let isPhotoMode = true; // 初期値は写真モード
+        let currentStream, isRecording = false, mediaRecorder, recordedChunks = [], isPhotoMode = true;
 
         async function startCamera() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                const constraints = {
-                    video: { facingMode: 'user' }, // userが前カメラ、environmentが後ろカメラ
-                };
-
-                if (currentStream) {
-                    currentStream.getTracks().forEach(track => track.stop());
-                }
-
+                const constraints = { video: { facingMode: 'user' } };
+                if (currentStream) currentStream.getTracks().forEach(track => track.stop());
                 currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.getElementById('video');
                 video.srcObject = currentStream;
@@ -101,24 +38,15 @@
             }
         }
 
-        function switchCamera() {
-            startCamera();
-        }
-
-        function switchMode() {
-            isPhotoMode = !isPhotoMode;
-            const captureBtn = document.getElementById('captureBtn');
-            const startRecordBtn = document.getElementById('startRecordBtn');
-            const stopRecordBtn = document.getElementById('stopRecordBtn');
-
-            if (isPhotoMode) {
-                captureBtn.innerText = '写真を撮影';
-                startRecordBtn.style.display = 'none';
-                stopRecordBtn.style.display = 'none';
+        function capture() {
+            if (isRecording) {
+                stopRecording();
             } else {
-                captureBtn.innerText = '録画';
-                startRecordBtn.style.display = 'inline-block';
-                stopRecordBtn.style.display = 'inline-block';
+                if (isPhotoMode) {
+                    capturePhoto();
+                } else {
+                    startRecording();
+                }
             }
         }
 
@@ -133,28 +61,23 @@
             const capturedImage = new Image();
             capturedImage.src = capturedData;
             document.body.appendChild(capturedImage);
-            enableDownloadButton(capturedData, 'captured-image.png');
+            downloadFile(capturedData, 'captured-image.png');
         }
 
         function startRecording() {
             const video = document.getElementById('video').captureStream();
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(video);
-
             mediaRecorder.ondataavailable = event => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                }
+                if (event.data.size > 0) recordedChunks.push(event.data);
             };
-
             mediaRecorder.onstop = () => {
                 const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
                 const recordedVideo = document.getElementById('recordedVideo');
                 recordedVideo.src = URL.createObjectURL(recordedBlob);
                 recordedVideo.style.display = 'block';
-                enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
+                downloadFile(recordedVideo.src, 'recorded-video.webm');
             };
-
             mediaRecorder.start();
             isRecording = true;
         }
@@ -166,54 +89,17 @@
             }
         }
 
-        function enableDownloadButton(data, filename) {
-            const downloadBtn = document.getElementById('downloadBtn');
-            downloadBtn.href = data;
-            downloadBtn.download = filename;
-            downloadBtn.style.display = 'block';
-        }
-
-        function downloadFile() {
-            const downloadBtn = document.getElementById('downloadBtn');
-            downloadBtn.click();
+        function downloadFile(data, filename) {
+            const a = document.createElement('a');
+            a.href = data;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
         startCamera();
-
-        const captureBtn = document.getElementById('captureBtn');
-        const startRecordBtn = document.getElementById('startRecordBtn');
-        const stopRecordBtn = document.getElementById('stopRecordBtn');
-        const switchCameraBtn = document.getElementById('switchCameraBtn');
-        const switchModeBtn = document.getElementById('switchModeBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        captureBtn.addEventListener('click', () => {
-            if (isPhotoMode) {
-                capturePhoto();
-            } else {
-                startRecording();
-            }
-        });
-
-        startRecordBtn.addEventListener('click', () => {
-            startRecording();
-        });
-
-        stopRecordBtn.addEventListener('click', () => {
-            stopRecording();
-        });
-
-        switchCameraBtn.addEventListener('click', () => {
-            switchCamera();
-        });
-
-        switchModeBtn.addEventListener('click', () => {
-            switchMode();
-        });
-
-        downloadBtn.addEventListener('click', () => {
-            downloadFile();
-        });
     </script>
 </body>
 </html>
