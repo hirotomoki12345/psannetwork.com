@@ -5,89 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カメラアプリ</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        #cameraContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #video {
-            width: 100%;
-            max-width: 640px;
-            height: auto;
-            border: 2px solid #333;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background-color: #eee;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2e5baf;
-        }
-
-        #recordedVideo,
-        #capturedImage {
-            margin-top: 10px;
-            max-width: 100%;
-            border: 2px solid #333;
-            border-radius: 8px;
-            display: none;
-        }
-
-        #downloadBtn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4caf50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            display: none;
-        }
-
-        #downloadBtn:hover {
-            background-color: #45a049;
-        }
-
-        #recordingIndicator {
-            font-size: 20px;
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
+        h1 { color: #333; }
+        #cameraContainer { position: relative; display: flex; flex-direction: column; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #video { width: 100%; max-width: 640px; height: auto; border: 2px solid #333; border-radius: 8px; margin-bottom: 10px; background-color: #eee; }
+        button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4285f4; color: #fff; border: none; border-radius: 5px; transition: background-color 0.3s ease; }
+        button:hover { background-color: #2e5baf; }
+        #recordedVideo, #capturedImage { margin-top: 10px; max-width: 100%; border: 2px solid #333; border-radius: 8px; display: none; }
+        #recordingIndicator { font-size: 20px; color: red; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -96,8 +21,6 @@
         <video id="video" autoplay playsinline></video>
         <button onclick="toggleCapture()">写真/録画</button>
         <button onclick="switchCamera()">切り替えカメラ</button>
-        <button onclick="switchMode()">切り替えモード</button>
-        <button id="downloadBtn" onclick="downloadFile()">ダウンロード</button>
         <video id="recordedVideo" controls style="display:none"></video>
         <div id="recordingIndicator">録画中...</div>
         <img id="capturedImage" alt="captured-image">
@@ -108,79 +31,53 @@
 
         async function startCamera() {
             try {
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const constraints = { video: { facingMode: 'user' } };
-                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-                const video = document.getElementById('video');
-                video.srcObject = currentStream;
-            } catch (error) {
-                console.error('カメラへのアクセスに失敗しました:', error);
-            }
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                document.getElementById('video').srcObject = currentStream;
+            } catch (error) { console.error('カメラへのアクセスに失敗しました:', error); }
         }
 
-        function switchCamera() {
-            startCamera();
-        }
+        function switchCamera() { startCamera(); }
 
-        function switchMode() {
-            isPhotoMode = !isPhotoMode;
-            const captureBtn = document.querySelector('button');
-            captureBtn.innerText = isPhotoMode ? '写真/録画' : '録画';
-        }
-
-        function toggleCapture() {
-            isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording();
-        }
+        function toggleCapture() { isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording(); }
 
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
+            const ctx = canvas.getContext('2d');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const capturedData = canvas.toDataURL('image/png');
-            const capturedImage = document.getElementById('capturedImage');
-            capturedImage.src = capturedData;
-            capturedImage.style.display = 'block';
-            enableDownloadButton(capturedData, 'captured-image.png');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const img = document.getElementById('capturedImage');
+            img.src = canvas.toDataURL('image/png');
+            img.style.display = 'block';
+            downloadFile(img.src, 'captured-image.png');
         }
 
         function startRecording() {
             const video = document.getElementById('video').captureStream();
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(video);
-            mediaRecorder.ondataavailable = event => {
-                if (event.data.size > 0) recordedChunks.push(event.data);
-            };
+            mediaRecorder.ondataavailable = e => e.data.size > 0 && recordedChunks.push(e.data);
             mediaRecorder.onstop = () => {
-                const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                const recordedVideo = document.getElementById('recordedVideo');
-                recordedVideo.src = URL.createObjectURL(recordedBlob);
-                recordedVideo.style.display = 'block';
-                enableDownloadButton(recordedBlob, 'recorded-video.webm');
+                const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                const video = document.getElementById('recordedVideo');
+                video.src = URL.createObjectURL(blob);
+                video.style.display = 'block';
+                downloadFile(video.src, 'recorded-video.webm');
                 document.getElementById('recordingIndicator').style.display = 'none';
-                downloadFile(); // 自動でダウンロード
             };
             mediaRecorder.start();
             isRecording = true;
             document.getElementById('recordingIndicator').style.display = 'block';
         }
 
-        function stopRecording() {
-            mediaRecorder.stop();
-            isRecording = false;
-        }
+        function stopRecording() { mediaRecorder.stop(); isRecording = false; }
 
-        function enableDownloadButton(blob, filename) {
-            const downloadBtn = document.getElementById('downloadBtn');
-            downloadBtn.href = URL.createObjectURL(blob);
-            downloadBtn.download = filename;
-            downloadBtn.style.display = 'block';
-        }
-
-        function downloadFile() {
-            document.getElementById('downloadBtn').click();
+        function downloadFile(data, filename) {
+            const a = document.createElement('a');
+            a.href = data;
+            a.download = filename;
+            a.click();
         }
 
         startCamera();
