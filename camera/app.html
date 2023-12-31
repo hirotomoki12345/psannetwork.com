@@ -83,10 +83,10 @@ function downloadFile(data, fileType) {
     const a = document.createElement('a');
     const timestamp = new Date().toISOString().replace(/[:.]/g, '');
     const filename = `file_${timestamp}.${fileType}`;
-    
-    // Create a Blob from the base64-encoded data
+
+    // Convert the base64 data to a Blob
     const blob = base64ToBlob(data, `video/${fileType}`);
-    
+
     // Create an object URL for the Blob
     const url = URL.createObjectURL(blob);
 
@@ -100,6 +100,7 @@ function downloadFile(data, fileType) {
     // Releasing resources
     URL.revokeObjectURL(url);
 }
+
 
 
         function base64ToBlob(base64, mime) {
