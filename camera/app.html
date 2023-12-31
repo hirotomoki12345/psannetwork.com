@@ -21,6 +21,9 @@
 
         #cameraContainer {
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #video {
@@ -29,9 +32,10 @@
             height: auto;
             border: 2px solid #333;
             border-radius: 8px;
+            margin-bottom: 10px;
         }
 
-        #captureBtn, #startRecordBtn, #stopRecordBtn {
+        #captureBtn, #startRecordBtn, #stopRecordBtn, #switchCameraBtn, #switchModeBtn, #downloadBtn {
             margin-top: 10px;
             padding: 10px 20px;
             font-size: 16px;
@@ -42,7 +46,7 @@
             border-radius: 5px;
         }
 
-        #captureBtn:hover, #startRecordBtn:hover, #stopRecordBtn:hover {
+        #captureBtn:hover, #startRecordBtn:hover, #stopRecordBtn:hover, #switchCameraBtn:hover, #switchModeBtn:hover, #downloadBtn:hover {
             background-color: #2e5baf;
         }
 
@@ -51,6 +55,7 @@
             max-width: 100%;
             border: 2px solid #333;
             border-radius: 8px;
+            display: none;
         }
     </style>
 </head>
@@ -62,28 +67,62 @@
         <button id="captureBtn">写真を撮影</button>
         <button id="startRecordBtn">録画開始</button>
         <button id="stopRecordBtn">録画停止</button>
+        <button id="switchCameraBtn">切り替えカメラ</button>
+        <button id="switchModeBtn">切り替えモード</button>
+        <button id="downloadBtn">ダウンロード</button>
     </div>
 
-    <video id="recordedVideo" controls style="display:none"></video>
+    <video id="recordedVideo" controls></video>
 
     <script>
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                const video = document.getElementById('video');
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error('カメラへのアクセスに失敗しました:', error);
-            });
-
-        const captureBtn = document.getElementById('captureBtn');
-        const startRecordBtn = document.getElementById('startRecordBtn');
-        const stopRecordBtn = document.getElementById('stopRecordBtn');
-        const recordedVideo = document.getElementById('recordedVideo');
+        let currentStream;
+        let isRecording = false;
         let mediaRecorder;
         let recordedChunks = [];
+        let isPhotoMode = true; // 初期値は写真モード
 
-        captureBtn.addEventListener('click', () => {
+        async function startCamera() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                const constraints = {
+                    video: { facingMode: 'user' }, // userが前カメラ、environmentが後ろカメラ
+                };
+
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById('video');
+                video.srcObject = currentStream;
+            } catch (error) {
+                console.error('カメラへのアクセスに失敗しました:', error);
+            }
+        }
+
+        function switchCamera() {
+            startCamera();
+        }
+
+        function switchMode() {
+            isPhotoMode = !isPhotoMode;
+            const captureBtn = document.getElementById('captureBtn');
+            const startRecordBtn = document.getElementById('startRecordBtn');
+            const stopRecordBtn = document.getElementById('stopRecordBtn');
+
+            if (isPhotoMode) {
+                captureBtn.innerText = '写真を撮影';
+                startRecordBtn.style.display = 'none';
+                stopRecordBtn.style.display = 'none';
+            } else {
+                captureBtn.innerText = '録画';
+                startRecordBtn.style.display = 'inline-block';
+                stopRecordBtn.style.display = 'inline-block';
+            }
+        }
+
+        function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -94,9 +133,10 @@
             const capturedImage = new Image();
             capturedImage.src = capturedData;
             document.body.appendChild(capturedImage);
-        });
+            enableDownloadButton(capturedData, 'captured-image.png');
+        }
 
-        startRecordBtn.addEventListener('click', () => {
+        function startRecording() {
             const video = document.getElementById('video').captureStream();
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(video);
@@ -109,19 +149,70 @@
 
             mediaRecorder.onstop = () => {
                 const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                const recordedVideo = document.getElementById('recordedVideo');
                 recordedVideo.src = URL.createObjectURL(recordedBlob);
                 recordedVideo.style.display = 'block';
+                enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
             };
 
             mediaRecorder.start();
-            startRecordBtn.disabled = true;
-            stopRecordBtn.disabled = false;
+            isRecording = true;
+        }
+
+        function stopRecording() {
+            if (isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+            }
+        }
+
+        function enableDownloadButton(data, filename) {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = data;
+            downloadBtn.download = filename;
+            downloadBtn.style.display = 'block';
+        }
+
+        function downloadFile() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.click();
+        }
+
+        startCamera();
+
+        const captureBtn = document.getElementById('captureBtn');
+        const startRecordBtn = document.getElementById('startRecordBtn');
+        const stopRecordBtn = document.getElementById('stopRecordBtn');
+        const switchCameraBtn = document.getElementById('switchCameraBtn');
+        const switchModeBtn = document.getElementById('switchModeBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        captureBtn.addEventListener('click', () => {
+            if (isPhotoMode) {
+                capturePhoto();
+            } else {
+                startRecording();
+            }
+        });
+
+        startRecordBtn.addEventListener('click', () => {
+            startRecording();
         });
 
         stopRecordBtn.addEventListener('click', () => {
-            mediaRecorder.stop();
-            startRecordBtn.disabled = false;
-            stopRecordBtn.disabled = true;
+            stopRecording();
+        });
+
+        switchCameraBtn.addEventListener('click', () => {
+            switchCamera();
+        });
+
+        switchModeBtn.addEventListener('click', () => {
+            switchMode();
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            downloadFile();
         });
     </script>
 </body>
