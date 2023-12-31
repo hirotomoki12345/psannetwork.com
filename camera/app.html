@@ -102,8 +102,13 @@
             startCamera();
         }
 
-        function toggleCapture() {
-            isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording();
+        async function toggleCapture() {
+            if(isRecording) {
+                stopRecording();
+            } else {
+                await startCamera();
+                isPhotoMode ? capturePhoto() : startRecording();
+            }
         }
 
         function capturePhoto() {
@@ -123,10 +128,10 @@
             mediaRecorder.ondataavailable = e => e.data.size > 0 && recordedChunks.push(e.data);
             mediaRecorder.onstop = () => {
                 const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                const video = document.getElementById('recordedVideo');
-                video.src = URL.createObjectURL(blob);
-                video.style.display = 'block';
-                downloadFile(video.src, 'recorded-video.webm');
+                const recordedVideo = document.getElementById('recordedVideo');
+                recordedVideo.src = URL.createObjectURL(blob);
+                recordedVideo.style.display = 'block';
+                downloadFile(recordedVideo.src, 'recorded-video.webm');
                 document.getElementById('recordingIndicator').style.display = 'none';
             };
             mediaRecorder.start();
@@ -140,7 +145,7 @@
         }
 
         function startVideoRecording() {
-            isRecording ? stopRecording() : startRecording();
+            toggleCapture();
         }
 
         function downloadFile(data, fileType) {
