@@ -75,17 +75,28 @@
 
         function startVideoRecording() { isRecording ? stopRecording() : startRecording(); }
 
-        function downloadFile(data, fileType) {
-            const a = document.createElement('a');
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '');
-            const filename = `file_${timestamp}.${fileType}`;
-            const blob = base64ToBlob(data.split(',')[1], `video/${fileType}`);
-            const url = URL.createObjectURL(blob);
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
+function downloadFile(data, fileType) {
+    const a = document.createElement('a');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '');
+    const filename = `file_${timestamp}.${fileType}`;
+    
+    // Create a Blob from the base64-encoded data
+    const blob = base64ToBlob(data, `video/${fileType}`);
+    
+    // Create an object URL for the Blob
+    const url = URL.createObjectURL(blob);
+
+    // Set the download link attributes
+    a.href = url;
+    a.download = filename;
+
+    // Triggering download
+    a.click();
+
+    // Releasing resources
+    URL.revokeObjectURL(url);
+}
+
 
         function base64ToBlob(base64, mime) {
             const binary = atob(base64);
