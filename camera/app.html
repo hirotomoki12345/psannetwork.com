@@ -84,8 +84,10 @@ function downloadFile(data, fileType) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '');
     const filename = `file_${timestamp}.${fileType}`;
 
-    // Convert the base64 data to a Blob
-    const blob = base64ToBlob(data, `video/${fileType}`);
+    // Convert the base64 data to a Blob for images
+    const blob = fileType.includes('png') || fileType.includes('jpg')
+        ? base64ToBlob(data, `image/${fileType}`)
+        : base64ToBlob(data, `video/${fileType}`);
 
     // Create an object URL for the Blob
     const url = URL.createObjectURL(blob);
@@ -100,8 +102,6 @@ function downloadFile(data, fileType) {
     // Releasing resources
     URL.revokeObjectURL(url);
 }
-
-
 
         function base64ToBlob(base64, mime) {
             const binary = atob(base64);
