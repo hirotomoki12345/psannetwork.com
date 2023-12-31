@@ -5,68 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カメラアプリ</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-        }
-
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Arial', sans-serif; background-color: #f4f4f4; }
         h1 { color: #333; }
-
-        #cameraContainer {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #video {
-            width: 100%;
-            max-width: 640px;
-            height: auto;
-            border: 2px solid #333;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            background-color: #eee;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4285f4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
+        #cameraContainer { position: relative; display: flex; flex-direction: column; align-items: center; background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        #video { width: 100%; max-width: 640px; height: auto; border: 2px solid #333; border-radius: 8px; margin-bottom: 10px; background-color: #eee; }
+        button { margin-top: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4285f4; color: #fff; border: none; border-radius: 5px; transition: background-color 0.3s ease; }
         button:hover { background-color: #2e5baf; }
-
-        #recordedVideo, #capturedImage {
-            margin-top: 10px;
-            max-width: 100%;
-            border: 2px solid #333;
-            border-radius: 8px;
-            display: none;
-        }
-
-        #recordingIndicator {
-            font-size: 20px;
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
+        #recordedVideo { margin-top: 10px; max-width: 100%; border: 2px solid #333; border-radius: 8px; display: none; }
+        #recordingIndicator { font-size: 20px; color: red; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -103,10 +49,8 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const img = document.getElementById('capturedImage');
-            img.src = canvas.toDataURL('image/png');
-            img.style.display = 'block';
-            downloadFile(img.src, 'captured-image.png');
+            const imgDataUrl = canvas.toDataURL('image/png');
+            downloadFile(imgDataUrl, 'captured-image.png');
         }
 
         function startRecording() {
