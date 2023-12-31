@@ -19,11 +19,13 @@
     <div id="cameraContainer">
         <video id="video" autoplay playsinline></video>
         <button onclick="capture()">写真/録画</button>
-        <video id="recordedVideo" controls style="display:none"></video>
+        <button onclick="switchCamera()">切り替えカメラ</button>
+        <button onclick="switchMode()">切り替えモード</button>
+        <button id="downloadBtn" style="display:none" onclick="download()">ダウンロード</button>
     </div>
+    <video id="recordedVideo" controls style="display:none"></video>
     <script>
         let currentStream, isRecording = false, mediaRecorder, recordedChunks = [], isPhotoMode = true;
-
         async function startCamera() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();
@@ -33,72 +35,41 @@
                 currentStream = await navigator.mediaDevices.getUserMedia(constraints);
                 const video = document.getElementById('video');
                 video.srcObject = currentStream;
-            } catch (error) {
-                console.error('カメラへのアクセスに失敗しました:', error);
-            }
+            } catch (error) { console.error('カメラへのアクセスに失敗しました:', error); }
         }
-
+        function switchCamera() { startCamera(); }
+        function switchMode() {
+            isPhotoMode = !isPhotoMode;
+            const captureBtn = document.querySelector('button');
+            if (isPhotoMode) { captureBtn.innerText = '写真/録画'; } else { captureBtn.innerText = '録画'; }
+        }
         function capture() {
-            if (isRecording) {
-                stopRecording();
-            } else {
-                if (isPhotoMode) {
-                    capturePhoto();
-                } else {
-                    startRecording();
-                }
-            }
+            if (isPhotoMode) { capturePhoto(); } else { toggleRecording(); }
         }
-
         function capturePhoto() {
-            const video = document.getElementById('video');
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const capturedData = canvas.toDataURL('image/png');
-            const capturedImage = new Image();
-            capturedImage.src = capturedData;
-            document.body.appendChild(capturedImage);
-            downloadFile(capturedData, 'captured-image.png');
+            const video = document.getElementById('video'), canvas = document.createElement('canvas'), context = canvas.getContext('2d');
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight; context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const capturedData = canvas.toDataURL('image/png'), capturedImage = new Image();
+            capturedImage.src = capturedData; document.body.appendChild(capturedImage);
+            enableDownloadButton(capturedData, 'captured-image.png');
         }
-
-        function startRecording() {
+        function toggleRecording() {
             const video = document.getElementById('video').captureStream();
             recordedChunks = [];
             mediaRecorder = new MediaRecorder(video);
-            mediaRecorder.ondataavailable = event => {
-                if (event.data.size > 0) recordedChunks.push(event.data);
-            };
+            mediaRecorder.ondataavailable = event => { if (event.data.size > 0) recordedChunks.push(event.data); };
             mediaRecorder.onstop = () => {
-                const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                const recordedVideo = document.getElementById('recordedVideo');
-                recordedVideo.src = URL.createObjectURL(recordedBlob);
-                recordedVideo.style.display = 'block';
-                downloadFile(recordedVideo.src, 'recorded-video.webm');
+                const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' }), recordedVideo = document.getElementById('recordedVideo');
+                recordedVideo.src = URL.createObjectURL(recordedBlob); recordedVideo.style.display = 'block';
+                enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
             };
-            mediaRecorder.start();
-            isRecording = true;
+            mediaRecorder.start(); isRecording = true;
         }
-
-        function stopRecording() {
-            if (isRecording) {
-                mediaRecorder.stop();
-                isRecording = false;
-            }
+        function enableDownloadButton(data, filename) {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = data; downloadBtn.download = filename; downloadBtn.style.display = 'block';
         }
-
-        function downloadFile(data, filename) {
-            const a = document.createElement('a');
-            a.href = data;
-            a.download = filename;
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
+        function download() { document.getElementById('downloadBtn').click(); }
         startCamera();
     </script>
 </body>
