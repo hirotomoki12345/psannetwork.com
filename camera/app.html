@@ -89,7 +89,7 @@
                     currentStream.getTracks().forEach(track => track.stop());
                 }
 
-                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
                 document.getElementById('video').srcObject = currentStream;
             } catch (error) {
                 console.error('カメラへのアクセスに失敗しました:', error);
@@ -103,6 +103,7 @@
         function toggleCapture() {
             isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording();
         }
+
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
@@ -131,9 +132,14 @@
             document.getElementById('recordingIndicator').style.display = 'block';
         }
 
-        function stopRecording() { mediaRecorder.stop(); isRecording = false; }
+        function stopRecording() {
+            mediaRecorder.stop();
+            isRecording = false;
+        }
 
-        function startVideoRecording() { isRecording ? stopRecording() : startRecording(); }
+        function startVideoRecording() {
+            isRecording ? stopRecording() : startRecording();
+        }
 
         function downloadFile(data, fileType) {
             const a = document.createElement('a');
