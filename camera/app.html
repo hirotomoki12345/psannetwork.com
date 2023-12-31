@@ -80,6 +80,13 @@
         #downloadBtn:hover {
             background-color: #45a049;
         }
+
+        #recordingIndicator {
+            font-size: 20px;
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +98,7 @@
         <button onclick="switchMode()">切り替えモード</button>
         <button id="downloadBtn" onclick="download()">ダウンロード</button>
         <video id="recordedVideo" controls style="display:none"></video>
+        <div id="recordingIndicator">録画中...</div>
     </div>
 
     <script>
@@ -155,9 +163,11 @@
                 recordedVideo.src = URL.createObjectURL(recordedBlob);
                 recordedVideo.style.display = 'block';
                 enableDownloadButton(recordedVideo.src, 'recorded-video.webm');
+                document.getElementById('recordingIndicator').style.display = 'none';
             };
             mediaRecorder.start();
             isRecording = true;
+            document.getElementById('recordingIndicator').style.display = 'block';
         }
 
         function stopRecording() {
