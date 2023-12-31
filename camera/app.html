@@ -42,16 +42,20 @@
 
         function toggleCapture() { isPhotoMode ? capturePhoto() : isRecording ? stopRecording() : startRecording(); }
 
-        function capturePhoto() {
-            const video = document.getElementById('video');
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imgDataUrl = canvas.toDataURL('image/png');
-            downloadFile(imgDataUrl, 'captured-image.png');
-        }
+function capturePhoto() {
+    const video = document.getElementById('video');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Use canvas.toDataURL without the base64 header
+    const imgDataUrl = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '');
+    
+    downloadFile(imgDataUrl, 'captured-image.png');
+}
+
 
         function startRecording() {
             const video = document.getElementById('video').captureStream();
