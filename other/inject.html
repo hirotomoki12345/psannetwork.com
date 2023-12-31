@@ -1,0 +1,40 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Worker Registration</title>
+</head>
+<body>
+
+  <input type="file" id="fileInput" accept=".js">
+  <button onclick="registerServiceWorker()">Register Service Worker</button>
+
+  <script>
+    function registerServiceWorker() {
+      const fileInput = document.getElementById('fileInput');
+      const selectedFile = fileInput.files[0];
+
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('serviceWorker', selectedFile);
+
+        fetch('/upload-service-worker', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Service Worker registered:', data);
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error);
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
