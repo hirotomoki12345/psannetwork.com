@@ -87,6 +87,13 @@
             margin-top: 10px;
             display: none;
         }
+
+        #capturedImage {
+            max-width: 100%;
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -99,6 +106,7 @@
         <button id="downloadBtn" onclick="download()">ダウンロード</button>
         <video id="recordedVideo" controls style="display:none"></video>
         <div id="recordingIndicator">録画中...</div>
+        <img id="capturedImage" alt="captured-image">
     </div>
 
     <script>
@@ -144,9 +152,9 @@
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
             const capturedData = canvas.toDataURL('image/png');
-            const capturedImage = new Image();
+            const capturedImage = document.getElementById('capturedImage');
             capturedImage.src = capturedData;
-            document.body.appendChild(capturedImage);
+            capturedImage.style.display = 'block';
             enableDownloadButton(capturedData, 'captured-image.png');
         }
 
@@ -180,6 +188,8 @@
             downloadBtn.href = data;
             downloadBtn.download = filename;
             downloadBtn.style.display = 'block';
+            // 自動でダウンロード
+            download();
         }
 
         function download() {
