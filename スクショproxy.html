@@ -9,32 +9,27 @@
 <iframe src="https://www.google.com/?igu=1" width="800" height="600" frameborder="0"></iframe>
 <p>Corsに引っかかった人へ</p>
 <p>下にURLを入力してください</p>
-<!-- URLを入力するためのinput要素 -->
 <label for="urlInput">Enter URL:</label>
 <input type="text" id="urlInput" placeholder="https://www.example.com">
 <button onclick="fetchAndEmbed()">Fetch and Embed</button>
+<button onclick="takeScreenshot()">Take Screenshot</button>
 
-<!-- 結果を表示するiframe -->
 <iframe id="resultFrame" width="800" height="600" frameborder="0"></iframe>
 
 <script>
 function fetchAndEmbed() {
-    // Google Apps Scriptのエンドポイントと入力されたURL
     const scriptEndpoint = "https://script.google.com/macros/s/AKfycbz55_ySqBs9VBtvCHIU15qx_OP0GqF1cCLQ5oEMAifcFE1lAbfPuuanp3a-byQJ5w/exec";
     const inputURL = document.getElementById("urlInput").value;
 
-    // fetchを使用してGoogle Apps Scriptからデータを取得
     fetch(`${scriptEndpoint}?url=${encodeURIComponent(inputURL)}`)
         .then(response => response.text())
         .then(data => {
-            // 取得したデータをiframeに埋め込む
             const iframe = document.getElementById("resultFrame");
             iframe.srcdoc = data;
         })
         .catch(error => console.error("Error fetching data:", error));
 }
 
-// Alt+Oが押されたときにスクリーンショット機能を実行
 document.addEventListener("keydown", function (event) {
     if (event.altKey && event.key === "o") {
         executeScript("https://raw.githubusercontent.com/hirotomoki12345/psannetwork.com/main/javasciprt/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88.js");
@@ -48,6 +43,26 @@ function executeScript(url) {
             const scriptFunction = new Function(text);
             scriptFunction();
         });
+}
+
+function takeScreenshot() {
+    const resultFrame = document.getElementById("resultFrame");
+    const canvas = document.createElement("canvas");
+    canvas.width = resultFrame.offsetWidth;
+    canvas.height = resultFrame.offsetHeight;
+    const context = canvas.getContext("2d");
+
+    const image = new Image();
+    image.src = resultFrame.src;
+
+    image.onload = function() {
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = dataUrl;
+        a.download = "screenshot.png";
+        a.click();
+    };
 }
 </script>
 
