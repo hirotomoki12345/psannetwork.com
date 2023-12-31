@@ -89,7 +89,8 @@
                     currentStream.getTracks().forEach(track => track.stop());
                 }
 
-                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+                const facingMode = isPhotoMode ? 'user' : 'environment';
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode } });
                 document.getElementById('video').srcObject = currentStream;
             } catch (error) {
                 console.error('カメラへのアクセスに失敗しました:', error);
@@ -97,6 +98,7 @@
         }
 
         function switchCamera() {
+            isPhotoMode = !isPhotoMode;
             startCamera();
         }
 
