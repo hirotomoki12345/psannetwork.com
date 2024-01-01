@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スクリーンレコーディング</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="startButton">スクリーンレコーディング開始</button>
+    <button id="stopButton" style="display:none;">スクリーンレコーディング停止</button>
+
+    <script>
+        async function startScreenRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+
+                const videoElement = document.createElement('video');
+                videoElement.srcObject = stream;
+                videoElement.autoplay = true;
+                document.body.appendChild(videoElement);
+
+                document.getElementById('startButton').style.display = 'none';
+                document.getElementById('stopButton').style.display = 'block';
+            } catch (error) {
+                console.error('スクリーンレコーディングを開始できませんでした:', error);
+            }
+        }
+
+        function stopScreenRecording() {
+            const videoElement = document.querySelector('video');
+            if (videoElement) {
+                const stream = videoElement.srcObject;
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
+                document.getElementById('startButton').style.display = 'block';
+                document.getElementById('stopButton').style.display = 'none';
+            }
+        }
+
+        document.getElementById('startButton').addEventListener('click', startScreenRecording);
+        document.getElementById('stopButton').addEventListener('click', stopScreenRecording);
+    </script>
+</body>
+
+</html>
