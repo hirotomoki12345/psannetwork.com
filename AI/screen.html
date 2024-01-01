@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スクリーンレコーディング</title>
+    <title>スクリーンレコーディングできるといいなー</title>
     <style>
         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -15,19 +17,46 @@
             margin: 0;
         }
 
+        h1 {
+            color: #333;
+        }
+
         button {
             padding: 10px;
             margin: 5px;
             font-size: 16px;
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #345db5;
+        }
+
+        #stopButton {
+            display: none;
+            background-color: #db4437;
+        }
+
+        video {
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
-    <button id="startButton">スクリーンレコーディング開始</button>
-    <button id="stopButton" style="display:none;">スクリーンレコーディング停止</button>
+    <h1>スクリーンレコーディングできるといいなー</h1>
+    <video id="recordedVideo" style="display: none;"></video>
+    <button id="startButton">レコーディング開始</button>
+    <button id="stopButton">レコーディング停止</button>
 
     <script>
+        let mediaRecorder;
+        let recordedChunks = [];
+
         async function startScreenRecording() {
             try {
                 const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
@@ -37,23 +66,49 @@
                 videoElement.autoplay = true;
                 document.body.appendChild(videoElement);
 
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const recordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(recordedBlob);
+
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'recorded-video.webm';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+
+                    recordedChunks = [];
+                    URL.revokeObjectURL(url);
+                };
+
                 document.getElementById('startButton').style.display = 'none';
                 document.getElementById('stopButton').style.display = 'block';
+
+                mediaRecorder.start();
             } catch (error) {
                 console.error('スクリーンレコーディングを開始できませんでした:', error);
             }
         }
 
         function stopScreenRecording() {
-            const videoElement = document.querySelector('video');
+            mediaRecorder.stop();
+
+            const videoElement = document.getElementById('recordedVideo');
             if (videoElement) {
-                const stream = videoElement.srcObject;
-                const tracks = stream.getTracks();
-                tracks.forEach(track => track.stop());
-                videoElement.srcObject = null;
-                document.getElementById('startButton').style.display = 'block';
-                document.getElementById('stopButton').style.display = 'none';
+                videoElement.style.display = 'block';
+                videoElement.src = URL.createObjectURL(new Blob(recordedChunks, { type: 'video/webm' }));
             }
+
+            document.getElementById('startButton').style.display = 'block';
+            document.getElementById('stopButton').style.display = 'none';
         }
 
         document.getElementById('startButton').addEventListener('click', startScreenRecording);
