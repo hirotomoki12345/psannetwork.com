@@ -40,16 +40,11 @@
             display: none;
             background-color: #db4437;
         }
-
-        video {
-            margin-top: 20px;
-        }
     </style>
 </head>
 
 <body>
     <h1>スクリーンレコーディングできるといいなー</h1>
-    <video id="recordedVideo" style="display: none;"></video>
     <button id="startButton">レコーディング開始</button>
     <button id="stopButton">レコーディング停止</button>
 
@@ -60,11 +55,6 @@
         async function startScreenRecording() {
             try {
                 const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-
-                const videoElement = document.createElement('video');
-                videoElement.srcObject = stream;
-                videoElement.autoplay = true;
-                document.body.appendChild(videoElement);
 
                 mediaRecorder = new MediaRecorder(stream);
 
@@ -100,12 +90,6 @@
 
         function stopScreenRecording() {
             mediaRecorder.stop();
-
-            const videoElement = document.getElementById('recordedVideo');
-            if (videoElement) {
-                videoElement.style.display = 'block';
-                videoElement.src = URL.createObjectURL(new Blob(recordedChunks, { type: 'video/webm' }));
-            }
 
             document.getElementById('startButton').style.display = 'block';
             document.getElementById('stopButton').style.display = 'none';
