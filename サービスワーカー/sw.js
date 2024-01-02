@@ -1,7 +1,3 @@
-self.addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
-
 async function handleRequest(request) {
   const dohEndpoint = 'https://dns.google/dns-query';
   const dohUrl = new URL(dohEndpoint);
@@ -48,12 +44,13 @@ async function handleRequest(request) {
         headers: modifiedRequest.headers
       });
     } else {
-      throw new Error(`Unexpected response Content-Type: ${contentType}`);
+      console.error(`Unexpected response Content-Type: ${contentType}`);
+      // Return an error response with details
+      return new Response(`Unexpected response Content-Type: ${contentType}`, { status: 500 });
     }
   } catch (error) {
     console.error('Error in handleRequest:', error);
-    // Handle the error as needed, e.g., return an error response
-    return new Response('Error processing request', { status: 500 });
+    // Return an error response with details
+    return new Response(`Error processing request: ${error.message}`, { status: 500 });
   }
 }
-
