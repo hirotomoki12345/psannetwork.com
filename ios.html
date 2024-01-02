@@ -3,70 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Direct Download Example</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        #timer {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-
-        .visible {
-            display: none;
-        }
-    </style>
+    <title>Embed Google</title>
 </head>
 <body>
 
-<button onclick="download('direct')">Direct Install</button>
-<div id="timer" class="visible"></div>
+    <h1>Google を埋め込む例</h1>
+    
+    <iframe src="https://resources.usescarlet.com/install.php" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 
-<script>
-function download(option) {
-    console.log(option);
-    document.getElementsByClassName('visible')[0].remove();
-
-    // 1. style1が存在することを確認
-    var styleSheet = document.styleSheets.style1;
-
-    // 2. cssRulesが存在しない場合はrulesを使用
-    var rules = styleSheet.rules || styleSheet.cssRules;
-
-    with (rules[0]) {
-        style.display = style.display ? "" : "block";
-    }
-
-    var time = 10;
-    var x = setInterval(function () {
-        console.log(time);
-        document.getElementById("timer").innerHTML = time;
-        if (time <= 0) {
-            clearInterval(x);
-            if (option == "direct") {
-                window.open("https://balance.usescarlet.com/secure", "_self");
-            } else {
-                window.alert("Unknown option: " + option);
-            }
-            return;
-        }
-        time--;
-    }, 1000);
-}
-
-    (function(){var js = "window['__CF$cv$params']={r:'83f2e95288580ac2',t:'MTcwNDE5NzU1OC4xNzQwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();
-</script>
-<iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
-<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon="{&quot;rayId&quot;:&quot;83f2e95288580ac2&quot;,&quot;r&quot;:1,&quot;version&quot;:&quot;2023.10.0&quot;,&quot;token&quot;:&quot;bf623057bd9641aaa3065fe5187cc993&quot;}" crossorigin="anonymous"></script>
 </body>
 </html>
