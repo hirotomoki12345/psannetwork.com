@@ -34,7 +34,7 @@ async function handleRequest(request) {
   const response = await fetch(modifiedRequest);
 
   // レスポンスからHostヘッダを取得し、元のリクエストのHostヘッダに戻す
-  const originalHost = response.headers.get('Host');
+  const originalHost = response.headers.get('X-Original-Host');
   if (originalHost) {
     modifiedRequest.headers.set('Host', originalHost);
   }
