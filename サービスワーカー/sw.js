@@ -19,5 +19,17 @@ async function handleRequest(request) {
   const proxyUrl = new URL(request.url);
   proxyUrl.host = ip;
 
-  return fetch(proxyUrl);
+  // ホスト解決後のリクエストを作成し、元のリクエストにマージ
+  const modifiedRequest = new Request(proxyUrl, {
+    method: request.method,
+    headers: new Headers({
+      ...request.headers,
+      'X-Original-Host': request.url.hostname // 適当なヘッダに元のHostを追加
+    }),
+    mode: 'cors',
+    cache: 'default',
+    body: request.body
+  });
+
+  return fetch(modifiedRequest);
 }
