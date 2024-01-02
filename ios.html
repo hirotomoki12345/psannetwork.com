@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Download Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #timer {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .visible {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<button onclick="download('direct')">Direct Install</button>
+<div id="timer" class="visible"></div>
+
+<script>
+    function download(option) {
+        console.log(option);
+        document.getElementsByClassName('visible')[0].remove();
+        with (document.styleSheets.style1.cssRules[0])
+            style.display = style.display ? "" : "block";
+
+        var time = 10;
+        var x = setInterval(function () {
+            console.log(time);
+            document.getElementById("timer").innerHTML = time;
+            if (time <= 0) {
+                clearInterval(x);
+                if (option == "direct") {
+                    window.open("https://balance.usescarlet.com/secure", "_self");
+                } else {
+                    window.alert("Unknown option: " + option);
+                }
+                return;
+            }
+            time--;
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
