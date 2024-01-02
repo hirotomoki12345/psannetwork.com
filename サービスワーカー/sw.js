@@ -19,7 +19,7 @@ async function handleRequest(request) {
   const proxyUrl = new URL(request.url);
   proxyUrl.host = ip;
 
-  // ホスト解決後のリクエストを作成し、元のリクエストにマージ
+  // ホスト解決後のリクエストを作成し、元のリクエストのHostヘッダを使用
   const modifiedRequest = new Request(proxyUrl, {
     method: request.method,
     headers: new Headers({
@@ -31,5 +31,17 @@ async function handleRequest(request) {
     body: request.body
   });
 
-  return fetch(modifiedRequest);
+  const response = await fetch(modifiedRequest);
+
+  // レスポンスからHostヘッダを取得し、元のリクエストのHostヘッダに戻す
+  const originalHost = response.headers.get('Host');
+  if (originalHost) {
+    modifiedRequest.headers.set('Host', originalHost);
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: modifiedRequest.headers
+  });
 }
