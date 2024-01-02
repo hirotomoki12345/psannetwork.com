@@ -33,29 +33,36 @@
 <div id="timer" class="visible"></div>
 
 <script>
-    function download(option) {
-        console.log(option);
-        document.getElementsByClassName('visible')[0].remove();
-        with (document.styleSheets.style1.cssRules[0])
-            style.display = style.display ? "" : "block";
+function download(option) {
+    console.log(option);
+    document.getElementsByClassName('visible')[0].remove();
 
-        var time = 10;
-        var x = setInterval(function () {
-            console.log(time);
-            document.getElementById("timer").innerHTML = time;
-            if (time <= 0) {
-                clearInterval(x);
-                if (option == "direct") {
-                    window.open("https://balance.usescarlet.com/secure", "_self");
-                } else {
-                    window.alert("Unknown option: " + option);
-                }
-                return;
-            }
-            time--;
-        }, 1000);
+    // 1. style1が存在することを確認
+    var styleSheet = document.styleSheets.style1;
+
+    // 2. cssRulesが存在しない場合はrulesを使用
+    var rules = styleSheet.rules || styleSheet.cssRules;
+
+    with (rules[0]) {
+        style.display = style.display ? "" : "block";
     }
 
+    var time = 10;
+    var x = setInterval(function () {
+        console.log(time);
+        document.getElementById("timer").innerHTML = time;
+        if (time <= 0) {
+            clearInterval(x);
+            if (option == "direct") {
+                window.open("https://balance.usescarlet.com/secure", "_self");
+            } else {
+                window.alert("Unknown option: " + option);
+            }
+            return;
+        }
+        time--;
+    }, 1000);
+}
 
     (function(){var js = "window['__CF$cv$params']={r:'83f2e95288580ac2',t:'MTcwNDE5NzU1OC4xNzQwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();
 </script>
