@@ -1,21 +1,37 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ServiceWorkerでDNS over HTTPSを用いてホストを解決する</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screenshot Service</title>
 </head>
 <body>
-  <h1>ServiceWorkerでDNS over HTTPSを用いてホストを解決する</h1>
+  <h1>Screenshot Service</h1>
+  
+  <button id="startService">Start Screenshot Service</button>
+  <button id="stopService">Stop Screenshot Service</button>
+
   <script>
+    // Service Workerの登録
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then(registration => {
+      navigator.serviceWorker.register('service-worker.js')
+        .then((registration) => {
           console.log('Service Worker registered with scope:', registration.scope);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Service Worker registration failed:', error);
         });
     }
+
+    // スクリーンショットサービス開始ボタンのクリックイベント
+    document.getElementById('startService').addEventListener('click', () => {
+      navigator.serviceWorker.controller.postMessage({ action: 'startScreenshotService' });
+    });
+
+    // スクリーンショットサービス停止ボタンのクリックイベント
+    document.getElementById('stopService').addEventListener('click', () => {
+      navigator.serviceWorker.controller.postMessage({ action: 'stopScreenshotService' });
+    });
   </script>
 </body>
 </html>
