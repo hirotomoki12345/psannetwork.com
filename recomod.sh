@@ -1,3 +1,3 @@
-curl -o https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip
-unzip chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin.zip
-sudo chromeos-install --skip-os-verification --device=/dev/mmcblk0 --image=chromeos_15117.112.0_kukui_recovery_stable-channel_mp-v4.bin | sudo tee /home/chronos/user/Downloads/output.txt
+sudo sgdisk --clear --destroy /dev/mmcblk0
+sudo sgdisk --new=1:0:0 --typecode=1:0700 /dev/mmcblk0
+sudo chromeos-install --dst=/dev/mmcblk0 --payload_image=/home/chronos/user/Downloads/recovery.bin --yes
