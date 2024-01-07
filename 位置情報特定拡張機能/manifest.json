@@ -1,0 +1,19 @@
+
+{
+  "manifest_version": 3,
+  "name": "位置情報取得拡張機能",
+  "version": "1.0",
+  "permissions": [
+    "geolocation",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
