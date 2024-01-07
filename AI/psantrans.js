@@ -19,6 +19,13 @@ function translateText(userInput, sourceLanguage, targetLanguage, callback) {
 }
 
 function createTranslationUI() {
+    var existingDiv = document.getElementById('psantrans');
+
+    if (!existingDiv) {
+        console.error('指定されたidのdiv要素が見つかりません。');
+        return;
+    }
+
     var container = document.createElement('div');
     container.style.margin = '20px';
 
@@ -85,7 +92,7 @@ function createTranslationUI() {
     container.appendChild(button);
     container.appendChild(resultContainer);
 
-    document.body.appendChild(container);
+    existingDiv.appendChild(container);
 }
 
 createTranslationUI();
