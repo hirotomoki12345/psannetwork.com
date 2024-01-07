@@ -1,6 +1,5 @@
 var scriptUrl = "https://script.google.com/macros/s/AKfycbyG-vsxtqXBBN4qn-IxBpIDpcz4qFIloAhUGP3fTImzwlMTIhCZikM7eJJ--EMiqm0/exec";
 
-// 質問入力フォーム
 var inputElement = document.createElement("input");
 inputElement.type = "text";
 inputElement.placeholder = "質問を入力してください";
@@ -11,7 +10,6 @@ inputElement.style.border = "1px solid #ccc";
 inputElement.style.borderRadius = "5px";
 inputElement.style.flex = "1";
 
-// 質問送信ボタン
 var submitButton = document.createElement("button");
 submitButton.textContent = "質問する";
 submitButton.id = "submitButton";
@@ -22,7 +20,6 @@ submitButton.style.border = "none";
 submitButton.style.borderRadius = "5px";
 submitButton.style.cursor = "pointer";
 
-// 返答表示エリア
 var displayElement = document.createElement("div");
 displayElement.id = "answerDisplay";
 displayElement.style.marginTop = "10px";
@@ -30,22 +27,18 @@ displayElement.style.padding = "15px";
 displayElement.style.border = "1px solid #ccc";
 displayElement.style.borderRadius = "5px";
 
-// フォームコンテナ
 var formContainer = document.createElement("div");
 formContainer.style.display = "flex";
 formContainer.style.alignItems = "center";
 formContainer.style.justifyContent = "center";
 
-// フォームコンテナに要素を追加
 formContainer.appendChild(inputElement);
 formContainer.appendChild(submitButton);
 
-// 追加された部分: psanbardというidを持つdivタグに要素を追加
 var psanbardElement = document.getElementById("psanbard");
 psanbardElement.appendChild(formContainer);
 psanbardElement.appendChild(displayElement);
 
-// 質問ボタンがクリックされたときの処理
 submitButton.addEventListener("click", function() {
     submitButton.disabled = true;
     submitButton.style.backgroundColor = "#ddd";
