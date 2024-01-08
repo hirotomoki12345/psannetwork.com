@@ -7,10 +7,14 @@
     body {
       font-family: 'Arial', sans-serif;
       line-height: 1.6;
-      margin: 20px;
+      margin: 0; /* マージンを0に変更 */
       color: #fff; /* 文字の色を白に設定 */
       background-color: #000; /* 背景色を黒に設定 */
-      position: relative; /* 相対位置指定 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* 画面全体の高さを埋めるように */
+      overflow: hidden; /* オーバーフローを隠す */
     }
 
     h1, h2, h3 {
@@ -33,6 +37,7 @@
 
     .animated-lines {
       position: relative;
+      width: 80%; /* 幅を80%に指定 */
     }
 
     .animated-line {
@@ -54,15 +59,14 @@
       }
     }
 
-/* 新しいスタイル */
-.block {
-  position: relative;
-  z-index: 1; /* ブロックが文字の前に表示されるようにz-indexを指定 */
-  background-color: #000;
-  margin-bottom: 10px; /* margin-bottomの値を小さくしました */
-  padding: 10px; /* paddingの値を小さくしました */
-}
-
+    /* 新しいスタイル */
+    .block {
+      position: relative;
+      z-index: 1; /* ブロックが文字の前に表示されるようにz-indexを指定 */
+      background-color: #000;
+      margin-bottom: 10px; /* margin-bottomの値を小さくしました */
+      padding: 10px; /* paddingの値を小さくしました */
+    }
   </style>
   <link rel="stylesheet" href="/psan.css"> <!-- psan.cssファイルのリンクを追加 -->
 </head>
@@ -94,18 +98,20 @@
       <p>作成したバックエンドの関係上、長い文章を送るとエラーが発生する可能性があるため、部分部分で送ってください。</p>
     </div>
 
-    <script>
-      for (let i = 0; i < 100; i++) {
-        const delay = Math.random() * 8; // アニメーション開始のランダムな遅延
-        const duration = Math.random() * 10 + 5; // 5から15秒のランダムな持続時間
-        const position = Math.random() * 100; // 0から100%のランダムな位置
-        const line = document.createElement('div');
-        line.classList.add('animated-line');
-        line.style.left = `${position}%`;
-        line.style.animation = `move-line ${duration}s linear ${delay}s infinite`;
-        document.querySelector('.animated-lines').appendChild(line);
-      }
-    </script>
+    <div class="animated-line"></div>
   </div>
+
+  <script>
+    for (let i = 0; i < 100; i++) {
+      const delay = Math.random() * 8; // アニメーション開始のランダムな遅延
+      const duration = Math.random() * 10 + 5; // 5から15秒のランダムな持続時間
+      const position = Math.random() * 100; // 0から100%のランダムな位置
+      const line = document.createElement('div');
+      line.classList.add('animated-line');
+      line.style.left = `${position}%`;
+      line.style.animation = `move-line ${duration}s linear ${delay}s infinite`;
+      document.querySelector('.animated-lines').appendChild(line);
+    }
+  </script>
 </body>
 </html>
