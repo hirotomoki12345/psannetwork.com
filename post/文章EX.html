@@ -7,22 +7,22 @@
     body {
       font-family: 'Arial', sans-serif;
       line-height: 1.6;
-      margin: 0; /* マージンを0に変更 */
-      color: #fff; /* 文字の色を白に設定 */
-      background-color: #000; /* 背景色を黒に設定 */
+      margin: 0;
+      color: #fff;
+      background-color: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh; /* 画面全体の高さを埋めるように */
-      overflow: hidden; /* オーバーフローを隠す */
+      height: 100vh;
+      overflow: hidden;
     }
 
     h1, h2, h3 {
-      color: #fff; /* 見出しの色を白に設定 */
+      color: #fff;
     }
 
     p {
-      color: #ccc; /* 段落の色を灰色に設定 */
+      color: #ccc;
     }
 
     a {
@@ -37,7 +37,8 @@
 
     .animated-lines {
       position: relative;
-      width: 80%; /* 幅を80%に指定 */
+      width: 80%;
+      min-height: 100vh; /* コンテンツに応じて伸縮するための最小高さを設定 */
     }
 
     .animated-line {
@@ -59,26 +60,22 @@
       }
     }
 
-    /* 新しいスタイル */
     .block {
       position: relative;
-      z-index: 1; /* ブロックが文字の前に表示されるようにz-indexを指定 */
+      z-index: 1;
       background-color: #000;
-      margin-bottom: 10px; /* margin-bottomの値を小さくしました */
-      padding: 10px; /* paddingの値を小さくしました */
+      margin-bottom: 10px;
+      padding: 10px;
     }
   </style>
-  <link rel="stylesheet" href="/psan.css"> <!-- psan.cssファイルのリンクを追加 -->
+  <link rel="stylesheet" href="/psan.css">
 </head>
 <body>
   <div class="animated-lines">
-    <div class="block">
       <h1>文章修正Chrome拡張機能</h1>
       <p>こんにちは、Psanです。</p>
       <p>今回は文章をより良い文章に修正してくれるChrome拡張機能を作りました。</p>
-    </div>
 
-    <div class="block">
       <h2>インストール方法</h2>
       <p><strong>※注意:</strong> これはChrome限定です。</p>
       <ol>
@@ -99,13 +96,12 @@
     </div>
 
     <div class="animated-line"></div>
-  </div>
 
   <script>
     for (let i = 0; i < 100; i++) {
-      const delay = Math.random() * 8; // アニメーション開始のランダムな遅延
-      const duration = Math.random() * 10 + 5; // 5から15秒のランダムな持続時間
-      const position = Math.random() * 100; // 0から100%のランダムな位置
+      const delay = Math.random() * 8;
+      const duration = Math.random() * 10 + 5;
+      const position = Math.random() * 100;
       const line = document.createElement('div');
       line.classList.add('animated-line');
       line.style.left = `${position}%`;
