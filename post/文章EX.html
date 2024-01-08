@@ -10,6 +10,7 @@
       margin: 20px;
       color: #fff; /* 文字の色を白に設定 */
       background-color: #000; /* 背景色を黒に設定 */
+      position: relative; /* 相対位置指定 */
     }
 
     h1, h2, h3 {
@@ -52,28 +53,46 @@
         transform: translateX(100%);
       }
     }
+
+    /* 新しいスタイル */
+    .block {
+      position: relative;
+      z-index: 1; /* ブロックが文字の前に表示されるようにz-indexを指定 */
+      background-color: #000;
+      margin-bottom: 20px;
+      padding: 20px;
+    }
   </style>
   <link rel="stylesheet" href="/psan.css"> <!-- psan.cssファイルのリンクを追加 -->
 </head>
 <body>
   <div class="animated-lines">
-    <h1>文章修正Chrome拡張機能</h1>
-    <p>こんにちは、Psanです。</p>
-    <p>今回は文章をより良い文章に修正してくれるChrome拡張機能を作りました。</p>
-    <h2>インストール方法</h2>
-    <p><strong>※注意:</strong> これはChrome限定です。</p>
-    <ol>
-      <li>まず <a href="https://github.com/hirotomoki12345/psannetwork.com/raw/main/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX.zip" target="_blank">こちら</a> をダウンロードします。</li>
-      <li>次にChromeのファイルアプリを開いてください。</li>
-      <li>さっきダウンロードしたファイルを右クリックして、ZIPファイルを展開してください。</li>
-      <li><code>chrome://extensions</code> を開いてください。</li>
-      <li>右上のデベロッパーモードをオンにしてください。</li>
-      <li>パッケージ化されていない拡張機能を読み込むを押します。</li>
-      <li>さっき展開したZIPファイルのフォルダを選択します。すると拡張機能が読み込まれます。</li>
-      <li>あとは、Googleドキュメントなどのサイトで右下に追加されたスライドボタンを押して出てきた入力フォームに文章を打って文章を改善を押すと文章が生成されます。</li>
-    </ol>
-    <h3>最後に</h3>
-    <p>作成したバックエンドの関係上、長い文章を送るとエラーが発生する可能性があるため、部分部分で送ってください。</p>
+    <div class="block">
+      <h1>文章修正Chrome拡張機能</h1>
+      <p>こんにちは、Psanです。</p>
+      <p>今回は文章をより良い文章に修正してくれるChrome拡張機能を作りました。</p>
+    </div>
+
+    <div class="block">
+      <h2>インストール方法</h2>
+      <p><strong>※注意:</strong> これはChrome限定です。</p>
+      <ol>
+        <li>まず <a href="https://github.com/hirotomoki12345/psannetwork.com/raw/main/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX.zip" target="_blank">こちら</a> をダウンロードします。</li>
+        <li>次にChromeのファイルアプリを開いてください。</li>
+        <li>さっきダウンロードしたファイルを右クリックして、ZIPファイルを展開してください。</li>
+        <li><code>chrome://extensions</code> を開いてください。</li>
+        <li>右上のデベロッパーモードをオンにしてください。</li>
+        <li>パッケージ化されていない拡張機能を読み込むを押します。</li>
+        <li>さっき展開したZIPファイルのフォルダを選択します。すると拡張機能が読み込まれます。</li>
+        <li>あとは、Googleドキュメントなどのサイトで右下に追加されたスライドボタンを押して出てきた入力フォームに文章を打って文章を改善を押すと文章が生成されます。</li>
+      </ol>
+    </div>
+
+    <div class="block">
+      <h3>最後に</h3>
+      <p>作成したバックエンドの関係上、長い文章を送るとエラーが発生する可能性があるため、部分部分で送ってください。</p>
+    </div>
+
     <script>
       for (let i = 0; i < 100; i++) {
         const delay = Math.random() * 8; // アニメーション開始のランダムな遅延
