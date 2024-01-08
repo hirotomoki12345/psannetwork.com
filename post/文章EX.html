@@ -13,16 +13,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      height: 105vh;
       overflow: hidden;
     }
 
     h1, h2, h3 {
       color: #fff;
+      position: relative;
+      z-index: 2; /* 文字が線より上に表示されるようにz-indexを指定 */
     }
 
     p {
       color: #ccc;
+      position: relative;
+      z-index: 2; /* 文字が線より上に表示されるようにz-indexを指定 */
     }
 
     a {
@@ -39,6 +43,7 @@
       position: relative;
       width: 80%;
       min-height: 100vh;
+      z-index: 1; /* 線が文字より上に表示されるようにz-indexを指定 */
     }
 
     .animated-line {
@@ -49,6 +54,7 @@
       top: 50%;
       transform: translateY(-50%);
       opacity: 0.7;
+      z-index: 1; /* 線が文字より上に表示されるようにz-indexを指定 */
     }
 
     @keyframes move-line {
