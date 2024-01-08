@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/psan.css"> <!-- psan.cssファイルのリンクを追加 -->
+</head>
+<body>
+  <div class="animated-lines">
+    <!-- Generate multiple animated lines with random positions and animations -->
+    <script>
+      for (let i = 0; i < 100; i++) {
+        const delay = Math.random() * 8; // アニメーション開始のランダムな遅延
+        const duration = Math.random() * 10 + 5; // 5から15秒のランダムな持続時間
+        const position = Math.random() * 100; // 0から100%のランダムな位置
+        const line = document.createElement('div');
+        line.classList.add('animated-line');
+        line.style.left = `${position}%`;
+        line.style.animation = `move-line ${duration}s linear ${delay}s infinite`;
+        document.querySelector('.animated-lines').appendChild(line);
+      }
+    </script>
+  </div>
+</body>
+</html>
