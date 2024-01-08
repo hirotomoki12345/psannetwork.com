@@ -1,83 +1,71 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/psan.css"> <!-- psan.cssファイルのリンクを追加 -->
 
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      line-height: 1.6;
-      margin: 20px;
-      color: #fff; /* 文字の色を白に設定 */
-      background-color: #000; /* 背景色を黒に設定 */
-    }
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #fff; /* 文字の色を白に設定 */
+            background-color: #000; /* 背景色を黒に設定 */
+        }
 
-    h1, h2, h3 {
-      color: #fff; /* 見出しの色を白に設定 */
-    }
+        h1,
+        h2,
+        h3 {
+            color: #fff; /* 見出しの色を白に設定 */
+        }
 
-    p {
-      color: #ccc; /* 段落の色を灰色に設定 */
-      margin-bottom: 10px; /* 段落の下部に余白を追加 */
-    }
+        p {
+            color: #ccc; /* 段落の色を灰色に設定 */
+            margin-bottom: 10px; /* 段落の下部に余白を追加 */
+            position: relative; /* 相対位置指定 */
+        }
 
-    a {
-      color: #007BFF;
-      text-decoration: none;
-      font-weight: bold;
-    }
+        p::after {
+            content: '\25A0'; /* 大きい四角い要素の Unicode 文字 */
+            font-size: 1.5em; /* フォントサイズを調整 */
+            margin-left: 5px; /* 四角い要素と文字の間隔を調整 */
+        }
 
-    a:hover {
-      text-decoration: underline;
-    }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .animated-lines {
-      position: relative;
-      overflow: hidden; /* 要素からはみ出る部分を非表示にする */
-    }
-
-    .animated-line {
-      position: absolute;
-      height: 2px;
-      width: 100%; /* 幅を100%に設定 */
-      background-color: #007BFF;
-      top: 0; /* 上端に配置 */
-      opacity: 0.7;
-      animation: move-line 5s linear infinite; /* アニメーションの指定 */
-    }
-
-    @keyframes move-line {
-      0% {
-        transform: translateY(-100%);
-      }
-      100% {
-        transform: translateY(100%);
-      }
-    }
-  </style>
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="animated-lines">
-    <h1>文章修正Chrome拡張機能</h1>
-    <p>こんにちは、Psanです。</p>
-    <p>今回は文章をより良い文章に修正してくれるChrome拡張機能を作りました。</p>
-    <h2>インストール方法</h2>
-    <p><strong>※注意:</strong> これはChrome限定です。</p>
-    <ol>
-      <li>まず <a href="https://github.com/hirotomoki12345/psannetwork.com/raw/main/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX.zip" target="_blank">こちら</a> をダウンロードします。</li>
-      <li>次にChromeのファイルアプリを開いてください。</li>
-      <li>さっきダウンロードしたファイルを右クリックして、ZIPファイルを展開してください。</li>
-      <li><code>chrome://extensions</code> を開いてください。</li>
-      <li>右上のデベロッパーモードをオンにしてください。</li>
-      <li>パッケージ化されていない拡張機能を読み込むを押します。</li>
-      <li>さっき展開したZIPファイルのフォルダを選択します。すると拡張機能が読み込まれます。</li>
-      <li>あとは、Googleドキュメントなどのサイトで右下に追加されたスライドボタンを押して出てきた入力フォームに文章を打って文章を改善を押すと文章が生成されます。</li>
-    </ol>
-    <h3>最後に</h3>
-    <p>作成したバックエンドの関係上、長い文章を送るとエラーが発生する可能性があるため、部分部分で送ってください。</p>
-    <div class="animated-line"></div>
-  </div>
+    <div class="animated-lines">
+        <h1>文章修正Chrome拡張機能</h1>
+        <p>こんにちは、Psanです。</p>
+        <p>今回は文章をより良い文章に修正してくれるChrome拡張機能を作りました。</p>
+        <h2>インストール方法</h2>
+        <p><strong>※注意:</strong> これはChrome限定です。</p>
+        <ol>
+            <li>まず <a href="https://github.com/hirotomoki12345/psannetwork.com/raw/main/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX/%E6%96%87%E7%AB%A0%E4%BF%AE%E6%AD%A3EX.zip" target="_blank">こちら</a> をダウンロードします。</li>
+            <li>次にChromeのファイルアプリを開いてください。</li>
+            <li>さっきダウンロードしたファイルを右クリックして、ZIPファイルを展開してください。</li>
+            <li><code>chrome://extensions</code> を開いてください。</li>
+            <li>右上のデベロッパーモードをオンにしてください。</li>
+            <li>パッケージ化されていない拡張機能を読み込むを押します。</li>
+            <li>さっき展開したZIPファイルのフォルダを選択します。すると拡張機能が読み込まれます。</li>
+            <li>あとは、Googleドキュメントなどのサイトで右下に追加されたスライドボタンを押して出てきた入力フォームに文章を打って文章を改善を押すと文章が生成されます。</li>
+        </ol>
+        <h3>最後に</h3>
+        <p>作成したバックエンドの関係上、長い文章を送るとエラーが発生する可能性があるため、部分部分で送ってください。</p>
+        <div class="animated-line"></div>
+    </div>
 </body>
+
 </html>
