@@ -1,57 +1,38 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>リアルタイム音声文字起こし</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音声認識テスト</title>
 </head>
 <body>
-  <h1>リアルタイム音声文字起こし</h1>
-  <div id="transcriptionResult"></div>
-  <button id="startButton">開始</button>
-  <button id="stopButton">停止</button>
 
-  <script>
-    const recognition = new webkitSpeechRecognition(); // Chrome/Edge 用のプレフィックスが必要
-    recognition.lang = 'ja-JP';
-    recognition.continuous = true;
-    recognition.interimResults = true;
+<button id="btn">音声認識開始</button>
+<div id="content"></div>
 
-    const transcriptionResult = document.getElementById('transcriptionResult');
-    const startButton = document.getElementById('startButton');
-    const stopButton = document.getElementById('stopButton');
+<script>
+    const speech = new webkitSpeechRecognition();
+    speech.lang = 'ja-JP';
 
-    // 以前の結果を保持する変数
-    let accumulatedTranscript = '';
+    const btn = document.getElementById('btn');
+    const content = document.getElementById('content');
 
-    startButton.addEventListener('click', () => {
-      recognition.start();
-      transcriptionResult.textContent = '音声認識中...';
+    btn.addEventListener('click', function() {
+        speech.start();
     });
 
-    stopButton.addEventListener('click', () => {
-      recognition.stop();
-      transcriptionResult.textContent = '音声認識が停止しました。';
-    });
-
-    recognition.onresult = event => {
-      const result = event.results[event.results.length - 1];
-      const transcript = result[0].transcript;
-      
-      // 以前の結果に新しい結果を追加
-      accumulatedTranscript += transcript;
-
-      // 表示を更新
-      transcriptionResult.textContent = accumulatedTranscript;
+    speech.onresult = function(e) {
+        speech.stop();
+        if (e.results[0].isFinal) {
+            var autotext = e.results[0][0].transcript;
+            content.innerHTML += '<div>' + autotext + '</div>';
+        }
     };
 
-    recognition.onerror = event => {
-      console.error('音声認識エラー:', event.error);
+    speech.onend = () => {
+        speech.start();
     };
+</script>
 
-    recognition.onend = () => {
-      transcriptionResult.textContent = '音声認識が終了しました。';
-    };
-  </script>
 </body>
 </html>
