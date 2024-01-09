@@ -12,7 +12,7 @@
   <button id="stopButton">停止</button>
 
   <script>
-    const recognition = new webkitSpeechRecognition();
+    const recognition = new webkitSpeechRecognition(); // Chrome/Edge 用のプレフィックスが必要
     recognition.lang = 'ja-JP';
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -20,7 +20,9 @@
     const transcriptionResult = document.getElementById('transcriptionResult');
     const startButton = document.getElementById('startButton');
     const stopButton = document.getElementById('stopButton');
-    let fullTranscript = '';
+
+    // 以前の結果を保持する変数
+    let accumulatedTranscript = '';
 
     startButton.addEventListener('click', () => {
       recognition.start();
@@ -35,8 +37,12 @@
     recognition.onresult = event => {
       const result = event.results[event.results.length - 1];
       const transcript = result[0].transcript;
-      fullTranscript += transcript + ' '; // 空白を追加して単語ごとに区切ります
-      transcriptionResult.textContent = fullTranscript;
+      
+      // 以前の結果に新しい結果を追加
+      accumulatedTranscript += transcript;
+
+      // 表示を更新
+      transcriptionResult.textContent = accumulatedTranscript;
     };
 
     recognition.onerror = event => {
